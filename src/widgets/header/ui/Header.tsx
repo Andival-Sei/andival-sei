@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback, startTransition } from 'react
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { ThemeToggle } from '@/features/theme-toggle';
+import { applyBackdropBlur } from '@/shared/lib/backdrop-blur';
 import styles from './Header.module.scss';
 
 const NAV_ITEMS = [
@@ -23,6 +24,7 @@ export const Header = () => {
   const pathname = usePathname();
   const menuRef = useRef<HTMLElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
   const scrollPositionRef = useRef(0);
 
   // Отслеживание скролла для изменения стиля хедера
@@ -34,6 +36,20 @@ export const Header = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Применяем backdrop-filter напрямую через JavaScript
+  // Это гарантирует применение эффекта, даже если SCSS модули не работают
+  useEffect(() => {
+    if (headerRef.current) {
+      // Легкое размытие для тонкого эффекта glassmorphism
+      if (!isScrolled) {
+        applyBackdropBlur(headerRef.current, '4px', '110%');
+      } else {
+        // Немного усиленное размытие при скролле
+        applyBackdropBlur(headerRef.current, '6px', '115%');
+      }
+    }
+  }, [isScrolled]);
 
   const lockScroll = useCallback(() => {
     scrollPositionRef.current = window.scrollY;
@@ -113,7 +129,7 @@ export const Header = () => {
 
   return (
     <>
-      <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
+      <header ref={headerRef} className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
         <div className={styles.container}>
           <Link
             href="/"

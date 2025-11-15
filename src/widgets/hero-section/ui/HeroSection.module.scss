@@ -6,13 +6,17 @@
   min-height: 100dvh; // Поддержка динамического viewport height
   display: flex;
   align-items: center;
-  // Контент начинается с 0, чтобы прокручиваться под header для эффекта блюра
+  // КРИТИЧЕСКИ ВАЖНО: Hero начинается с самого верха (top: 0)
+  // Это позволяет backdrop-filter работать - он размывает контент, который виден под header
   padding: 0;
+  margin: 0;
   overflow: hidden;
   background-color: var(--background);
   color: var(--foreground);
 
   // Градиентный фон для создания глубины
+  // КРИТИЧЕСКИ ВАЖНО: Этот псевдоэлемент начинается с top: 0
+  // Он виден под header и будет размываться backdrop-filter
   &::before {
     content: '';
     position: absolute;
@@ -21,7 +25,27 @@
     right: 0;
     bottom: 0;
     background: radial-gradient(ellipse 80% 50% at 50% 0%, var(--primary) 0%, transparent 50%);
-    opacity: 0.05;
+    opacity: 0.15; // Увеличиваем opacity, чтобы градиент был виден под header
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // Дополнительный видимый элемент сверху для демонстрации эффекта размытия
+  // Этот элемент начинается с самого верха и виден под header
+  // backdrop-filter будет размывать этот видимый градиент под header
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: calc(var(--header-height) + 100px); // Достаточно большой, чтобы быть видимым под header
+    background: linear-gradient(
+      180deg,
+      rgba(37, 99, 235, 0.15) 0%,
+      rgba(37, 99, 235, 0.08) 50%,
+      transparent 100%
+    );
     pointer-events: none;
     z-index: 0;
   }
@@ -36,8 +60,9 @@
   gap: 3rem;
   align-items: center;
   width: 100%;
-  // Добавляем отступ сверху для видимости контента под header
-  // Контент будет прокручиваться под header, создавая эффект блюра
+  // КРИТИЧЕСКИ ВАЖНО: Hero начинается с top: 0, поэтому верхняя часть hero (градиенты, фон) видна под header
+  // backdrop-filter размывает эту видимую часть hero под header
+  // Padding-top используется только для читаемости текста, но hero background начинается сверху
   padding: calc(var(--header-height) + 2rem) 1rem 2rem;
 
   @include respond-to(sm) {

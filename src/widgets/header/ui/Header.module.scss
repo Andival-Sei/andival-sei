@@ -11,21 +11,25 @@
   z-index: 1000;
   width: 100%;
   // Базовый полупрозрачный фон для эффекта glassmorphism
+  // КРИТИЧЕСКИ ВАЖНО: backdrop-filter работает только с полупрозрачным фоном
+  // НЕ используем transform - он может блокировать backdrop-filter!
   background-color: var(--header-bg);
-  border-bottom: 1px solid var(--border);
-  transition:
-    background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    backdrop-filter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-  // Современный backdrop-filter для эффекта размытия (glassmorphism)
-  // Оптимальный blur (20px) для красивого эффекта без избыточности
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  // Граница через box-shadow вместо псевдоэлемента (упрощаем)
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.05);
+
+  transition:
+    background-color 0.3s ease,
+    backdrop-filter 0.3s ease;
+
+  // backdrop-filter для эффекта размытия (glassmorphism)
+  // Легкое размытие (4px) с насыщенностью для тонкого эффекта glassmorphism
+  // Примечание: JavaScript применяет эффект напрямую через inline стили (высший приоритет)
+  // Эти значения используются только как fallback, если JavaScript не загрузился
+  backdrop-filter: blur(4px) saturate(110%);
+  -webkit-backdrop-filter: blur(4px) saturate(110%);
 
   // Fallback для браузеров без поддержки backdrop-filter
-  // Используем более непрозрачный фон
   @supports not (backdrop-filter: blur(1px)) {
     background-color: var(--header-bg-scrolled);
   }
@@ -33,12 +37,13 @@
   // Эффект при скролле - более непрозрачный фон и тень
   &.scrolled {
     background-color: var(--header-bg-scrolled);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-    border-bottom-color: transparent;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
 
-    // Усиленный блюр при скролле для лучшей читаемости
-    backdrop-filter: blur(30px) saturate(200%);
-    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    // Немного усиленный блюр при скролле для лучшей читаемости
+    // Примечание: JavaScript применяет эффект напрямую через inline стили (высший приоритет)
+    // Это значение используется только как fallback, если JavaScript не загрузился
+    backdrop-filter: blur(6px) saturate(115%);
+    -webkit-backdrop-filter: blur(6px) saturate(115%);
 
     .dark & {
       box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
