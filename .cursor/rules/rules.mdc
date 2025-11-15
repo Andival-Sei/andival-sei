@@ -66,14 +66,26 @@ alwaysApply: true
 
 ## Git и коммиты
 
-9. **Коммиты:**
+9. **Git Flow Workflow:**
+   - Проект использует Git Flow с ветками `main` (продакшн) и `develop` (разработка)
+   - Все ветки фич создаются от `develop`, никогда от `main`
+   - Формат имен веток: `тип/краткое-описание` (например: `feature/dark-theme`, `fix/header-scroll`)
+   - Типы веток: `feature/`, `fix/`, `refactor/`, `docs/`, `style/`, `test/`, `chore/`
+   - Все изменения мерджатся в `develop` через Pull Request
+   - В продакшн (`main`) мерджится только стабильная версия из `develop`
+
+10. **Коммиты:**
+   - Используется формат [Conventional Commits](https://www.conventionalcommits.org/)
+   - Формат: `<тип>[область]: <описание>` (например: `feat(theme): добавлена поддержка темной темы`)
+   - Типы коммитов: `feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `test:`, `chore:`, `perf:`, `ci:`
    - ESLint и Prettier запускаются автоматически через Husky
    - Коммиты должны быть атомарными и понятными
    - Сообщения коммитов на русском языке
+   - **Подробное руководство:** см. [CONTRIBUTING.md](../../CONTRIBUTING.md)
 
 ## Next.js специфика
 
-10. **App Router:**
+11. **App Router:**
 
 - Использовать Server Components по умолчанию
 - Client Components только при необходимости ('use client')
