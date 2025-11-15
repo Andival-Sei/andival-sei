@@ -3,8 +3,9 @@
 .hero {
   padding: 3rem 1rem;
   text-align: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  // Использование стандартного фона темы
+  background-color: var(--background);
+  color: var(--foreground);
   position: relative;
   overflow: hidden;
 

@@ -39,62 +39,39 @@
 }
 
 .primary {
-  color: #ffffff;
-  background-color: #0070f3;
+  // Использование CSS переменных для поддержки тем
+  color: var(--primary-foreground);
+  background-color: var(--primary);
 
   &:hover:not(:disabled) {
-    background-color: #0051cc;
+    background-color: var(--primary-hover);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 112, 243, 0.4);
-  }
-
-  .dark & {
-    background-color: #3291ff;
-
-    &:hover:not(:disabled) {
-      background-color: #4da3ff;
-      box-shadow: 0 4px 12px rgba(50, 145, 255, 0.4);
-    }
+    // Тень с цветом primary для эффекта свечения
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
   }
 }
 
 .secondary {
-  color: #ffffff;
-  background-color: #6b7280;
+  // Использование CSS переменных для поддержки тем
+  color: var(--primary-foreground);
+  background-color: var(--secondary);
 
   &:hover:not(:disabled) {
-    background-color: #4b5563;
+    background-color: var(--secondary-hover);
     transform: translateY(-1px);
-  }
-
-  .dark & {
-    background-color: #52525b;
-
-    &:hover:not(:disabled) {
-      background-color: #3f3f46;
-    }
   }
 }
 
 .outline {
+  // Прозрачный фон с обводкой
   background-color: transparent;
-  color: #0070f3;
-  border: 2px solid #0070f3;
+  color: var(--primary);
+  border: 2px solid var(--primary);
 
   &:hover:not(:disabled) {
-    background-color: #0070f3;
-    color: #ffffff;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
     transform: translateY(-1px);
-  }
-
-  .dark & {
-    color: #3291ff;
-    border-color: #3291ff;
-
-    &:hover:not(:disabled) {
-      background-color: #3291ff;
-      color: #ffffff;
-    }
   }
 }
 
