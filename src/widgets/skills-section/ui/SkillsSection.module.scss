@@ -1,77 +1,97 @@
 @use '@/shared/lib/breakpoints' as *;
 
+/**
+ * Секция навыков
+ * Современный адаптивный дизайн с поддержкой тем
+ * Использует карточки с иконками технологий из react-icons
+ */
+
 .section {
-  padding: 3rem 1rem;
+  padding: 4rem 1rem;
   background-color: var(--background);
   color: var(--foreground);
   transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
+    background-color 0.3s ease,
+    color 0.3s ease;
+  position: relative;
+  overflow: hidden;
 
   @include respond-to(sm) {
-    padding: 4rem 2rem;
-  }
-
-  @include respond-to(md) {
     padding: 5rem 2rem;
   }
 
-  @include respond-to(lg) {
+  @include respond-to(md) {
     padding: 6rem 2rem;
+  }
+
+  @include respond-to(lg) {
+    padding: 8rem 2rem;
   }
 }
 
 .container {
   @include container;
+  position: relative;
+  z-index: 1;
 }
 
 .title {
-  @include fluid-font(1.75rem, 2.5rem);
+  @include fluid-font(2rem, 3rem);
   font-weight: 700;
   text-align: center;
   margin-bottom: 0.75rem;
   line-height: 1.2;
   color: var(--foreground);
-  transition: color 0.2s ease;
+  transition: color 0.3s ease;
+  letter-spacing: -0.02em;
 
   @include respond-to(sm) {
     margin-bottom: 1rem;
   }
+
+  @include respond-to(md) {
+    margin-bottom: 1.25rem;
+  }
 }
 
 .subtitle {
-  @include fluid-font(0.875rem, 1.125rem);
+  @include fluid-font(1rem, 1.25rem);
   text-align: center;
   color: var(--muted-foreground);
-  margin-bottom: 2.5rem;
-  transition: color 0.2s ease;
+  margin-bottom: 3rem;
+  transition: color 0.3s ease;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 
   @include respond-to(sm) {
-    margin-bottom: 3rem;
+    margin-bottom: 4rem;
   }
 
   @include respond-to(md) {
-    margin-bottom: 3.5rem;
+    margin-bottom: 5rem;
   }
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 1.25rem;
+  gap: 1.5rem;
+  align-items: stretch;
 
   @include respond-to(sm) {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1.5rem;
+    gap: 2rem;
   }
 
   @include respond-to(md) {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 2rem;
+    gap: 2.5rem;
   }
 
   @include respond-to(lg) {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 3rem;
   }
 }
 
@@ -79,54 +99,123 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1.5rem 1rem;
+  padding: 2rem 1.5rem;
   background-color: var(--card);
   border: 1px solid var(--border);
-  border-radius: 0.75rem;
+  border-radius: 1rem;
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease,
-    background-color 0.2s ease;
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s ease,
+    background-color 0.3s ease;
   text-align: center;
   cursor: default;
+  position: relative;
+  overflow: hidden;
+
+  // Градиентный фон при наведении (только для десктопа)
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      transparent 0%,
+      rgba(37, 99, 235, 0.03) 50%,
+      transparent 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
 
   // Hover эффект только для устройств с курсором
   @media (hover: hover) and (pointer: fine) {
     &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      transform: translateY(-8px);
       border-color: var(--primary);
+      box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.08),
+        0 0 0 1px var(--primary);
 
-      .dark & {
-        box-shadow: 0 8px 24px rgba(255, 255, 255, 0.05);
+      &::before {
+        opacity: 1;
+      }
+
+      .iconWrapper {
+        transform: scale(1.1) rotate(5deg);
+      }
+
+      .icon {
+        filter: brightness(1.1);
       }
     }
   }
 
+  // Активное состояние (для touch устройств)
+  &:active {
+    transform: translateY(-4px);
+  }
+
   @include respond-to(sm) {
-    padding: 2rem 1.25rem;
+    padding: 2.5rem 1.75rem;
   }
 
   @include respond-to(md) {
-    padding: 2.25rem 1.5rem;
+    padding: 3rem 2rem;
+  }
+}
+
+.iconWrapper {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @include respond-to(sm) {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 1.75rem;
+  }
+
+  @include respond-to(md) {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 2rem;
   }
 }
 
 .icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  line-height: 1;
-  filter: grayscale(0%);
-  transition: transform 0.2s ease;
+  width: 100%;
+  height: 100%;
+  // Цвет задается через style prop для каждой иконки индивидуально
+  // Это позволяет использовать официальные цвета брендов
+  transition:
+    filter 0.3s ease,
+    transform 0.3s ease;
 
-  .card:hover & {
-    transform: scale(1.1);
-  }
+  // Настройка фильтра для лучшей видимости иконок
+  filter: brightness(1);
+
+  // Убеждаемся, что иконки не наследуют цвет текста
+  // Это позволяет использовать оригинальные цвета брендов
+}
+
+.iconPlaceholder {
+  font-size: 2.5rem;
+  line-height: 1;
+  color: var(--muted-foreground);
+  transition: color 0.3s ease;
 
   @include respond-to(sm) {
     font-size: 3rem;
-    margin-bottom: 1.25rem;
   }
 
   @include respond-to(md) {
@@ -137,13 +226,14 @@
 .name {
   @include fluid-font(1rem, 1.125rem);
   font-weight: 600;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
   color: var(--foreground);
-  transition: color 0.2s ease;
+  transition: color 0.3s ease;
   line-height: 1.3;
+  letter-spacing: -0.01em;
 
   @include respond-to(sm) {
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
   }
 }
 
@@ -153,6 +243,7 @@
   justify-content: center;
   gap: 0.5rem;
   margin-top: auto;
+  padding-top: 0.5rem;
 }
 
 .levelDot {
@@ -161,18 +252,74 @@
   border-radius: 50%;
   display: inline-block;
   flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+  transition: box-shadow 0.3s ease;
 }
 
 .levelText {
   @include fluid-font(0.75rem, 0.875rem);
   color: var(--muted-foreground);
-  transition: color 0.2s ease;
-  text-transform: capitalize;
+  transition: color 0.3s ease;
+  font-weight: 500;
 }
 
 // Поддержка foldable устройств
 @include foldable-horizontal {
   .grid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+// Анимация появления карточек (stagger effect)
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeInUp 0.6s ease-out backwards;
+
+  // Stagger анимация для карточек
+  @for $i from 1 through 15 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.05}s;
+    }
+  }
+}
+
+// Улучшенные тени для темной темы
+.dark {
+  .card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        box-shadow:
+          0 12px 32px rgba(0, 0, 0, 0.4),
+          0 0 0 1px var(--primary);
+      }
+    }
+  }
+
+  .levelDot {
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  }
+}
+
+// Улучшения для больших экранов
+@include respond-to(xl) {
+  .grid {
+    gap: 3.5rem;
+  }
+
+  .card {
+    padding: 3.5rem 2.5rem;
   }
 }
