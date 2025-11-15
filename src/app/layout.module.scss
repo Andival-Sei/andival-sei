@@ -1,9 +1,14 @@
+@use '@/shared/lib/breakpoints' as *;
+
 .wrapper {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  min-width: 320px; // Минимальная ширина для поддержки старых устройств
 }
 
 .main {
   flex: 1;
+  width: 100%;
+  overflow-x: hidden; // Предотвращение горизонтального скролла
 }

@@ -1,0 +1,112 @@
+// Система breakpoints для адаптивного дизайна
+// Mobile-first подход
+
+// Импорт модуля map для работы с картами
+@use 'sass:map';
+
+$breakpoints: (
+  xs: 320px,
+  // Минимальная ширина (старые телефоны)
+  sm: 640px,
+  // Мобильные устройства (современные телефоны)
+  md: 768px,
+  // Планшеты (портретная ориентация)
+  lg: 1024px,
+  // Планшеты (ландшафтная) / маленькие ноутбуки
+  xl: 1280px,
+  // Десктопы
+  2xl: 1536px,
+  // Большие десктопы
+  3xl: 1920px, // Ультраширокие экраны (21:9 и выше)
+);
+
+// Максимальная ширина контента для ультрашироких экранов
+$max-content-width: 1400px;
+
+// Миксин для медиа-запросов (min-width) - mobile-first
+@mixin respond-to($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media (min-width: map.get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Breakpoint `#{$breakpoint}` не найден в $breakpoints.";
+  }
+}
+
+// Миксин для медиа-запросов (max-width) - desktop-first
+@mixin respond-below($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media (max-width: map.get($breakpoints, $breakpoint) - 1px) {
+      @content;
+    }
+  } @else {
+    @warn "Breakpoint `#{$breakpoint}` не найден в $breakpoints.";
+  }
+}
+
+// Миксин для диапазона breakpoints
+@mixin respond-between($min, $max) {
+  @if map.has-key($breakpoints, $min) and map.has-key($breakpoints, $max) {
+    @media (min-width: map.get($breakpoints, $min)) and (max-width: map.get($breakpoints, $max) - 1px) {
+      @content;
+    }
+  } @else {
+    @warn "Breakpoint не найден в $breakpoints.";
+  }
+}
+
+// Миксин для ориентации экрана
+@mixin orientation($orientation) {
+  @if $orientation == portrait or $orientation == landscape {
+    @media (orientation: $orientation) {
+      @content;
+    }
+  } @else {
+    @warn "Ориентация должна быть 'portrait' или 'landscape'.";
+  }
+}
+
+// Миксин для поддержки foldable устройств (viewport segments)
+@mixin foldable-horizontal {
+  @media (horizontal-viewport-segments: 2) {
+    @content;
+  }
+}
+
+@mixin foldable-vertical {
+  @media (vertical-viewport-segments: 2) {
+    @content;
+  }
+}
+
+// Миксин для контейнера с ограничением максимальной ширины
+@mixin container {
+  width: 100%;
+  max-width: $max-content-width;
+  margin: 0 auto;
+  padding: 0 1rem;
+
+  @include respond-to(md) {
+    padding: 0 2rem;
+  }
+
+  @include respond-to(xl) {
+    padding: 0 3rem;
+  }
+
+  // На ультрашироких экранах дополнительное ограничение
+  @include respond-to(3xl) {
+    max-width: $max-content-width;
+  }
+}
+
+// Миксин для адаптивных размеров шрифта
+@mixin fluid-font($min-size, $max-size, $min-width: 320px, $max-width: 1920px) {
+  font-size: clamp(
+    #{$min-size},
+    #{$min-size} + (#{$max-size} - #{$min-size}) *
+      ((100vw - #{$min-width}) / (#{$max-width} - #{$min-width})),
+    #{$max-size}
+  );
+}

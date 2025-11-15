@@ -1,3 +1,5 @@
+@use '@/shared/lib/breakpoints' as *;
+
 // Компонент Button с SCSS модулем
 .button {
   display: inline-flex;
@@ -11,6 +13,12 @@
   border-radius: 0.5rem;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  width: 100%;
+  min-height: 44px; // Минимальный размер для удобного нажатия на мобильных
+
+  @include respond-to(sm) {
+    width: auto;
+  }
 
   &:active {
     transform: translateY(0);
@@ -20,6 +28,13 @@
     opacity: 0.5;
     cursor: not-allowed;
     transform: none;
+  }
+
+  // Улучшение для touch-устройств
+  @media (hover: none) and (pointer: coarse) {
+    &:hover {
+      transform: none;
+    }
   }
 }
 

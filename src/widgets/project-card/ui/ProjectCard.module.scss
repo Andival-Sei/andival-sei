@@ -1,3 +1,5 @@
+@use '@/shared/lib/breakpoints' as *;
+
 .card {
   border: 1px solid var(--border);
   border-radius: 0.5rem;
@@ -8,22 +10,37 @@
     box-shadow 0.2s,
     border-color 0.2s ease,
     background-color 0.2s ease;
-}
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  // Hover эффект только для устройств с курсором
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
-  .dark & {
-    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+      .dark & {
+        box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+      }
+    }
   }
 }
 
 .image {
   width: 100%;
-  height: 200px;
+  height: 180px;
   background-color: var(--muted);
   transition: background-color 0.2s ease;
+  object-fit: cover;
+
+  @include respond-to(sm) {
+    height: 200px;
+  }
+
+  @include respond-to(md) {
+    height: 220px;
+  }
 }
 
 .placeholder {
@@ -32,22 +49,41 @@
   justify-content: center;
   height: 100%;
   color: var(--muted-foreground);
+  font-size: 0.875rem;
 }
 
 .content {
-  padding: 1.5rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  @include respond-to(sm) {
+    padding: 1.5rem;
+  }
 }
 
 .title {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
+  line-height: 1.3;
+
+  @include respond-to(sm) {
+    font-size: 1.25rem;
+  }
 }
 
 .description {
   color: var(--muted-foreground);
   margin-bottom: 1rem;
   line-height: 1.6;
+  font-size: 0.875rem;
+  flex-grow: 1;
+
+  @include respond-to(sm) {
+    font-size: 1rem;
+  }
 }
 
 .technologies {
@@ -62,13 +98,20 @@
   background-color: var(--accent);
   color: var(--accent-foreground);
   border-radius: 1rem;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
+  white-space: nowrap;
+
+  @include respond-to(sm) {
+    font-size: 0.875rem;
+  }
 }
 
 .actions {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: auto;
 }
