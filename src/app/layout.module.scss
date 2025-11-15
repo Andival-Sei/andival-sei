@@ -11,11 +11,6 @@
   flex: 1;
   width: 100%;
   overflow-x: hidden; // Предотвращение горизонтального скролла
-  // Добавляем отступ сверху, чтобы контент не скрывался под fixed header
-  padding-top: var(--header-height);
-
-  @include respond-below(md) {
-    // На мобильных устройствах header немного ниже из-за меньшего padding
-    padding-top: 3.5rem;
-  }
+  // Убираем padding-top, чтобы контент прокручивался под header для эффекта блюра
+  // Отступы добавляются в первый элемент каждой страницы (например, HeroSection)
 }
