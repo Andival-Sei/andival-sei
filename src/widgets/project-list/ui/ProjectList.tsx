@@ -8,35 +8,55 @@ import styles from './ProjectList.module.scss';
 
 /**
  * Виджет "Список проектов"
+ * Отображает проекты в виде адаптивной сетки карточек
  * TODO: Добавить пагинацию и улучшить UI
  */
 export const ProjectList = () => {
   const { projects, isLoading, error } = useProjectList();
 
   if (isLoading) {
-    return <div className={styles.loading}>Загрузка проектов...</div>;
+    return (
+      <section className={styles.section}>
+        <div className={styles.container}>
+          <div className={styles.loading}>Загрузка проектов...</div>
+        </div>
+      </section>
+    );
   }
 
   if (error) {
-    return <div className={styles.error}>Ошибка: {error.message}</div>;
-  }
-
-  if (projects.length === 0) {
-    return <div className={styles.empty}>Проекты не найдены</div>;
+    return (
+      <section className={styles.section}>
+        <div className={styles.container}>
+          <div className={styles.error}>Ошибка: {error.message}</div>
+        </div>
+      </section>
+    );
   }
 
   return (
-    <div className={styles.list}>
-      <div className={styles.controls}>
-        <ProjectSearch projects={projects} />
-        <ProjectFilter projects={projects} />
-      </div>
+    <section className={styles.section}>
+      <div className={styles.container}>
+        <h2 className={styles.title}>Проекты</h2>
+        <p className={styles.subtitle}>Примеры моих работ и проектов, над которыми я работал</p>
 
-      <div className={styles.grid}>
-        {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
+        {projects.length === 0 ? (
+          <div className={styles.empty}>Проекты не найдены</div>
+        ) : (
+          <>
+            <div className={styles.controls}>
+              <ProjectSearch projects={projects} />
+              <ProjectFilter projects={projects} />
+            </div>
+
+            <div className={styles.grid}>
+              {projects.map((project) => (
+                <ProjectCard key={project.id} project={project} />
+              ))}
+            </div>
+          </>
+        )}
       </div>
-    </div>
+    </section>
   );
 };
