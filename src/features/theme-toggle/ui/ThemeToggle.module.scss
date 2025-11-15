@@ -1,0 +1,15 @@
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 120px;
+}
+
+.icon {
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.text {
+  font-weight: 500;
+}

@@ -1,0 +1,94 @@
+// Компонент Button с SCSS модулем
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.primary {
+  color: #ffffff;
+  background-color: #0070f3;
+
+  &:hover:not(:disabled) {
+    background-color: #0051cc;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 112, 243, 0.4);
+  }
+
+  .dark & {
+    background-color: #3291ff;
+
+    &:hover:not(:disabled) {
+      background-color: #4da3ff;
+      box-shadow: 0 4px 12px rgba(50, 145, 255, 0.4);
+    }
+  }
+}
+
+.secondary {
+  color: #ffffff;
+  background-color: #6b7280;
+
+  &:hover:not(:disabled) {
+    background-color: #4b5563;
+    transform: translateY(-1px);
+  }
+
+  .dark & {
+    background-color: #52525b;
+
+    &:hover:not(:disabled) {
+      background-color: #3f3f46;
+    }
+  }
+}
+
+.outline {
+  background-color: transparent;
+  color: #0070f3;
+  border: 2px solid #0070f3;
+
+  &:hover:not(:disabled) {
+    background-color: #0070f3;
+    color: #ffffff;
+    transform: translateY(-1px);
+  }
+
+  .dark & {
+    color: #3291ff;
+    border-color: #3291ff;
+
+    &:hover:not(:disabled) {
+      background-color: #3291ff;
+      color: #ffffff;
+    }
+  }
+}
+
+.small {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.large {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}
