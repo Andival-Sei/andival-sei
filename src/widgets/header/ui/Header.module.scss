@@ -1,9 +1,12 @@
 @use '@/shared/lib/breakpoints' as *;
 
 // Основной контейнер хедера
+// Используем position: fixed для гарантированного отображения header всегда вверху
 .header {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
   width: 100%;
   background-color: var(--header-bg);
@@ -303,7 +306,7 @@
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-left: 1px solid var(--border);
-  z-index: 1000; // Ниже кнопки меню (1003), но выше overlay (999)
+  z-index: 1001; // Выше header (1000) и overlay (999), но ниже кнопки меню (1003)
   transform: translateX(100%);
   opacity: 0;
   visibility: hidden;
