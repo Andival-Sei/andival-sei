@@ -6,7 +6,7 @@
 // - Добавить hover эффекты
 
 import type { Project } from "@/src/entities/project/model/types";
-import { Card } from "@/src/shared/ui/Card";
+import { Card, CardContent } from "@/src/shared/ui/Card";
 
 interface ProjectCardProps {
   project: Project;
@@ -18,7 +18,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       {/* TODO: Добавить изображение проекта */}
       <div className="bg-muted aspect-video w-full" />
 
-      <div className="p-6">
+      <CardContent>
         <h3 className="text-xl font-semibold">{project.title}</h3>
         <p className="text-muted-foreground mt-2 text-sm">
           {project.description}
@@ -40,7 +40,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         <div className="mt-4 flex gap-2">
           {/* TODO: Добавить кнопки для демо и кода */}
         </div>
-      </div>
+      </CardContent>
     </Card>
   );
 }

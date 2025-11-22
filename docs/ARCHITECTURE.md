@@ -257,18 +257,48 @@ src/shared/
 
 **Примеры**:
 
-- `Button` - кнопка
-- `Card` - карточка
-- `Section` - секция
-- `Link` - ссылка
+- `Button` - кнопка (из Shadcn/ui)
+- `Card` - карточка с подкомпонентами (CardHeader, CardTitle, CardDescription, CardContent, CardFooter) (из Shadcn/ui)
+- `Input`, `Textarea`, `Label` - компоненты форм (из Shadcn/ui)
+- `Badge` - бейдж для тегов (из Shadcn/ui)
+- `Dialog` - модальное окно (из Shadcn/ui)
+- `DropdownMenu` - выпадающее меню (из Shadcn/ui)
+- `Tabs` - вкладки (из Shadcn/ui)
+- `Separator` - разделитель (из Shadcn/ui)
+- `Section` - секция (кастомный компонент)
+- `Link` - ссылка (кастомный компонент)
 - `utils.ts` - утилиты (cn, formatters и т.д.)
 - `constants.ts` - константы
 - `site.ts` - конфигурация сайта
+
+**UI компоненты (Shadcn/ui)**:
+
+Проект использует [Shadcn/ui](https://ui.shadcn.com/) - библиотеку доступных и кастомизируемых UI компонентов на базе Radix UI.
+
+**Добавление новых компонентов Shadcn/ui**:
+
+```bash
+# Добавить компонент через CLI
+npx shadcn@latest add <component-name>
+
+# Компонент будет создан в src/shared/ui/<component-name>/
+# Не забудьте обновить src/shared/ui/index.ts для экспорта
+```
+
+**Структура компонентов Shadcn/ui**:
+
+Все компоненты Shadcn/ui размещаются в `src/shared/ui/` с сохранением структуры FSD:
+
+- Каждый компонент в своей папке (PascalCase)
+- Файл компонента: `ComponentName.tsx`
+- Экспорт через `index.ts`
+- Все компоненты экспортируются из `src/shared/ui/index.ts`
 
 **Правила**:
 
 - Не может импортировать из других слоёв FSD
 - Используется во всех слоях
+- Компоненты Shadcn/ui можно кастомизировать напрямую в коде
 
 ---
 

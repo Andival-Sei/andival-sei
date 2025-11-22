@@ -21,6 +21,7 @@ describe("Button component", () => {
     const button = screen.getByRole("button");
     expect(button).toHaveClass("border");
     expect(button).toHaveClass("bg-background");
+    expect(button).toHaveClass("shadow-xs");
   });
 
   it("должен применять variant ghost", () => {
@@ -32,13 +33,13 @@ describe("Button component", () => {
   it("должен применять size sm", () => {
     render(<Button size="sm">Small</Button>);
     const button = screen.getByRole("button");
-    expect(button).toHaveClass("h-9");
+    expect(button).toHaveClass("h-8");
   });
 
   it("должен применять size lg", () => {
     render(<Button size="lg">Large</Button>);
     const button = screen.getByRole("button");
-    expect(button).toHaveClass("h-11");
+    expect(button).toHaveClass("h-10");
   });
 
   it("должен вызывать onClick при клике", async () => {
