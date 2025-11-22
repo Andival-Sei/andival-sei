@@ -3,9 +3,9 @@
 // - Добавить фильтры по технологиям
 // - Добавить поиск проектов
 
-import { Header } from '@/src/widgets/header';
-import { ProjectsSection } from '@/src/widgets/projects-section';
-import { Footer } from '@/src/widgets/footer';
+import { Footer } from "@/src/widgets/footer";
+import { Header } from "@/src/widgets/header";
+import { ProjectsSection } from "@/src/widgets/projects-section";
 
 export function ProjectsPage() {
   return (
@@ -16,4 +16,3 @@ export function ProjectsPage() {
     </>
   );
 }
-

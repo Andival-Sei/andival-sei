@@ -11,7 +11,7 @@
 ## Пример использования
 
 ```tsx
-import styles from './ExampleComponent.module.scss';
+import styles from "./ExampleComponent.module.scss";
 
 export function ExampleComponent() {
   return (
@@ -42,4 +42,3 @@ export function ExampleComponent() {
 2. Добавляйте плавные переходы для всех свойств, связанных с цветом
 3. Используйте вложенные селекторы для организации кода
 4. При необходимости используйте data-атрибуты для специфичных стилей тем
-

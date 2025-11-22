@@ -25,7 +25,9 @@
           "responsive",
           "screen",
           "theme",
-          "layer"
+          "layer",
+          "mixin",
+          "include"
         ]
       }
     ],
@@ -39,10 +41,13 @@
           "responsive",
           "screen",
           "theme",
-          "layer"
+          "layer",
+          "mixin",
+          "include"
         ]
       }
-    ]
+    ],
+    "scss/at-mixin-pattern": null
   },
   "ignoreFiles": [
     "**/*.js",

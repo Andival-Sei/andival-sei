@@ -4,13 +4,13 @@
 // - Сделать адаптивным (мобильное меню)
 // - Добавить плавную прокрутку
 
-import Link from 'next/link';
+import Link from "next/link";
 
 const navItems = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
-  { href: '/projects', label: 'Projects' },
-  { href: '/contact', label: 'Contact' },
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
+  { href: "/projects", label: "Projects" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function Navigation() {
@@ -21,7 +21,7 @@ export function Navigation() {
         <Link
           key={item.href}
           href={item.href}
-          className="text-sm font-medium transition-colors hover:text-foreground/80"
+          className="hover:text-foreground/80 text-sm font-medium transition-colors"
         >
           {item.label}
         </Link>
@@ -29,4 +29,3 @@ export function Navigation() {
     </nav>
   );
 }
-

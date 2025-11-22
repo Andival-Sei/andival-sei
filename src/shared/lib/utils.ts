@@ -1,5 +1,5 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 // TODO: Установить clsx и tailwind-merge если их нет
 // npm install clsx tailwind-merge
@@ -16,4 +16,3 @@ export function cn(...inputs: ClassValue[]) {
 // - truncate
 // - debounce
 // - throttle
-

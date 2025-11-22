@@ -36,6 +36,7 @@ andival-sei/
 **Назначение**: Инициализация приложения, провайдеры, глобальные настройки.
 
 **Структура**:
+
 ```
 src/app/
 ├── providers/          # React провайдеры
@@ -45,10 +46,12 @@ src/app/
 ```
 
 **Примеры**:
+
 - `ThemeProvider` - провайдер темы (светлая/тёмная)
 - Другие провайдеры (если понадобятся)
 
 **Правила**:
+
 - Может импортировать только из `shared`
 - Используется в `app/layout.tsx`
 
@@ -59,6 +62,7 @@ src/app/
 **Назначение**: Сложные бизнес-процессы, которые координируют работу нескольких фич.
 
 **Структура**:
+
 ```
 src/processes/
 └── send-contact-form/
@@ -68,9 +72,11 @@ src/processes/
 ```
 
 **Примеры**:
+
 - `send-contact-form` - процесс отправки контактной формы
 
 **Правила**:
+
 - Может импортировать из `widgets`, `features`, `entities`, `shared`
 - Используется в `compositions` или `widgets`
 
@@ -83,6 +89,7 @@ src/processes/
 **Примечание**: Слой переименован из `pages` в `compositions` для избежания конфликта с Next.js, который использует директорию `pages/` для Pages Router.
 
 **Структура**:
+
 ```
 src/compositions/
 ├── home/
@@ -95,16 +102,19 @@ src/compositions/
 ```
 
 **Примеры**:
+
 - `HomePage` - главная страница
 - `AboutPage` - страница "О себе"
 - `ProjectsPage` - страница проектов
 - `ContactPage` - страница контактов
 
 **Правила**:
+
 - Может импортировать из `widgets`, `features`, `entities`, `shared`
 - Используется в `app/*/page.tsx`
 
 **Пример использования**:
+
 ```typescript
 // app/page.tsx
 import { HomePage } from "@/src/compositions/home";
@@ -121,6 +131,7 @@ export default function Home() {
 **Назначение**: Крупные составные блоки интерфейса, состоящие из фич и сущностей.
 
 **Структура**:
+
 ```
 src/widgets/
 ├── header/
@@ -135,6 +146,7 @@ src/widgets/
 ```
 
 **Примеры**:
+
 - `Header` - шапка сайта с навигацией
 - `Footer` - подвал сайта
 - `HeroSection` - главная секция
@@ -143,6 +155,7 @@ src/widgets/
 - `ContactSection` - секция контактов
 
 **Правила**:
+
 - Может импортировать из `features`, `entities`, `shared`
 - Используется в `pages` или других `widgets`
 
@@ -153,6 +166,7 @@ src/widgets/
 **Назначение**: Конкретные пользовательские сценарии и интерактивные элементы.
 
 **Структура**:
+
 ```
 src/features/
 ├── theme-toggle/
@@ -165,12 +179,14 @@ src/features/
 ```
 
 **Примеры**:
+
 - `theme-toggle` - переключатель темы
 - `project-card` - карточка проекта
 - `contact-form` - форма обратной связи
 - `navigation` - навигационное меню
 
 **Правила**:
+
 - Может импортировать из `entities`, `shared`
 - Может содержать `model/` для бизнес-логики
 - Используется в `widgets` или `pages`
@@ -182,6 +198,7 @@ src/features/
 **Назначение**: Бизнес-сущности приложения с их типами, данными и UI компонентами.
 
 **Структура**:
+
 ```
 src/entities/
 ├── project/
@@ -196,16 +213,19 @@ src/entities/
 ```
 
 **Примеры**:
+
 - `project` - сущность проекта
 - `skill` - сущность навыка
 - `contact` - сущность контакта
 
 **Правила**:
+
 - Может импортировать только из `shared`
 - Содержит типы, данные и UI компоненты для отображения сущности
 - Используется в `features`, `widgets`, `pages`
 
 **Структура сущности**:
+
 - `model/types.ts` - TypeScript типы
 - `model/*-data.ts` - данные (заглушки или реальные данные)
 - `ui/` - UI компоненты для отображения сущности
@@ -217,6 +237,7 @@ src/entities/
 **Назначение**: Переиспользуемый код, не привязанный к бизнес-логике.
 
 **Структура**:
+
 ```
 src/shared/
 ├── ui/              # Базовые UI компоненты
@@ -235,6 +256,7 @@ src/shared/
 ```
 
 **Примеры**:
+
 - `Button` - кнопка
 - `Card` - карточка
 - `Section` - секция
@@ -244,6 +266,7 @@ src/shared/
 - `site.ts` - конфигурация сайта
 
 **Правила**:
+
 - Не может импортировать из других слоёв FSD
 - Используется во всех слоях
 
@@ -262,34 +285,36 @@ app → processes → compositions → widgets → features → entities → sha
 ### Примеры правильных импортов
 
 ✅ **Правильно**:
+
 ```typescript
 // compositions/home может импортировать из widgets, features, entities, shared
-import { Header } from '@/src/widgets/header';
-import { HeroSection } from '@/src/widgets/hero-section';
+import { Header } from "@/src/widgets/header";
+import { HeroSection } from "@/src/widgets/hero-section";
 
 // widgets/header может импортировать из features, entities, shared
-import { Navigation } from '@/src/features/navigation';
-import { ThemeToggle } from '@/src/features/theme-toggle';
-import { Button } from '@/src/shared/ui';
+import { Navigation } from "@/src/features/navigation";
+import { ThemeToggle } from "@/src/features/theme-toggle";
+import { Button } from "@/src/shared/ui";
 
 // features/project-card может импортировать из entities, shared
-import { Project } from '@/src/entities/project';
-import { Card } from '@/src/shared/ui';
+import { Project } from "@/src/entities/project";
+import { Card } from "@/src/shared/ui";
 
 // entities/project может импортировать только из shared
-import type { Optional } from '@/src/shared/types/common';
+import type { Optional } from "@/src/shared/types/common";
 ```
 
 ❌ **Неправильно**:
+
 ```typescript
 // entities/project НЕ может импортировать из features
-import { ProjectCard } from '@/src/features/project-card'; // ❌
+import { ProjectCard } from "@/src/features/project-card"; // ❌
 
 // features НЕ может импортировать из widgets
-import { Header } from '@/src/widgets/header'; // ❌
+import { Header } from "@/src/widgets/header"; // ❌
 
 // shared НЕ может импортировать из других слоёв
-import { Project } from '@/src/entities/project'; // ❌
+import { Project } from "@/src/entities/project"; // ❌
 ```
 
 ### Внутри слоя
@@ -297,12 +322,14 @@ import { Project } from '@/src/entities/project'; // ❌
 Внутри одного слоя можно импортировать только из своих сегментов (фич/виджетов/сущностей).
 
 ✅ **Правильно**:
+
 ```typescript
 // widgets/header может импортировать из widgets/footer
-import { Footer } from '@/src/widgets/footer';
+import { Footer } from "@/src/widgets/footer";
 ```
 
 ❌ **Неправильно**:
+
 ```typescript
 // features/theme-toggle НЕ должен импортировать из features/contact-form
 // (если нет прямой необходимости)
@@ -319,10 +346,11 @@ import { Footer } from '@/src/widgets/footer';
 - `@/app/*` → `app/*`
 
 **Примеры использования**:
+
 ```typescript
-import { Button } from '@/src/shared/ui';
-import { HomePage } from '@/src/compositions/home';
-import { Header } from '@/src/widgets/header';
+import { Button } from "@/src/shared/ui";
+import { HomePage } from "@/src/compositions/home";
+import { Header } from "@/src/widgets/header";
 ```
 
 ---
@@ -332,6 +360,7 @@ import { Header } from '@/src/widgets/header';
 ### Роутинг
 
 Роутинг осуществляется через директорию `app/`:
+
 - `app/page.tsx` → главная страница
 - `app/about/page.tsx` → страница "О себе"
 - `app/projects/page.tsx` → страница проектов
@@ -340,6 +369,7 @@ import { Header } from '@/src/widgets/header';
 ### Layout
 
 `app/layout.tsx` содержит:
+
 - Глобальные метаданные
 - Провайдеры (ThemeProvider и т.д.)
 - Глобальные стили
@@ -373,9 +403,10 @@ feature-name/
 ```
 
 **Публичный API** (`index.ts`):
+
 ```typescript
-export { FeatureName } from './ui/FeatureName';
-export type { FeatureNameProps } from './ui/FeatureName';
+export { FeatureName } from "./ui/FeatureName";
+export type { FeatureNameProps } from "./ui/FeatureName";
 ```
 
 ---
@@ -416,4 +447,3 @@ export type { FeatureNameProps } from './ui/FeatureName';
 ## Обновления
 
 Этот документ будет обновляться по мере развития проекта. При изменении архитектуры обновите соответствующие разделы.
-

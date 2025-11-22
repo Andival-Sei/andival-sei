@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useTheme } from '@/src/app/providers';
-import { cn } from '@/src/shared/lib/utils';
+import { useTheme } from "@/src/app/providers";
+import { cn } from "@/src/shared/lib/utils";
 
 /**
  * Иконка солнца (светлая тема)
@@ -78,41 +78,41 @@ export function ThemeToggle() {
 
   const toggleTheme = () => {
     // Циклическое переключение: light -> dark -> system -> light
-    if (theme === 'light') {
-      setTheme('dark');
-    } else if (theme === 'dark') {
-      setTheme('system');
+    if (theme === "light") {
+      setTheme("dark");
+    } else if (theme === "dark") {
+      setTheme("system");
     } else {
-      setTheme('light');
+      setTheme("light");
     }
   };
 
   const getThemeLabel = () => {
-    if (theme === 'system') {
-      return 'Системная тема';
+    if (theme === "system") {
+      return "Системная тема";
     }
-    return theme === 'light' ? 'Светлая тема' : 'Тёмная тема';
+    return theme === "light" ? "Светлая тема" : "Тёмная тема";
   };
 
   const getNextThemeLabel = () => {
-    if (theme === 'light') {
-      return 'Переключить на тёмную тему';
+    if (theme === "light") {
+      return "Переключить на тёмную тему";
     }
-    if (theme === 'dark') {
-      return 'Переключить на системную тему';
+    if (theme === "dark") {
+      return "Переключить на системную тему";
     }
-    return 'Переключить на светлую тему';
+    return "Переключить на светлую тему";
   };
 
   return (
     <button
       onClick={toggleTheme}
       className={cn(
-        'inline-flex items-center justify-center rounded-md p-2',
-        'hover:bg-accent hover:text-accent-foreground',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-        'transition-colors duration-150',
-        'relative overflow-hidden'
+        "inline-flex items-center justify-center rounded-md p-2",
+        "hover:bg-accent hover:text-accent-foreground",
+        "focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+        "transition-colors duration-150",
+        "relative overflow-hidden"
       )}
       aria-label={getNextThemeLabel()}
       title={getNextThemeLabel()}
@@ -121,28 +121,28 @@ export function ThemeToggle() {
         {/* Иконка для светлой темы */}
         <SunIcon
           className={cn(
-            'absolute inset-0 h-5 w-5 transition-all duration-300',
-            resolvedTheme === 'light' && theme !== 'system'
-              ? 'rotate-0 scale-100 opacity-100'
-              : 'rotate-90 scale-0 opacity-0'
+            "absolute inset-0 h-5 w-5 transition-all duration-300",
+            resolvedTheme === "light" && theme !== "system"
+              ? "rotate-0 scale-100 opacity-100"
+              : "rotate-90 scale-0 opacity-0"
           )}
         />
         {/* Иконка для тёмной темы */}
         <MoonIcon
           className={cn(
-            'absolute inset-0 h-5 w-5 transition-all duration-300',
-            resolvedTheme === 'dark' && theme !== 'system'
-              ? 'rotate-0 scale-100 opacity-100'
-              : '-rotate-90 scale-0 opacity-0'
+            "absolute inset-0 h-5 w-5 transition-all duration-300",
+            resolvedTheme === "dark" && theme !== "system"
+              ? "rotate-0 scale-100 opacity-100"
+              : "-rotate-90 scale-0 opacity-0"
           )}
         />
         {/* Иконка для системной темы */}
         <MonitorIcon
           className={cn(
-            'absolute inset-0 h-5 w-5 transition-all duration-300',
-            theme === 'system'
-              ? 'rotate-0 scale-100 opacity-100'
-              : 'rotate-90 scale-0 opacity-0'
+            "absolute inset-0 h-5 w-5 transition-all duration-300",
+            theme === "system"
+              ? "rotate-0 scale-100 opacity-100"
+              : "rotate-90 scale-0 opacity-0"
           )}
         />
       </span>
@@ -150,4 +150,3 @@ export function ThemeToggle() {
     </button>
   );
 }
-

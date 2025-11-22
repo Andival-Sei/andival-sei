@@ -1,24 +1,27 @@
-import { type ButtonHTMLAttributes, forwardRef } from 'react';
-import { cn } from '@/src/shared/lib/utils';
+import { type ButtonHTMLAttributes, forwardRef } from "react";
+
+import { cn } from "@/src/shared/lib/utils";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'default' | 'outline' | 'ghost';
-  size?: 'default' | 'sm' | 'lg';
+  variant?: "default" | "outline" | "ghost";
+  size?: "default" | "sm" | "lg";
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'default', size = 'default', ...props }, ref) => {
+  ({ className, variant = "default", size = "default", ...props }, ref) => {
     return (
       <button
         className={cn(
-          'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
+          "focus-visible:ring-ring inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50",
           {
-            'bg-primary text-primary-foreground hover:bg-primary/90': variant === 'default',
-            'border border-input bg-background hover:bg-accent hover:text-accent-foreground': variant === 'outline',
-            'hover:bg-accent hover:text-accent-foreground': variant === 'ghost',
-            'h-10 px-4 py-2': size === 'default',
-            'h-9 rounded-md px-3': size === 'sm',
-            'h-11 rounded-md px-8': size === 'lg',
+            "bg-primary text-primary-foreground hover:bg-primary/90":
+              variant === "default",
+            "border-input bg-background hover:bg-accent hover:text-accent-foreground border":
+              variant === "outline",
+            "hover:bg-accent hover:text-accent-foreground": variant === "ghost",
+            "h-10 px-4 py-2": size === "default",
+            "h-9 rounded-md px-3": size === "sm",
+            "h-11 rounded-md px-8": size === "lg",
           },
           className
         )}
@@ -29,5 +32,4 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 
-Button.displayName = 'Button';
-
+Button.displayName = "Button";

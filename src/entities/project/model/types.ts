@@ -14,4 +14,3 @@ export interface Project {
   // - category: string
   // - tags: string[]
 }
-

@@ -3,9 +3,9 @@
 // - Добавить фильтры по технологиям
 // - Добавить пагинацию (если много проектов)
 
-import { Section } from '@/src/shared/ui/Section';
-import { ProjectCard } from '@/src/features/project-card';
-import { projects } from '@/src/entities/project/model/project-data';
+import { projects } from "@/src/entities/project/model/project-data";
+import { ProjectCard } from "@/src/features/project-card";
+import { Section } from "@/src/shared/ui/Section";
 
 export function ProjectsSection() {
   return (
@@ -20,4 +20,3 @@ export function ProjectsSection() {
     </Section>
   );
 }
-

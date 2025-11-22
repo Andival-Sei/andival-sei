@@ -11,10 +11,9 @@ export function HeroSection() {
       <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
         Welcome to My Portfolio
       </h1>
-      <p className="max-w-[700px] text-lg text-muted-foreground">
+      <p className="text-muted-foreground max-w-[700px] text-lg">
         TODO: Добавить описание
       </p>
     </section>
   );
 }
-

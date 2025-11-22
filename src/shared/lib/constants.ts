@@ -6,6 +6,5 @@
 // - Временные интервалы
 // - Другие конфигурационные значения
 
-export const SITE_NAME = 'Portfolio';
-export const SITE_DESCRIPTION = 'Personal portfolio website';
-
+export const SITE_NAME = "Portfolio";
+export const SITE_DESCRIPTION = "Personal portfolio website";

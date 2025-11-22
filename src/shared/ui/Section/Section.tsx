@@ -1,14 +1,15 @@
-import { type HTMLAttributes, forwardRef } from 'react';
-import { cn } from '@/src/shared/lib/utils';
+import { type HTMLAttributes, forwardRef } from "react";
 
-export interface SectionProps extends HTMLAttributes<HTMLElement> {}
+import { cn } from "@/src/shared/lib/utils";
+
+export type SectionProps = HTMLAttributes<HTMLElement>;
 
 export const Section = forwardRef<HTMLElement, SectionProps>(
   ({ className, children, ...props }, ref) => {
     return (
       <section
         ref={ref}
-        className={cn('container py-24 md:py-32', className)}
+        className={cn("container py-24 md:py-32", className)}
         {...props}
       >
         {children}
@@ -17,5 +18,4 @@ export const Section = forwardRef<HTMLElement, SectionProps>(
   }
 );
 
-Section.displayName = 'Section';
-
+Section.displayName = "Section";

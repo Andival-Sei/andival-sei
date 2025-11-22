@@ -3,8 +3,8 @@
 // - Добавить контактную информацию
 // - Добавить карту (опционально)
 
-import { Section } from '@/src/shared/ui/Section';
-import { ContactForm } from '@/src/features/contact-form';
+import { ContactForm } from "@/src/features/contact-form";
+import { Section } from "@/src/shared/ui/Section";
 
 export function ContactSection() {
   return (
@@ -17,4 +17,3 @@ export function ContactSection() {
     </Section>
   );
 }
-

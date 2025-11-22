@@ -3,9 +3,9 @@
 // - Добавить контактную информацию
 // - Добавить ссылки на социальные сети
 
-import { Header } from '@/src/widgets/header';
-import { ContactSection } from '@/src/widgets/contact-section';
-import { Footer } from '@/src/widgets/footer';
+import { ContactSection } from "@/src/widgets/contact-section";
+import { Footer } from "@/src/widgets/footer";
+import { Header } from "@/src/widgets/header";
 
 export function ContactPage() {
   return (
@@ -16,4 +16,3 @@ export function ContactPage() {
     </>
   );
 }
-

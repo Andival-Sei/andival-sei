@@ -8,4 +8,3 @@ export function SendContactForm() {
   // TODO: Реализовать логику отправки формы
   return null;
 }
-

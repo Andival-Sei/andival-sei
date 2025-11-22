@@ -2,35 +2,39 @@
 // Демонстрирует, как использовать CSS переменные в SCSS модулях
 
 .example {
-  // Использование CSS переменных из globals.css
-  background-color: var(--background);
-  color: var(--foreground);
-  border: 1px solid var(--border);
   padding: 1rem;
+
+  // Использование CSS переменных из globals.css
+  color: var(--foreground);
+  background-color: var(--background);
+  border: 1px solid var(--border);
   border-radius: 0.5rem;
-  transition: background-color 150ms, color 150ms, border-color 150ms;
+  transition:
+    background-color 150ms,
+    color 150ms,
+    border-color 150ms;
 
   // Вложенные селекторы
   &__title {
-    color: var(--foreground);
-    font-weight: 600;
     margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--foreground);
   }
 
   &__content {
-    color: var(--muted-foreground);
     font-size: 0.875rem;
+    color: var(--muted-foreground);
   }
 
   // Модификаторы
   &--accent {
-    background-color: var(--accent);
     color: var(--accent-foreground);
+    background-color: var(--accent);
   }
 
   &--primary {
-    background-color: var(--primary);
     color: var(--primary-foreground);
+    background-color: var(--primary);
   }
 
   // Hover состояние
@@ -39,14 +43,14 @@
   }
 
   // Использование с data-атрибутами (если нужно специфичное поведение)
-  [data-theme='dark'] & {
+  [data-theme="dark"] & {
     // Дополнительные стили для тёмной темы, если нужно
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 30%);
   }
 
-  [data-theme='light'] & {
+  [data-theme="light"] & {
     // Дополнительные стили для светлой темы, если нужно
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
   }
 }
 
@@ -58,15 +62,15 @@ $theme-border: var(--border);
 
 // Использование в миксинах
 @mixin theme-transition {
-  transition-property: background-color, color, border-color;
-  transition-duration: 150ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  transition-property: background-color, color, border-color;
 }
 
 .themed-element {
-  @include theme-transition;
-  background-color: $theme-background;
   color: $theme-foreground;
+  background-color: $theme-background;
   border: 1px solid $theme-border;
-}
 
+  @include theme-transition;
+}

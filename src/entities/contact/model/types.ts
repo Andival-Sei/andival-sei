@@ -11,4 +11,3 @@ export interface ContactInfo {
     // TODO: Добавить другие социальные сети
   };
 }
-
