@@ -15,6 +15,7 @@ interface ThemeContextType {
   theme: Theme;
   setTheme: (theme: Theme) => void;
   resolvedTheme: "light" | "dark";
+  mounted: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -155,7 +156,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   return (
     <ThemeContext.Provider
-      value={{ theme, setTheme: handleSetTheme, resolvedTheme }}
+      value={{ theme, setTheme: handleSetTheme, resolvedTheme, mounted }}
     >
       {children}
     </ThemeContext.Provider>

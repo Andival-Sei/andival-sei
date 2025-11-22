@@ -74,7 +74,7 @@ function MonitorIcon({ className }: { className?: string }) {
 }
 
 export function ThemeToggle() {
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme, mounted } = useTheme();
 
   const toggleTheme = () => {
     // Циклическое переключение: light -> dark -> system -> light
@@ -103,6 +103,30 @@ export function ThemeToggle() {
     }
     return "Переключить на светлую тему";
   };
+
+  // Пока компонент не смонтирован, рендерим нейтральное состояние
+  // чтобы избежать ошибок гидратации
+  if (!mounted) {
+    return (
+      <button
+        className={cn(
+          "inline-flex items-center justify-center rounded-md p-2",
+          "hover:bg-accent hover:text-accent-foreground",
+          "focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+          "transition-colors duration-150",
+          "relative overflow-hidden"
+        )}
+        aria-label="Переключить тему"
+        title="Переключить тему"
+        disabled
+      >
+        <span className="relative h-5 w-5">
+          <SunIcon className="absolute inset-0 h-5 w-5 opacity-0" />
+        </span>
+        <span className="sr-only">Загрузка...</span>
+      </button>
+    );
+  }
 
   return (
     <button
