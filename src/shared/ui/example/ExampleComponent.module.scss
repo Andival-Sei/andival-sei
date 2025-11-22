@@ -1,0 +1,72 @@
+// Пример SCSS модуля с поддержкой тем
+// Демонстрирует, как использовать CSS переменные в SCSS модулях
+
+.example {
+  // Использование CSS переменных из globals.css
+  background-color: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 150ms, color 150ms, border-color 150ms;
+
+  // Вложенные селекторы
+  &__title {
+    color: var(--foreground);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  &__content {
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+  }
+
+  // Модификаторы
+  &--accent {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+  }
+
+  &--primary {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  // Hover состояние
+  &:hover {
+    background-color: var(--muted);
+  }
+
+  // Использование с data-атрибутами (если нужно специфичное поведение)
+  [data-theme='dark'] & {
+    // Дополнительные стили для тёмной темы, если нужно
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  [data-theme='light'] & {
+    // Дополнительные стили для светлой темы, если нужно
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Пример использования SCSS переменных (опционально)
+// Можно определить SCSS переменные, которые ссылаются на CSS переменные
+$theme-background: var(--background);
+$theme-foreground: var(--foreground);
+$theme-border: var(--border);
+
+// Использование в миксинах
+@mixin theme-transition {
+  transition-property: background-color, color, border-color;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.themed-element {
+  @include theme-transition;
+  background-color: $theme-background;
+  color: $theme-foreground;
+  border: 1px solid $theme-border;
+}
+
