@@ -1,0 +1,58 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-standard-scss",
+    "stylelint-config-recess-order"
+  ],
+  "rules": {
+    "selector-class-pattern": null,
+    "scss/at-import-partial-extension": null,
+    "custom-property-pattern": null,
+    "value-keyword-case": null,
+    "declaration-block-no-duplicate-properties": [
+      true,
+      {
+        "ignoreProperties": ["composes"]
+      }
+    ],
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": [
+          "tailwind",
+          "apply",
+          "variants",
+          "responsive",
+          "screen",
+          "theme",
+          "layer"
+        ]
+      }
+    ],
+    "scss/at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": [
+          "tailwind",
+          "apply",
+          "variants",
+          "responsive",
+          "screen",
+          "theme",
+          "layer"
+        ]
+      }
+    ]
+  },
+  "ignoreFiles": [
+    "**/*.js",
+    "**/*.jsx",
+    "**/*.ts",
+    "**/*.tsx",
+    "node_modules/**",
+    ".next/**",
+    "out/**",
+    "build/**",
+    "dist/**"
+  ]
+}
