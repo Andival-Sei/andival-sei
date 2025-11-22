@@ -1,36 +1,147 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Website
 
-## Getting Started
+Персональный сайт-портфолио, построенный на [Next.js](https://nextjs.org) 16 с использованием архитектуры [Feature-Sliced Design (FSD)](https://feature-sliced.design/).
 
-First, run the development server:
+## 🚀 Технологии
+
+- **Next.js 16.0.3** - React фреймворк с App Router
+- **React 19.2.0** - UI библиотека
+- **TypeScript** - типизированный JavaScript
+- **Tailwind CSS 4** - утилитарный CSS фреймворк
+- **Feature-Sliced Design** - архитектурная методология
+
+## 📦 Установка
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Клонировать репозиторий
+git clone <repository-url>
+cd andival-sei
+
+# Установить зависимости
+pnpm install
+# или
+npm install
+# или
+yarn install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Разработка
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Запустить dev сервер:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm dev
+# или
+npm run dev
+# или
+yarn dev
+```
 
-## Learn More
+Откройте [http://localhost:3000](http://localhost:3000) в браузере.
 
-To learn more about Next.js, take a look at the following resources:
+Страница автоматически обновляется при изменении файлов.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📁 Структура проекта
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Проект использует архитектуру **Feature-Sliced Design (FSD)**:
 
-## Deploy on Vercel
+```
+andival-sei/
+├── app/                    # Next.js App Router (роутинг)
+│   ├── layout.tsx          # Корневой layout
+│   ├── page.tsx            # Главная страница
+│   ├── about/page.tsx      # Страница "О себе"
+│   ├── projects/page.tsx   # Страница проектов
+│   └── contact/page.tsx    # Страница контактов
+│
+├── src/                    # FSD слои
+│   ├── app/                # Инициализация приложения
+│   ├── processes/          # Бизнес-процессы
+│   ├── compositions/       # Композиция страниц
+│   ├── widgets/            # Крупные блоки UI
+│   ├── features/           # Функциональные возможности
+│   ├── entities/           # Бизнес-сущности
+│   └── shared/             # Переиспользуемый код
+│
+└── docs/                   # Документация
+    └── ARCHITECTURE.md     # Описание архитектуры
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Подробнее о архитектуре проекта см. в [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🎨 Особенности
+
+- ✅ **FSD архитектура** - масштабируемая и поддерживаемая структура кода
+- ✅ **TypeScript** - полная типизация
+- ✅ **Tailwind CSS** - современная стилизация
+- ✅ **App Router** - новый роутинг Next.js
+- ✅ **Тёмная тема** - поддержка светлой и тёмной темы (TODO: реализовать)
+- ✅ **Адаптивный дизайн** - работает на всех устройствах
+
+## 📝 Доступные страницы
+
+- `/` - Главная страница
+- `/about` - О себе
+- `/projects` - Проекты
+- `/contact` - Контакты
+
+## 🏗️ Скрипты
+
+```bash
+# Разработка
+pnpm dev
+
+# Сборка для продакшена
+pnpm build
+
+# Запуск продакшен сборки
+pnpm start
+
+# Линтинг
+pnpm lint
+```
+
+## 📚 Документация
+
+- [Архитектура проекта](./docs/ARCHITECTURE.md) - подробное описание FSD структуры
+- [Next.js Documentation](https://nextjs.org/docs) - документация Next.js
+- [Feature-Sliced Design](https://feature-sliced.design/) - документация FSD
+
+## 🚧 TODO
+
+Проект находится в стадии разработки. Основные задачи:
+
+- [ ] Реализовать переключатель темы
+- [ ] Добавить контент на страницы
+- [ ] Реализовать форму обратной связи
+- [ ] Добавить данные проектов
+- [ ] Настроить SEO
+- [ ] Добавить анимации
+- [ ] Оптимизировать изображения
+
+## 🚀 Деплой
+
+### Vercel (рекомендуется)
+
+Самый простой способ задеплоить Next.js приложение - использовать [Vercel Platform](https://vercel.com/new):
+
+1. Подключите репозиторий к Vercel
+2. Vercel автоматически определит настройки Next.js
+3. Нажмите Deploy
+
+### Другие платформы
+
+См. [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) для других платформ.
+
+## 📄 Лицензия
+
+TODO: Добавить информацию о лицензии
+
+## 👤 Автор
+
+TODO: Добавить информацию об авторе
+
+## 🔗 Ссылки
+
+- [Демо сайта](https://yourdomain.com) - TODO: Добавить ссылку на демо
+- [GitHub](https://github.com/yourusername/andival-sei) - TODO: Добавить ссылку на репозиторий
