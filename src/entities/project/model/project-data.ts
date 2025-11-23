@@ -27,6 +27,7 @@ export const projects: Project[] = [
     category: "Учебный проект",
     demoUrl: "https://skill-swap-40-2.vercel.app/",
     codeUrl: "https://github.com/Andival-Sei/SkillSwap_40_2",
+    imageUrl: "/projects/skillswap.png",
     featured: true,
   },
   {
@@ -132,6 +133,7 @@ export const projects: Project[] = [
     category: "Пет-проект",
     demoUrl: "https://mods-guide.vercel.app/",
     codeUrl: "https://github.com/Andival-Sei/mods-guide",
+    imageUrl: "/projects/mods-guide.png",
     featured: true,
   },
 ];

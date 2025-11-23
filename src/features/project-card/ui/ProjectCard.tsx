@@ -1,4 +1,5 @@
 import { ArrowUpRight, Github, Globe } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import type { Project } from "@/src/entities/project/model/types";
@@ -18,9 +19,21 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
   const hasLinks = project.demoUrl || project.codeUrl;
 
   return (
-    <Card className="border-border/60 from-card/80 via-card/70 to-card/60 hover:border-primary/50 bg-linear-to-b group relative flex h-full flex-col overflow-hidden border-2 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+    <Card className="border-border/60 from-card/80 via-card/70 to-card/60 bg-linear-to-b group relative flex h-full flex-col overflow-hidden border-2 shadow-sm transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-xl">
       <div className="from-primary/10 via-primary/5 pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,0.18),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(56,189,248,0.16),transparent_32%)] to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
       <div className="via-primary/50 bg-linear-to-r absolute inset-x-0 top-0 h-px from-transparent to-transparent opacity-70" />
+
+      {/* Превью изображения */}
+      {project.imageUrl ? (
+        <div className="from-primary/5 via-primary/3 bg-linear-to-br relative aspect-video w-full overflow-hidden to-transparent">
+          <Image
+            src={project.imageUrl}
+            alt={project.title}
+            fill
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          />
+        </div>
+      ) : null}
 
       <div className="flex items-start justify-between gap-4 px-6 pt-6">
         <div className="flex flex-wrap items-center gap-3">

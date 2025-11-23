@@ -24,7 +24,7 @@ export function FeaturedProjectCard({
 
   return (
     <div
-      className={`border-border/60 from-card/90 via-card/80 to-card/70 hover:border-primary/50 bg-linear-to-br group relative flex min-h-[500px] flex-col overflow-hidden rounded-2xl border-2 p-6 shadow-lg transition-all duration-500 hover:shadow-2xl md:min-h-[600px] md:p-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12 lg:p-12 ${
+      className={`border-border/60 from-card/90 via-card/80 to-card/70 bg-linear-to-br group relative flex min-h-[500px] flex-col overflow-hidden rounded-2xl border-2 p-6 shadow-lg transition-all duration-500 ease-out hover:shadow-2xl md:min-h-[600px] md:p-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12 lg:p-12 ${
         reversed ? "lg:flex-row-reverse" : ""
       }`}
     >
