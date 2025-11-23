@@ -42,7 +42,7 @@ export const projects: Project[] = [
     category: "Учебный проект",
     demoUrl: "https://web-larek-frontend-xi.vercel.app/",
     codeUrl: "https://github.com/Andival-Sei/web-larek-frontend",
-    featured: true,
+    featured: false,
   },
   {
     id: "ono-tebe-nado-fd",
@@ -88,5 +88,50 @@ export const projects: Project[] = [
     demoUrl: "https://andival-sei.github.io/slozhno-sosredotochitsya-fd/",
     codeUrl: "https://github.com/Andival-Sei/slozhno-sosredotochitsya-fd",
     featured: false,
+  },
+  {
+    id: "thrivetalk-landing-page",
+    title: "Thrivetalk Landing Page",
+    description:
+      "Мой первый сайт. Лендинг-страница для платформы онлайн-терапии ThriveTalk. Сайт рассказывает о сервисе психологической помощи и демонстрирует базовые навыки верстки HTML и CSS.",
+    technologies: ["HTML", "CSS"],
+    status: "Завершён",
+    timeline: "2024",
+    focus:
+      "Первый опыт создания веб-страницы, освоение основ HTML и CSS, верстка лендинга с использованием семантической разметки.",
+    category: "Учебный проект",
+    demoUrl: "https://andival-sei.github.io/Thrivetalk_landing_page/home.html",
+    codeUrl: "https://github.com/Andival-Sei/Thrivetalk_landing_page",
+    featured: false,
+  },
+  {
+    id: "zakrivayuschiy-teg-f",
+    title: "Закрывающий тег",
+    description:
+      "Проект 'Закрывающий тег' - учебная работа по верстке. Проект развивает навыки создания веб-страниц с использованием HTML и CSS, демонстрирует понимание структуры документа и стилизации.",
+    technologies: ["HTML", "CSS"],
+    status: "Завершён",
+    timeline: "2024",
+    focus:
+      "Практика верстки, работа с макетом, создание структурированной HTML-разметки и применение CSS для стилизации.",
+    category: "Учебный проект",
+    demoUrl: "https://andival-sei.github.io/zakrivayuschiy-teg-f/",
+    codeUrl: "https://github.com/Andival-Sei/zakrivayuschiy-teg-f",
+    featured: false,
+  },
+  {
+    id: "mods-guide",
+    title: "Mods Guide",
+    description:
+      "Веб-приложение-гид по модификациям, созданное с использованием современного стека технологий. Проект демонстрирует навыки работы с TypeScript, SCSS и сборщиком Vite.",
+    technologies: ["TypeScript", "SCSS", "Vite"],
+    status: "Завершён",
+    timeline: "2024",
+    focus:
+      "Разработка современного веб-приложения с использованием TypeScript для типобезопасности, SCSS для стилизации и Vite для быстрой сборки проекта.",
+    category: "Пет-проект",
+    demoUrl: "https://mods-guide.vercel.app/",
+    codeUrl: "https://github.com/Andival-Sei/mods-guide",
+    featured: true,
   },
 ];
