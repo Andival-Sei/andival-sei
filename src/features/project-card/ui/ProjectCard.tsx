@@ -18,9 +18,9 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
   const hasLinks = project.demoUrl || project.codeUrl;
 
   return (
-    <Card className="border-border/60 from-card/80 via-card/70 to-card/60 hover:border-primary/50 group relative flex h-full flex-col overflow-hidden border-2 bg-gradient-to-b shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+    <Card className="border-border/60 from-card/80 via-card/70 to-card/60 hover:border-primary/50 bg-linear-to-b group relative flex h-full flex-col overflow-hidden border-2 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
       <div className="from-primary/10 via-primary/5 pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,0.18),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(56,189,248,0.16),transparent_32%)] to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
-      <div className="via-primary/50 absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent to-transparent opacity-70" />
+      <div className="via-primary/50 bg-linear-to-r absolute inset-x-0 top-0 h-px from-transparent to-transparent opacity-70" />
 
       <div className="flex items-start justify-between gap-4 px-6 pt-6">
         <div className="flex flex-wrap items-center gap-3">
@@ -38,7 +38,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             </Badge>
           ) : null}
         </div>
-        <span className="text-muted-foreground text-xs uppercase tracking-[0.1em]">
+        <span className="text-muted-foreground text-xs uppercase tracking-widest">
           {timelineLabel}
         </span>
       </div>

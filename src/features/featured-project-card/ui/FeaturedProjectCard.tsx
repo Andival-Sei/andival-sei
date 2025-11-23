@@ -76,7 +76,7 @@ export function FeaturedProjectCard({
                   {project.category}
                 </Badge>
               ) : null}
-              <span className="text-muted-foreground text-xs uppercase tracking-[0.1em]">
+              <span className="text-muted-foreground text-xs uppercase tracking-widest">
                 {timelineLabel}
               </span>
             </div>
@@ -104,7 +104,7 @@ export function FeaturedProjectCard({
           {/* Технологии */}
           {project.technologies && project.technologies.length > 0 ? (
             <div className="space-y-3">
-              <span className="text-muted-foreground text-xs font-medium uppercase tracking-[0.1em]">
+              <span className="text-muted-foreground text-xs font-medium uppercase tracking-widest">
                 Технологии
               </span>
               <div className="flex flex-wrap gap-2">
