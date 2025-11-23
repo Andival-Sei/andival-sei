@@ -44,4 +44,49 @@ export const projects: Project[] = [
     codeUrl: "https://github.com/Andival-Sei/web-larek-frontend",
     featured: true,
   },
+  {
+    id: "ono-tebe-nado-fd",
+    title: "Оно тебе надо",
+    description:
+      "Первая проектная работа по Яндекс Практикуму. Лендинг аукциона необычных вещей, в которые изначально никто не верил. Сайт рассказывает историю лотов и демонстрирует базовые навыки верстки.",
+    technologies: ["HTML", "CSS"],
+    status: "Завершён",
+    timeline: "2024",
+    focus:
+      "Освоение основ HTML и CSS, верстка лендинга с использованием семантической разметки и стилей.",
+    category: "Учебный проект",
+    demoUrl: "https://andival-sei.github.io/ono-tebe-nado-fd/",
+    codeUrl: "https://github.com/Andival-Sei/ono-tebe-nado-fd",
+    featured: false,
+  },
+  {
+    id: "posmotri-v-okno-fd",
+    title: "Посмотри в окно",
+    description:
+      "Проектная работа по Яндекс Практикуму. Верстка страницы с использованием HTML и CSS. Проект развивает навыки создания адаптивных веб-страниц.",
+    technologies: ["HTML", "CSS"],
+    status: "Завершён",
+    timeline: "2024",
+    focus:
+      "Практика верстки, работа с макетом и создание структурированной HTML-разметки.",
+    category: "Учебный проект",
+    demoUrl: "https://andival-sei.github.io/posmotri-v-okno-fd/",
+    codeUrl: "https://github.com/Andival-Sei/posmotri-v-okno-fd",
+    featured: false,
+  },
+  {
+    id: "slozhno-sosredotochitsya-fd",
+    title: "Сложно сосредоточиться",
+    description:
+      "Проектная работа по Яндекс Практикуму на тему адаптивной верстки. Сайт демонстрирует навыки создания отзывчивых интерфейсов, работающих на разных устройствах.",
+    technologies: ["HTML", "CSS", "JavaScript"],
+    status: "Завершён",
+    timeline: "2024",
+    focus:
+      "Изучение адаптивной верстки и медиа-запросов, создание интерфейсов для различных экранов.",
+    category: "Учебный проект",
+    demoUrl: "https://andival-sei.github.io/slozhno-sosredotochitsya-fd/",
+    codeUrl: "https://github.com/Andival-Sei/slozhno-sosredotochitsya-fd",
+    featured: false,
+  },
 ];
