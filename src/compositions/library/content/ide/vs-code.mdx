@@ -1,3 +1,484 @@
 # VS Code
 
-_Контент в разработке..._
+Visual Studio Code — это бесплатный, открытый редактор кода от Microsoft, который стал одним из самых популярных инструментов разработки благодаря своей легкости, расширяемости и богатому функционалу. VS Code поддерживает множество языков программирования, имеет встроенный отладчик, интегрированный терминал и мощную экосистему расширений.
+
+## Основные возможности
+
+### Редактор кода
+
+VS Code предоставляет современный редактор с подсветкой синтаксиса, автодополнением, навигацией по коду и поддержкой множества языков программирования.
+
+### Интегрированный терминал
+
+Встроенный терминал позволяет выполнять команды прямо в редакторе, не переключаясь между окнами.
+
+```bash
+# Открыть терминал: Ctrl+` (или Cmd+` на macOS)
+# Создать новый терминал: Ctrl+Shift+` 
+# Разделить терминал: Ctrl+Shift+5
+```
+
+### Отладка
+
+Встроенный отладчик поддерживает множество языков и платформ, позволяя устанавливать точки останова, проверять переменные и выполнять код пошагово.
+
+### Управление версиями
+
+Встроенная поддержка Git для коммитов, просмотра изменений и работы с ветками прямо в редакторе.
+
+## Горячие клавиши (Windows/Linux)
+
+### Навигация и редактирование
+
+```text
+Ctrl+P          - Быстрый переход к файлу
+Ctrl+Shift+P    - Командная палитра
+Ctrl+`          - Показать/скрыть терминал
+Ctrl+B          - Показать/скрыть боковую панель
+Ctrl+J          - Показать/скрыть панель внизу
+Ctrl+\          - Разделить редактор
+Ctrl+Tab        - Переключение между открытыми файлами
+Ctrl+Shift+N    - Новое окно
+Ctrl+W          - Закрыть текущий файл
+Ctrl+K Ctrl+W   - Закрыть все файлы
+```
+
+### Редактирование кода
+
+```text
+Ctrl+D          - Выделить следующее вхождение слова
+Ctrl+Shift+L    - Выделить все вхождения слова
+Alt+Click       - Добавить курсор
+Ctrl+Alt+↑/↓    - Добавить курсор выше/ниже
+Ctrl+Shift+K    - Удалить строку
+Alt+↑/↓         - Переместить строку вверх/вниз
+Shift+Alt+↑/↓   - Копировать строку вверх/вниз
+Ctrl+/          - Закомментировать/раскомментировать строку
+Ctrl+Shift+A    - Закомментировать блок
+Ctrl+]          - Увеличить отступ
+Ctrl+[          - Уменьшить отступ
+```
+
+### Поиск и замена
+
+```text
+Ctrl+F          - Поиск в файле
+Ctrl+H          - Замена в файле
+Ctrl+Shift+F    - Поиск по всему проекту
+Ctrl+Shift+H    - Замена по всему проекту
+F3              - Найти следующее
+Shift+F3        - Найти предыдущее
+```
+
+### Навигация по коду
+
+```text
+F12             - Перейти к определению
+Alt+F12         - Показать определение (Peek)
+Shift+F12       - Найти все ссылки
+Ctrl+T          - Перейти к символу в файле
+Ctrl+Shift+O    - Перейти к символу в текущем файле
+Ctrl+G          - Перейти к строке
+Ctrl+Shift+\    - Перейти к соответствующей скобке
+```
+
+### Работа с файлами
+
+```text
+Ctrl+N          - Новый файл
+Ctrl+O          - Открыть файл
+Ctrl+S          - Сохранить
+Ctrl+Shift+S    - Сохранить как
+Ctrl+K S        - Сохранить все
+Ctrl+K Ctrl+W   - Закрыть все
+```
+
+## Настройка клавиатурных сокращений
+
+Вы можете настроить собственные горячие клавиши через Command Palette (`Ctrl+Shift+P`) → "Preferences: Open Keyboard Shortcuts" или через файл `keybindings.json`.
+
+### Пример настройки
+
+```json
+[
+  {
+    "key": "ctrl+h",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Run tests"
+  },
+  {
+    "key": "ctrl+shift+/",
+    "command": "workbench.action.terminal.sendSignal",
+    "args": {
+      "signal": "SIGTERM"
+    }
+  }
+]
+```
+
+## Настройки (settings.json)
+
+Основные настройки можно изменить через UI (`Ctrl+,`) или напрямую в файле `settings.json`.
+
+### Полезные настройки
+
+```json
+{
+  // Автосохранение
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  
+  // Форматирование при сохранении
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  
+  // Мини-карта кода
+  "editor.minimap.enabled": true,
+  
+  // Подсветка текущей строки
+  "editor.renderLineHighlight": "all",
+  
+  // Показывать пробелы и табы
+  "editor.renderWhitespace": "boundary",
+  
+  // Размер шрифта
+  "editor.fontSize": 14,
+  "editor.fontFamily": "'Fira Code', 'Consolas', monospace",
+  
+  // Лигатуры для шрифтов (Fira Code, JetBrains Mono)
+  "editor.fontLigatures": true,
+  
+  // Обрезка пробелов в конце строк
+  "files.trimTrailingWhitespace": true,
+  
+  // Вставить финальный перевод строки
+  "files.insertFinalNewline": true,
+  
+  // Исключения для поиска
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.next": true
+  }
+}
+```
+
+## Расширения (Extensions)
+
+VS Code имеет огромную экосистему расширений. Вот некоторые из самых полезных:
+
+### Для веб-разработки
+
+- **ESLint** — линтер для JavaScript/TypeScript
+- **Prettier** — форматировщик кода
+- **Auto Rename Tag** — автоматическое переименование парных тегов
+- **Live Server** — локальный сервер с автообновлением
+- **Thunder Client** — REST API клиент (альтернатива Postman)
+
+### Для TypeScript/JavaScript
+
+- **TypeScript Importer** — автоматический импорт типов
+- **Path Intellisense** — автодополнение путей к файлам
+- **npm Intellisense** — автодополнение для npm модулей
+
+### Для Git
+
+- **GitLens** — расширенная работа с Git
+- **Git Graph** — визуализация истории коммитов
+
+### Для производительности
+
+- **Error Lens** — показ ошибок прямо в коде
+- **Bracket Pair Colorizer** — цветные скобки (встроено в VS Code)
+- **Indent Rainbow** — цветная индикация отступов
+
+## Интеграция с AI (2025)
+
+### GitHub Copilot
+
+GitHub Copilot — это AI-ассистент, который предлагает автодополнение кода на основе контекста.
+
+```typescript
+// Просто начните печатать, и Copilot предложит продолжение
+function calculateTotal(items: Item[]): number {
+  // Copilot предложит реализацию
+  return items.reduce((sum, item) => sum + item.price, 0);
+}
+```
+
+### Agent HQ (VS Code 1.106+)
+
+Единый интерфейс для запуска, мониторинга и управления AI-агентами:
+
+- Локальные и удаленные агенты
+- Интеграция с GitHub Copilot и OpenAI Codex
+- Улучшенный контроль и делегирование задач
+
+### Terminal Inline Chat
+
+Чат с AI прямо в терминале для получения помощи с командами и скриптами:
+
+```text
+# Активация: kb(inlinechat.start)
+# Используйте @terminal для вопросов о терминале
+```
+
+### Chat Mode
+
+Различные режимы чата для разных задач:
+
+```text
+workbench.action.chat.open        - Открыть чат
+workbench.action.chat.openAgent   - Режим агента
+workbench.action.chat.openEdit    - Режим редактирования
+workbench.action.chat.openAsk     - Режим вопросов
+```
+
+### Model Context Protocol (MCP)
+
+Поддержка MCP для безопасного подключения к внешним AI-моделям и инструментам разработчика.
+
+## Работа с задачами (Tasks)
+
+VS Code позволяет автоматизировать повторяющиеся задачи через систему Tasks.
+
+### Пример tasks.json
+
+```json
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run tests",
+      "type": "shell",
+      "command": "npm test",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build",
+      "type": "shell",
+      "command": "npm run build",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Lint",
+      "type": "shell",
+      "command": "npm run lint",
+      "problemMatcher": []
+    }
+  ]
+}
+```
+
+### Запуск задач
+
+```text
+Ctrl+Shift+P → "Tasks: Run Task" → выберите задачу
+Ctrl+Shift+B → Запустить задачу сборки (если настроена)
+```
+
+## Отладка (Debugging)
+
+### Конфигурация launch.json
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/src/index.js",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}"
+    }
+  ]
+}
+```
+
+### Горячие клавиши отладки
+
+```text
+F5              - Начать/продолжить отладку
+F9              - Установить/убрать точку останова
+F10             - Шаг через (Step Over)
+F11             - Шаг внутрь (Step Into)
+Shift+F11       - Шаг наружу (Step Out)
+Shift+F5        - Остановить отладку
+Ctrl+Shift+F5   - Перезапустить отладку
+```
+
+## Snippets (Фрагменты кода)
+
+Создавайте собственные сниппеты для ускорения разработки.
+
+### Настройка сниппетов
+
+```json
+{
+  "React Functional Component": {
+    "prefix": "rfc",
+    "body": [
+      "import React from 'react';",
+      "",
+      "interface ${1:ComponentName}Props {",
+      "  $2",
+      "}",
+      "",
+      "export const ${1:ComponentName}: React.FC<${1:ComponentName}Props> = ({ $3 }) => {",
+      "  return (",
+      "    <div>",
+      "      $0",
+      "    </div>",
+      "  );",
+      "};"
+    ],
+    "description": "React Functional Component with TypeScript"
+  }
+}
+```
+
+## Multi-cursor editing
+
+Множественные курсоры позволяют редактировать несколько мест одновременно:
+
+```text
+Alt+Click              - Добавить курсор в позицию клика
+Ctrl+Alt+↑/↓          - Добавить курсор выше/ниже
+Ctrl+D                - Выделить следующее вхождение
+Ctrl+Shift+L          - Выделить все вхождения
+Ctrl+Shift+Alt+→      - Расширить выделение
+Ctrl+Shift+Alt+←      - Уменьшить выделение
+Esc                   - Отменить все курсоры
+```
+
+## Интеграция с терминалом
+
+### Полезные команды терминала
+
+```bash
+# Отправка сигнала процессу
+Ctrl+Shift+/  - SIGTERM (настраивается)
+
+# Очистка терминала на macOS
+Cmd+K         - Очистить терминал (можно отключить)
+```
+
+### Настройка терминала
+
+```json
+{
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.cursorBlinking": true,
+  "terminal.integrated.cursorStyle": "line"
+}
+```
+
+## Workspace и папки
+
+### Multi-root Workspace
+
+Работайте с несколькими папками одновременно:
+
+```json
+{
+  "folders": [
+    {
+      "path": "frontend"
+    },
+    {
+      "path": "backend"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/node_modules": true
+    }
+  }
+}
+```
+
+## Полезные советы
+
+### 1. Command Palette — ваш лучший друг
+
+Используйте `Ctrl+Shift+P` для доступа ко всем командам VS Code. Просто начните печатать название команды.
+
+### 2. Настройте форматирование при сохранении
+
+```json
+{
+  "editor.formatOnSave": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
+```
+
+### 3. Используйте Zen Mode для фокуса
+
+```text
+Ctrl+K Z  - Войти в Zen Mode (полноэкранный режим)
+Esc Esc   - Выйти из Zen Mode
+```
+
+### 4. Синхронизация настроек
+
+Используйте Settings Sync для синхронизации настроек, расширений и горячих клавиш между устройствами через GitHub или Microsoft аккаунт.
+
+### 5. Интеграция с Git
+
+```text
+Ctrl+Shift+G    - Открыть панель Source Control
+Ctrl+Enter      - Commit изменений (в панели Source Control)
+Ctrl+Shift+P → "Git: Push" - Отправить изменения
+```
+
+## Новые возможности (2025)
+
+### VS Code 1.106 (Октябрь 2025)
+
+- **Agent HQ** — единый интерфейс для AI-агентов
+- Улучшенная безопасность и контроль при работе с AI
+- Обновленный редактор с улучшенной многозадачностью
+
+### VS Code 1.105 (Сентябрь 2025)
+
+- Интеграция с OpenAI Codex
+- Управление сложными задачами через AI-агентов
+- AI-помощь в разрешении конфликтов слияния
+
+### VS Code 1.104+ (Август 2025)
+
+- Поддержка GPT-5
+- Поддержка Model Context Protocol (MCP)
+- Улучшенные уведомления о проблемах с сертификатами
+
+## Полезные ресурсы
+
+- [Официальная документация VS Code](https://code.visualstudio.com/docs) - Полное руководство по VS Code
+- [VS Code Keyboard Shortcuts](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf) - Шпаргалка по горячим клавишам
+- [VS Code Marketplace](https://marketplace.visualstudio.com/vscode) - Каталог расширений
+- [VS Code Tips and Tricks](https://code.visualstudio.com/docs/getstarted/tips-and-tricks) - Советы и трюки
+- [VS Code GitHub](https://github.com/microsoft/vscode) - Исходный код и issues
+- [VS Code Release Notes](https://code.visualstudio.com/updates) - Последние обновления

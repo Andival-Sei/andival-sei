@@ -1,3 +1,626 @@
-# Redux
+# Redux: Управление состоянием приложения
 
-_Контент в разработке..._
+Redux — это предсказуемая библиотека для управления состоянием JavaScript приложений. Она обеспечивает централизованное хранилище состояния, что упрощает управление данными и делает поведение приложения предсказуемым и отлаживаемым.
+
+## Основные концепции
+
+Redux основан на трёх ключевых принципах:
+
+1. **Единый источник истины** — всё состояние приложения хранится в одном объекте (store)
+2. **Состояние только для чтения** — единственный способ изменить состояние — отправить action
+3. **Изменения через чистые функции** — редьюсеры описывают, как состояние изменяется в ответ на actions
+
+### Store (Хранилище)
+
+Store — это объект, который хранит всё состояние приложения и предоставляет методы для доступа к нему.
+
+```typescript
+import { configureStore } from "@reduxjs/toolkit";
+import counterReducer from "./features/counter/counterSlice";
+
+export const store = configureStore({
+  reducer: {
+    counter: counterReducer,
+  },
+});
+
+// Типы для TypeScript
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+```
+
+### Actions (Действия)
+
+Actions — это объекты, которые описывают, что произошло в приложении. Они должны иметь поле `type` и могут содержать дополнительные данные в `payload`.
+
+```typescript
+// Action creator (создатель действий)
+const increment = () => ({
+  type: "counter/increment",
+});
+
+const incrementByAmount = (amount: number) => ({
+  type: "counter/incrementByAmount",
+  payload: amount,
+});
+```
+
+### Reducers (Редьюсеры)
+
+Reducers — это чистые функции, которые определяют, как состояние изменяется в ответ на actions. Они принимают текущее состояние и action, возвращают новое состояние.
+
+```typescript
+// Классический редьюсер (без Redux Toolkit)
+type CounterState = {
+  value: number;
+};
+
+type CounterAction =
+  | { type: "counter/increment" }
+  | { type: "counter/decrement" }
+  | { type: "counter/incrementByAmount"; payload: number };
+
+function counterReducer(
+  state: CounterState = { value: 0 },
+  action: CounterAction
+): CounterState {
+  switch (action.type) {
+    case "counter/increment":
+      return { value: state.value + 1 };
+    case "counter/decrement":
+      return { value: state.value - 1 };
+    case "counter/incrementByAmount":
+      return { value: state.value + action.payload };
+    default:
+      return state;
+  }
+}
+```
+
+## Redux Toolkit (RTK)
+
+Redux Toolkit — это официальный рекомендуемый способ написания Redux логики. Он упрощает настройку, уменьшает boilerplate код и включает полезные утилиты.
+
+### createSlice
+
+`createSlice` автоматически генерирует action creators и action types на основе редьюсеров, которые вы определяете.
+
+```typescript
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+
+type CounterState = {
+  value: number;
+};
+
+const initialState: CounterState = {
+  value: 0,
+};
+
+const counterSlice = createSlice({
+  name: "counter",
+  initialState,
+  reducers: {
+    // Redux Toolkit использует Immer, поэтому можно писать "мутирующий" код
+    increment: (state) => {
+      state.value += 1;
+    },
+    decrement: (state) => {
+      state.value -= 1;
+    },
+    incrementByAmount: (state, action: PayloadAction<number>) => {
+      state.value += action.payload;
+    },
+    reset: (state) => {
+      state.value = 0;
+    },
+  },
+});
+
+// Экспортируем actions и reducer
+export const { increment, decrement, incrementByAmount, reset } =
+  counterSlice.actions;
+export default counterSlice.reducer;
+```
+
+### configureStore
+
+`configureStore` упрощает настройку store, автоматически добавляя:
+- Redux DevTools Extension
+- Redux Thunk middleware для асинхронных действий
+- Проверки на случайные мутации состояния
+
+```typescript
+import { configureStore } from "@reduxjs/toolkit";
+import counterReducer from "./features/counter/counterSlice";
+import todosReducer from "./features/todos/todosSlice";
+
+export const store = configureStore({
+  reducer: {
+    counter: counterReducer,
+    todos: todosReducer,
+  },
+  // Middleware настраивается автоматически, но можно добавить свои
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // Игнорируем определённые action types
+        ignoredActions: ["persist/PERSIST"],
+      },
+    }),
+});
+```
+
+## React Redux
+
+React Redux — официальные React биндинги для Redux. Предоставляет хуки для взаимодействия с store из React компонентов.
+
+### Provider
+
+Оберните приложение в `Provider`, чтобы компоненты могли получать доступ к store.
+
+```tsx
+import { Provider } from "react-redux";
+import { store } from "./store";
+import App from "./App";
+
+function Root() {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+}
+```
+
+### useSelector
+
+`useSelector` позволяет компонентам читать данные из Redux store.
+
+```tsx
+import { useSelector } from "react-redux";
+import type { RootState } from "./store";
+
+function CounterDisplay() {
+  // Простой селектор
+  const count = useSelector((state: RootState) => state.counter.value);
+
+  // Селектор с мемоизацией (рекомендуется для сложных вычислений)
+  const expensiveValue = useSelector(
+    (state: RootState) => {
+      // Дорогие вычисления
+      return state.counter.value * 2;
+    },
+    // Функция сравнения (опционально)
+    (left, right) => left === right
+  );
+
+  return <div>Счётчик: {count}</div>;
+}
+```
+
+### useDispatch
+
+`useDispatch` возвращает функцию `dispatch` для отправки actions.
+
+```tsx
+import { useDispatch } from "react-redux";
+import { increment, decrement, incrementByAmount } from "./counterSlice";
+import type { AppDispatch } from "./store";
+
+function CounterControls() {
+  const dispatch = useDispatch<AppDispatch>();
+
+  return (
+    <div>
+      <button onClick={() => dispatch(increment())}>+1</button>
+      <button onClick={() => dispatch(decrement())}>-1</button>
+      <button onClick={() => dispatch(incrementByAmount(5))}>
+        +5
+      </button>
+    </div>
+  );
+}
+```
+
+### Типизированные хуки (TypeScript)
+
+Создайте типизированные версии хуков для лучшей поддержки TypeScript:
+
+```typescript
+import { useDispatch, useSelector, useStore } from "react-redux";
+import type { TypedUseSelectorHook } from "react-redux";
+import type { RootState, AppDispatch, AppStore } from "./store";
+
+// Используйте эти хуки вместо обычных useDispatch и useSelector
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+export const useAppStore: () => AppStore = useStore;
+```
+
+Использование:
+
+```tsx
+import { useAppDispatch, useAppSelector } from "./hooks";
+
+function Counter() {
+  const count = useAppSelector((state) => state.counter.value);
+  const dispatch = useAppDispatch();
+
+  return (
+    <div>
+      <span>{count}</span>
+      <button onClick={() => dispatch(increment())}>+</button>
+    </div>
+  );
+}
+```
+
+## Асинхронные действия (Thunks)
+
+Redux Thunk позволяет писать action creators, которые возвращают функции вместо объектов. Это полезно для асинхронных операций.
+
+### createAsyncThunk
+
+`createAsyncThunk` упрощает создание асинхронных actions.
+
+```typescript
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+
+// Асинхронный thunk
+export const fetchUserById = createAsyncThunk(
+  "users/fetchById",
+  async (userId: string, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`/api/users/${userId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch user");
+      }
+      return await response.json();
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
+    }
+  }
+);
+
+type UserState = {
+  user: User | null;
+  loading: boolean;
+  error: string | null;
+};
+
+const initialState: UserState = {
+  user: null,
+  loading: false,
+  error: null,
+};
+
+const userSlice = createSlice({
+  name: "user",
+  initialState,
+  reducers: {
+    clearUser: (state) => {
+      state.user = null;
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      // Pending (ожидание)
+      .addCase(fetchUserById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      // Fulfilled (успешно)
+      .addCase(fetchUserById.fulfilled, (state, action: PayloadAction<User>) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      // Rejected (ошибка)
+      .addCase(fetchUserById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
+  },
+});
+
+export const { clearUser } = userSlice.actions;
+export default userSlice.reducer;
+```
+
+Использование в компоненте:
+
+```tsx
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "./hooks";
+import { fetchUserById } from "./userSlice";
+
+function UserProfile({ userId }: { userId: string }) {
+  const dispatch = useAppDispatch();
+  const { user, loading, error } = useAppSelector((state) => state.user);
+
+  useEffect(() => {
+    dispatch(fetchUserById(userId));
+  }, [dispatch, userId]);
+
+  if (loading) return <div>Загрузка...</div>;
+  if (error) return <div>Ошибка: {error}</div>;
+  if (!user) return null;
+
+  return <div>{/* Рендер пользователя */}</div>;
+}
+```
+
+## RTK Query
+
+RTK Query — мощный инструмент для получения и кэширования данных. Он автоматически генерирует хуки для запросов и мутаций, управляет кэшированием и инвалидацией.
+
+### Настройка API Slice
+
+```typescript
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
+// Определяем типы
+type Post = {
+  id: string;
+  title: string;
+  body: string;
+  userId: number;
+};
+
+// Создаём API slice
+export const apiSlice = createApi({
+  reducerPath: "api",
+  baseQuery: fetchBaseQuery({
+    baseUrl: "https://jsonplaceholder.typicode.com",
+  }),
+  tagTypes: ["Post", "User"],
+  endpoints: (builder) => ({
+    // Query (GET запрос)
+    getPosts: builder.query<Post[], void>({
+      query: () => "/posts",
+      providesTags: ["Post"],
+    }),
+    getPost: builder.query<Post, string>({
+      query: (id) => `/posts/${id}`,
+      providesTags: (result, error, id) => [{ type: "Post", id }],
+    }),
+    // Mutation (POST/PUT/DELETE запрос)
+    createPost: builder.mutation<Post, Partial<Post>>({
+      query: (newPost) => ({
+        url: "/posts",
+        method: "POST",
+        body: newPost,
+      }),
+      invalidatesTags: ["Post"],
+    }),
+    updatePost: builder.mutation<Post, { id: string; data: Partial<Post> }>({
+      query: ({ id, data }) => ({
+        url: `/posts/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: (result, error, { id }) => [{ type: "Post", id }],
+    }),
+    deletePost: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/posts/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Post"],
+    }),
+  }),
+});
+
+// Экспортируем хуки
+export const {
+  useGetPostsQuery,
+  useGetPostQuery,
+  useCreatePostMutation,
+  useUpdatePostMutation,
+  useDeletePostMutation,
+} = apiSlice;
+```
+
+### Настройка Store с RTK Query
+
+```typescript
+import { configureStore } from "@reduxjs/toolkit";
+import { apiSlice } from "./api/apiSlice";
+import counterReducer from "./features/counter/counterSlice";
+
+export const store = configureStore({
+  reducer: {
+    counter: counterReducer,
+    // Добавляем reducer для RTK Query
+    [apiSlice.reducerPath]: apiSlice.reducer,
+  },
+  // Добавляем middleware для RTK Query
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(apiSlice.middleware),
+});
+
+// Настройка listeners для refetchOnFocus/refetchOnReconnect
+import { setupListeners } from "@reduxjs/toolkit/query";
+setupListeners(store.dispatch);
+```
+
+### Использование в компонентах
+
+```tsx
+import {
+  useGetPostsQuery,
+  useCreatePostMutation,
+  useDeletePostMutation,
+} from "./api/apiSlice";
+
+function PostsList() {
+  // Query hook автоматически делает запрос при монтировании
+  const {
+    data: posts,
+    isLoading,
+    isError,
+    error,
+    refetch, // Функция для повторного запроса
+  } = useGetPostsQuery();
+
+  // Mutation hooks возвращают массив [trigger, result]
+  const [createPost, { isLoading: isCreating }] = useCreatePostMutation();
+  const [deletePost] = useDeletePostMutation();
+
+  const handleCreate = async () => {
+    try {
+      await createPost({
+        title: "Новый пост",
+        body: "Содержимое поста",
+        userId: 1,
+      }).unwrap(); // unwrap() выбрасывает ошибку, если запрос не удался
+    } catch (error) {
+      console.error("Ошибка создания поста:", error);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deletePost(id).unwrap();
+    } catch (error) {
+      console.error("Ошибка удаления поста:", error);
+    }
+  };
+
+  if (isLoading) return <div>Загрузка...</div>;
+  if (isError) return <div>Ошибка: {JSON.stringify(error)}</div>;
+
+  return (
+    <div>
+      <button onClick={handleCreate} disabled={isCreating}>
+        Создать пост
+      </button>
+      <ul>
+        {posts?.map((post) => (
+          <li key={post.id}>
+            <h3>{post.title}</h3>
+            <p>{post.body}</p>
+            <button onClick={() => handleDelete(post.id)}>Удалить</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+## Best Practices
+
+### 1. Нормализация состояния
+
+Храните данные в нормализованном виде для лучшей производительности:
+
+```typescript
+type NormalizedState = {
+  entities: {
+    users: Record<string, User>;
+    posts: Record<string, Post>;
+  };
+  ids: {
+    users: string[];
+    posts: string[];
+  };
+};
+```
+
+### 2. Селекторы с мемоизацией
+
+Используйте `createSelector` из `reselect` для мемоизации сложных вычислений:
+
+```typescript
+import { createSelector } from "@reduxjs/toolkit";
+import type { RootState } from "./store";
+
+const selectTodos = (state: RootState) => state.todos.items;
+const selectFilter = (state: RootState) => state.todos.filter;
+
+export const selectFilteredTodos = createSelector(
+  [selectTodos, selectFilter],
+  (todos, filter) => {
+    switch (filter) {
+      case "completed":
+        return todos.filter((todo) => todo.completed);
+      case "active":
+        return todos.filter((todo) => !todo.completed);
+      default:
+        return todos;
+    }
+  }
+);
+```
+
+### 3. Структура папок
+
+Рекомендуемая структура для Redux приложения:
+
+```
+src/
+  store/
+    index.ts          # Настройка store
+    hooks.ts          # Типизированные хуки
+  features/
+    counter/
+      counterSlice.ts
+      Counter.tsx
+    todos/
+      todosSlice.ts
+      TodosList.tsx
+  api/
+    apiSlice.ts       # RTK Query API
+```
+
+### 4. Избегайте мутаций
+
+В Redux Toolkit можно писать "мутирующий" код благодаря Immer, но помните:
+
+```typescript
+// ✅ Правильно (в createSlice)
+const slice = createSlice({
+  reducers: {
+    addTodo: (state, action) => {
+      state.todos.push(action.payload); // Immer преобразует это в immutable
+    },
+  },
+});
+
+// ❌ Неправильно (вне createSlice)
+function badReducer(state, action) {
+  state.todos.push(action.payload); // Это реальная мутация!
+  return state;
+}
+```
+
+### 5. Обработка ошибок
+
+Всегда обрабатывайте ошибки в async thunks и RTK Query:
+
+```typescript
+export const fetchData = createAsyncThunk(
+  "data/fetch",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await fetch("/api/data");
+      if (!response.ok) {
+        return rejectWithValue("Ошибка загрузки данных");
+      }
+      return await response.json();
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
+    }
+  }
+);
+```
+
+## Полезные ресурсы
+
+- [Redux Documentation](https://redux.js.org/) — официальная документация
+- [Redux Toolkit Documentation](https://redux-toolkit.js.org/) — документация RTK
+- [RTK Query Documentation](https://redux-toolkit.js.org/rtk-query/overview) — документация RTK Query
+- [React Redux Documentation](https://react-redux.js.org/) — документация React Redux
+- [Redux DevTools Extension](https://github.com/reduxjs/redux-devtools-extension) — инструменты разработчика

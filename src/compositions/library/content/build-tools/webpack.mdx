@@ -1,3 +1,810 @@
 # Webpack
 
-_Контент в разработке..._
+Webpack — это мощный статический модульный бандлер для современных JavaScript‑приложений. Он анализирует зависимости модулей и создает статические ресурсы (бандлы) из этих модулей. Webpack позволяет обрабатывать не только JavaScript, но и CSS, изображения, шрифты и другие ресурсы через систему загрузчиков (loaders) и плагинов.
+
+## Быстрый старт
+
+### Установка и базовые команды
+
+```bash
+# Установка webpack и webpack-cli как dev-зависимости
+npm install --save-dev webpack webpack-cli
+
+# Запуск сборки (production режим по умолчанию)
+npx webpack
+
+# Запуск сборки в development режиме
+npx webpack --mode development
+
+# Запуск с указанием конфигурационного файла
+npx webpack --config webpack.config.js
+
+# Запуск с переменными окружения
+npx webpack --env production
+```
+
+### Базовые npm скрипты
+
+```json
+{
+  "scripts": {
+    "build": "webpack --mode production",
+    "dev": "webpack --mode development",
+    "watch": "webpack --mode development --watch",
+    "serve": "webpack serve --mode development"
+  }
+}
+```
+
+## Конфигурация
+
+### Базовый webpack.config.js
+
+```javascript
+const path = require("path");
+
+module.exports = {
+  // Точка входа приложения
+  entry: "./src/index.js",
+
+  // Выходная конфигурация
+  output: {
+    filename: "main.js",
+    path: path.resolve(__dirname, "dist"),
+    clean: true, // Очищать выходную директорию перед сборкой
+  },
+
+  // Режим работы: 'development' | 'production' | 'none'
+  mode: "development",
+
+  // Source maps для отладки
+  devtool: "inline-source-map",
+};
+```
+
+### Множественные точки входа
+
+```javascript
+const path = require("path");
+
+module.exports = {
+  entry: {
+    index: "./src/index.js",
+    print: "./src/print.js",
+  },
+  output: {
+    filename: "[name].bundle.js", // [name] заменяется на имя точки входа
+    path: path.resolve(__dirname, "dist"),
+    clean: true,
+  },
+};
+```
+
+### Продвинутая конфигурация точек входа
+
+```javascript
+module.exports = {
+  entry: {
+    home: "./home.js",
+    shared: ["react", "react-dom", "redux", "react-redux"],
+    catalog: {
+      import: "./catalog.js",
+      filename: "pages/catalog.js", // Кастомное имя файла
+      dependOn: "shared", // Общие зависимости
+      chunkLoading: false, // Отключить загрузку чанков по требованию
+    },
+    personal: {
+      import: "./personal.js",
+      filename: "pages/personal.js",
+      dependOn: "shared",
+      chunkLoading: "jsonp",
+      asyncChunks: true, // Создавать асинхронные чанки
+    },
+  },
+};
+```
+
+### Условная конфигурация
+
+```javascript
+const path = require("path");
+
+module.exports = (env, argv) => {
+  const isProduction = argv.mode === "production";
+
+  return {
+    entry: "./src/index.js",
+    output: {
+      filename: isProduction ? "[name].[contenthash].js" : "[name].js",
+      path: path.resolve(__dirname, "dist"),
+      clean: true,
+    },
+    mode: argv.mode || "development",
+    devtool: isProduction ? "source-map" : "inline-source-map",
+    optimization: {
+      minimize: isProduction,
+    },
+  };
+};
+```
+
+## Загрузчики (Loaders)
+
+Загрузчики позволяют Webpack обрабатывать файлы различных типов и преобразовывать их в валидные модули.
+
+### Обработка CSS
+
+```bash
+npm install --save-dev style-loader css-loader
+```
+
+```javascript
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/i, // Применяется к файлам .css
+        use: [
+          "style-loader", // Инжектит CSS в DOM
+          "css-loader", // Разрешает import в CSS
+        ],
+        // Порядок важен: применяются справа налево
+      },
+    ],
+  },
+};
+```
+
+### Обработка SCSS/SASS
+
+```bash
+npm install --save-dev sass-loader sass css-loader style-loader
+```
+
+```javascript
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          "style-loader",
+          "css-loader",
+          "sass-loader", // Компилирует SASS/SCSS в CSS
+        ],
+      },
+    ],
+  },
+};
+```
+
+### Обработка TypeScript
+
+```bash
+npm install --save-dev ts-loader typescript
+```
+
+```javascript
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  resolve: {
+    extensions: [".tsx", ".ts", ".js"], // Разрешение расширений
+  },
+};
+```
+
+### Обработка изображений и файлов
+
+```bash
+npm install --save-dev file-loader url-loader
+```
+
+```javascript
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: "asset/resource", // Встроенный asset/resource (заменяет file-loader)
+        generator: {
+          filename: "images/[name][ext]",
+        },
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: "asset/resource",
+        generator: {
+          filename: "fonts/[name][ext]",
+        },
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: "asset/inline", // Для маленьких файлов (base64)
+        parser: {
+          dataUrlCondition: {
+            maxSize: 8192, // 8kb
+          },
+        },
+      },
+    ],
+  },
+};
+```
+
+### Комплексный пример с несколькими загрузчиками
+
+```javascript
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env"],
+          },
+        },
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: "style-loader",
+            options: {
+              injectType: "singletonStyleTag",
+            },
+          },
+          {
+            loader: "css-loader",
+            options: {
+              modules: {
+                localIdentName: "[local]--[hash:base64:5]",
+              },
+            },
+          },
+        ],
+      },
+    ],
+  },
+};
+```
+
+## Плагины (Plugins)
+
+Плагины используются для выполнения более широкого спектра задач, таких как оптимизация бандлов, управление активами и инжекция переменных окружения.
+
+### HtmlWebpackPlugin
+
+```bash
+npm install --save-dev html-webpack-plugin
+```
+
+```javascript
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require("path");
+
+module.exports = {
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/index.html", // Шаблон HTML
+      filename: "index.html",
+      inject: "body", // Где инжектить скрипты: 'head' | 'body' | true | false
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+      },
+    }),
+  ],
+};
+```
+
+### DefinePlugin для переменных окружения
+
+```javascript
+const webpack = require("webpack");
+
+module.exports = {
+  plugins: [
+    new webpack.DefinePlugin({
+      "process.env.NODE_ENV": JSON.stringify("production"),
+      "process.env.API_URL": JSON.stringify("https://api.example.com"),
+      "VERSION": JSON.stringify("1.0.0"),
+    }),
+  ],
+};
+```
+
+### EnvironmentPlugin
+
+```javascript
+const webpack = require("webpack");
+
+module.exports = {
+  plugins: [
+    // Короткая запись для DefinePlugin
+    new webpack.EnvironmentPlugin(["NODE_ENV", "API_URL"]),
+
+    // С значениями по умолчанию
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: "development",
+      DEBUG: false,
+    }),
+  ],
+};
+```
+
+### MiniCssExtractPlugin для извлечения CSS
+
+```bash
+npm install --save-dev mini-css-extract-plugin
+```
+
+```javascript
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader, // Заменяет style-loader
+          "css-loader",
+        ],
+      },
+    ],
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: "[name].[contenthash].css",
+      chunkFilename: "[id].[contenthash].css",
+    }),
+  ],
+};
+```
+
+### Bundle Analyzer
+
+```bash
+npm install --save-dev webpack-bundle-analyzer
+```
+
+```javascript
+const BundleAnalyzerPlugin =
+  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+
+module.exports = {
+  plugins: [
+    new BundleAnalyzerPlugin({
+      analyzerMode: "static", // 'server' | 'static' | 'json' | 'disabled'
+      openAnalyzer: true,
+      reportFilename: "bundle-report.html",
+    }),
+  ],
+};
+```
+
+## Dev Server и Hot Module Replacement (HMR)
+
+### Установка и базовая настройка
+
+```bash
+npm install --save-dev webpack-dev-server
+```
+
+```javascript
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  mode: "development",
+  entry: "./src/index.js",
+  devtool: "inline-source-map",
+  devServer: {
+    static: "./dist", // Директория для статических файлов
+    hot: true, // Включить Hot Module Replacement
+    open: true, // Автоматически открыть браузер
+    port: 3000,
+    compress: true, // Сжатие gzip
+    historyApiFallback: true, // Для SPA маршрутизации
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: "Development",
+    }),
+  ],
+  output: {
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "dist"),
+    clean: true,
+  },
+};
+```
+
+### Продвинутая настройка Dev Server
+
+```javascript
+module.exports = {
+  devServer: {
+    static: {
+      directory: path.join(__dirname, "public"),
+      publicPath: "/static",
+    },
+    host: "0.0.0.0", // Доступ с других устройств
+    port: 3000,
+    allowedHosts: "all", // Разрешить все хосты
+    hot: "only", // Только HMR, без fallback к полной перезагрузке
+    liveReload: false, // Отключить live reload (используется HMR)
+    compress: true,
+    headers: {
+      "X-Custom-Header": "value",
+    },
+    proxy: {
+      "/api": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/api": "",
+        },
+      },
+    },
+  },
+};
+```
+
+### Использование HMR в коде
+
+```javascript
+// Автоматическое принятие обновлений
+if (module.hot) {
+  module.hot.accept();
+}
+
+// Принятие обновлений конкретного модуля
+if (module.hot) {
+  module.hot.accept("./print.js", function () {
+    console.log("Обновление модуля print.js");
+    // Выполнить действия после обновления
+    printMe();
+  });
+}
+
+// Сохранение состояния между обновлениями
+if (module.hot) {
+  // Сохранить данные
+  module.hot.data.counter = 0;
+
+  // Восстановить данные при обновлении
+  module.hot.accept((newModule) => {
+    const savedCounter = module.hot.data.counter;
+    console.log("Восстановленный счетчик:", savedCounter);
+  });
+}
+
+// Очистка побочных эффектов
+let interval;
+if (module.hot) {
+  module.hot.dispose((data) => {
+    clearInterval(interval);
+    data.intervalId = interval;
+  });
+
+  if (module.hot.data && module.hot.data.intervalId) {
+    interval = module.hot.data.intervalId;
+  }
+}
+```
+
+### Статусы HMR
+
+```javascript
+if (module.hot) {
+  // Получить текущий статус
+  const status = module.hot.status();
+  // Возможные значения: 'idle' | 'check' | 'prepare' | 'ready' | 'dispose' | 'apply' | 'abort' | 'fail'
+
+  // Обработчик изменения статуса
+  module.hot.addStatusHandler((status) => {
+    console.log("HMR статус:", status);
+  });
+}
+```
+
+## Оптимизация и Code Splitting
+
+### Базовое разделение кода
+
+```javascript
+module.exports = {
+  optimization: {
+    splitChunks: {
+      chunks: "all", // Оптимизировать все типы чанков
+    },
+  },
+};
+```
+
+### Выделение vendor-кода в отдельный чанк
+
+```javascript
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  entry: "./src/index.js",
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: "Caching",
+    }),
+  ],
+  output: {
+    filename: "[name].[contenthash].js",
+    path: path.resolve(__dirname, "dist"),
+    clean: true,
+  },
+  optimization: {
+    runtimeChunk: "single", // Выделить runtime в отдельный чанк
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all",
+        },
+      },
+    },
+  },
+};
+```
+
+### Продвинутое разделение кода
+
+```javascript
+module.exports = {
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      minSize: 20000,
+      maxSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 30,
+      maxInitialRequests: 30,
+      cacheGroups: {
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+        },
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          priority: -10,
+          chunks: "all",
+        },
+        react: {
+          test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+          name: "react",
+          priority: 20,
+          chunks: "all",
+        },
+        common: {
+          name: "common",
+          minChunks: 2,
+          priority: 10,
+          chunks: "all",
+          enforce: true,
+        },
+      },
+    },
+  },
+};
+```
+
+### Динамические импорты
+
+```javascript
+// Динамический импорт создает отдельный чанк
+button.onclick = () => {
+  import("./print.js").then((module) => {
+    const print = module.default;
+    print();
+  });
+};
+
+// С async/await
+button.onclick = async () => {
+  const { default: print } = await import("./print.js");
+  print();
+};
+
+// Именованный экспорт
+const { namedExport } = await import("./utils.js");
+```
+
+### Минификация в production
+
+```javascript
+const TerserPlugin = require("terser-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+
+module.exports = {
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          compress: {
+            drop_console: true, // Удалить console.log
+          },
+        },
+      }),
+      new CssMinimizerPlugin(),
+    ],
+  },
+};
+```
+
+## Переменные окружения
+
+### Использование .env файлов
+
+```bash
+npm install --save-dev dotenv-webpack
+```
+
+```javascript
+const Dotenv = require("dotenv-webpack");
+
+module.exports = {
+  plugins: [
+    new Dotenv({
+      path: "./.env", // Путь к .env файлу
+      safe: true, // Использовать .env.example для проверки
+      systemvars: true, // Загружать системные переменные
+    }),
+  ],
+};
+```
+
+```bash
+# .env
+NODE_ENV=development
+API_URL=http://localhost:3000
+DEBUG=true
+```
+
+### Доступ к переменным в коде
+
+```javascript
+// После настройки DefinePlugin или EnvironmentPlugin
+console.log(process.env.NODE_ENV);
+console.log(process.env.API_URL);
+
+// В клиентском коде
+const apiUrl = process.env.API_URL || "http://localhost:3000";
+```
+
+### Программная передача переменных
+
+```bash
+# Через CLI
+npx webpack --env production --env min
+
+# В конфигурации
+module.exports = (env, argv) => {
+  console.log(env.production); // true
+  console.log(env.min); // true
+  console.log(argv.mode); // 'production'
+};
+```
+
+## Resolve (Разрешение модулей)
+
+### Алиасы для путей
+
+```javascript
+const path = require("path");
+
+module.exports = {
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+      "@components": path.resolve(__dirname, "src/components"),
+      "@utils": path.resolve(__dirname, "src/utils"),
+      "~": path.resolve(__dirname, "./"),
+    },
+    extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
+    modules: [
+      path.resolve(__dirname, "src"),
+      path.resolve(__dirname, "node_modules"),
+    ],
+  },
+};
+```
+
+```javascript
+// Использование алиасов
+import Button from "@/components/Button";
+import { formatDate } from "@utils/date";
+```
+
+### Fallback для Node.js модулей
+
+```javascript
+module.exports = {
+  resolve: {
+    fallback: {
+      "path": require.resolve("path-browserify"),
+      "crypto": require.resolve("crypto-browserify"),
+      "stream": require.resolve("stream-browserify"),
+      "buffer": require.resolve("buffer/"),
+    },
+  },
+};
+```
+
+## Производительность сборки
+
+### Кэширование для ускорения пересборок
+
+```javascript
+module.exports = {
+  cache: {
+    type: "filesystem", // Кэширование в файловой системе
+    buildDependencies: {
+      config: [__filename], // Инвалидация при изменении конфига
+    },
+  },
+};
+```
+
+### Уменьшение объема обработки
+
+```javascript
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/, // Исключить node_modules
+        include: path.resolve(__dirname, "src"), // Только src
+        use: "babel-loader",
+      },
+    ],
+  },
+  resolve: {
+    modules: [path.resolve(__dirname, "src"), "node_modules"], // Оптимизация поиска
+  },
+};
+```
+
+### Отключение оптимизаций для больших проектов
+
+```javascript
+module.exports = {
+  optimization: {
+    removeAvailableModules: false,
+    removeEmptyChunks: false,
+    splitChunks: false, // Временно отключить для отладки
+  },
+};
+```
+
+## Полезные ресурсы
+
+- [Официальная документация Webpack](https://webpack.js.org/) — Полное руководство по Webpack
+- [Webpack GitHub](https://github.com/webpack/webpack) — Исходный код и issues
+- [Webpack Plugins](https://webpack.js.org/plugins/) — Список официальных и сторонних плагинов
+- [Awesome Webpack](https://github.com/webpack-contrib/awesome-webpack) — Коллекция ресурсов и примеров
+- [Webpack Loaders](https://webpack.js.org/loaders/) — Список загрузчиков
+- [Rspack](https://rspack.dev/) — Высокопроизводительный альтернативный бандлер с совместимостью с Webpack

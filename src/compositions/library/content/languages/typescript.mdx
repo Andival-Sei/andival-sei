@@ -1,3 +1,634 @@
 # TypeScript
 
-_Контент в разработке..._
+TypeScript — это надстройка над JavaScript, добавляющая статическую типизацию. Это позволяет выявлять ошибки на этапе разработки, улучшает читаемость кода и обеспечивает лучшую поддержку IDE с автодополнением и рефакторингом.
+
+## Базовые типы
+
+TypeScript предоставляет набор базовых типов, которые можно использовать для аннотации переменных.
+
+### Примитивные типы
+
+```typescript
+// Строки
+let name: string = "Иван";
+let greeting: string = `Привет, ${name}!`;
+
+// Числа
+let age: number = 30;
+let price: number = 99.99;
+
+// Логические значения
+let isActive: boolean = true;
+let isCompleted: boolean = false;
+
+// null и undefined
+let data: null = null;
+let value: undefined = undefined;
+
+// any - избегайте использования, когда это возможно
+let anything: any = "может быть чем угодно";
+anything = 42;
+anything = true;
+```
+
+### Массивы и кортежи
+
+```typescript
+// Массивы
+let numbers: number[] = [1, 2, 3, 4, 5];
+let names: Array<string> = ["Анна", "Борис", "Василий"];
+
+// Кортежи (фиксированная длина и типы)
+let person: [string, number] = ["Иван", 30];
+let coordinates: [number, number] = [10.5, 20.3];
+
+// Кортежи с опциональными элементами
+let optionalTuple: [string, number?] = ["тест"];
+optionalTuple = ["тест", 42];
+
+// Кортежи с rest элементами
+let tupleWithRest: [string, ...number[]] = ["метки", 1, 2, 3];
+```
+
+### Объекты и литеральные типы
+
+```typescript
+// Объект с явной типизацией
+let user: { name: string; age: number } = {
+  name: "Иван",
+  age: 30,
+};
+
+// Литеральные типы
+let status: "loading" | "success" | "error" = "loading";
+let direction: "up" | "down" | "left" | "right" = "up";
+
+// Объединение типов (Union)
+let id: string | number = "abc123";
+id = 42; // тоже валидно
+```
+
+## Интерфейсы и типы
+
+Интерфейсы и типы позволяют описывать структуру объектов и создавать переиспользуемые контракты.
+
+### Интерфейсы
+
+```typescript
+// Базовый интерфейс
+interface User {
+  name: string;
+  age: number;
+  email: string;
+}
+
+// Опциональные свойства
+interface Config {
+  apiUrl: string;
+  timeout?: number; // опциональное свойство
+  retries?: number;
+}
+
+// Только для чтения
+interface Point {
+  readonly x: number;
+  readonly y: number;
+}
+
+let point: Point = { x: 10, y: 20 };
+// point.x = 30; // Ошибка: нельзя изменить readonly свойство
+
+// Расширение интерфейсов
+interface Animal {
+  name: string;
+}
+
+interface Dog extends Animal {
+  breed: string;
+  bark(): void;
+}
+
+const myDog: Dog = {
+  name: "Рекс",
+  breed: "Овчарка",
+  bark() {
+    console.log("Гав!");
+  },
+};
+```
+
+### Type Aliases
+
+```typescript
+// Type alias для примитивов
+type ID = string | number;
+type Status = "pending" | "completed" | "failed";
+
+// Type alias для объектов
+type User = {
+  id: ID;
+  name: string;
+  status: Status;
+};
+
+// Type alias для функций
+type EventHandler = (event: Event) => void;
+type MathOperation = (a: number, b: number) => number;
+
+const add: MathOperation = (a, b) => a + b;
+const multiply: MathOperation = (a, b) => a * b;
+```
+
+### Разница между interface и type
+
+```typescript
+// Интерфейсы можно расширять и объявлять повторно
+interface User {
+  name: string;
+}
+
+interface User {
+  age: number; // объединение с предыдущим
+}
+
+// Types нельзя объявлять повторно, но можно создавать пересечения
+type Admin = User & {
+  permissions: string[];
+};
+
+// Интерфейсы лучше для объектов, которые могут расширяться
+// Types лучше для union, intersection и сложных типов
+```
+
+## Дженерики (Generics)
+
+Дженерики позволяют создавать переиспользуемые компоненты, работающие с различными типами данных.
+
+### Дженерики в функциях
+
+```typescript
+// Простая generic функция
+function identity<T>(arg: T): T {
+  return arg;
+}
+
+let output1 = identity<string>("привет");
+let output2 = identity<number>(42);
+let output3 = identity("автовывод"); // TypeScript выведет тип автоматически
+
+// Generic функция с ограничениями
+function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+
+const user = { name: "Иван", age: 30 };
+let name = getProperty(user, "name"); // string
+let age = getProperty(user, "age"); // number
+// let invalid = getProperty(user, "invalid"); // Ошибка!
+```
+
+### Дженерики в интерфейсах
+
+```typescript
+// Generic интерфейс
+interface Box<Type> {
+  contents: Type;
+}
+
+let stringBox: Box<string> = { contents: "текст" };
+let numberBox: Box<number> = { contents: 42 };
+
+// Generic интерфейс с несколькими параметрами
+interface Pair<T, U> {
+  first: T;
+  second: U;
+}
+
+let pair: Pair<string, number> = {
+  first: "ключ",
+  second: 100,
+};
+
+// Generic интерфейс для функций
+interface GenericIdentityFn<Type> {
+  (arg: Type): Type;
+}
+
+function identity<Type>(arg: Type): Type {
+  return arg;
+}
+
+let myIdentity: GenericIdentityFn<number> = identity;
+```
+
+### Дженерики в классах
+
+```typescript
+class Container<T> {
+  private items: T[] = [];
+
+  add(item: T): void {
+    this.items.push(item);
+  }
+
+  get(index: number): T | undefined {
+    return this.items[index];
+  }
+
+  getAll(): T[] {
+    return [...this.items];
+  }
+}
+
+let stringContainer = new Container<string>();
+stringContainer.add("первый");
+stringContainer.add("второй");
+
+let numberContainer = new Container<number>();
+numberContainer.add(1);
+numberContainer.add(2);
+```
+
+### Ограничения дженериков
+
+```typescript
+// Ограничение extends
+interface Lengthwise {
+  length: number;
+}
+
+function logLength<T extends Lengthwise>(arg: T): T {
+  console.log(arg.length);
+  return arg;
+}
+
+logLength("строка"); // OK, string имеет length
+logLength([1, 2, 3]); // OK, array имеет length
+// logLength(42); // Ошибка: number не имеет length
+
+// Использование keyof
+function getValue<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+
+const person = { name: "Иван", age: 30 };
+let name = getValue(person, "name"); // string
+let age = getValue(person, "age"); // number
+```
+
+## Утилитарные типы
+
+TypeScript предоставляет набор встроенных утилитарных типов для трансформации существующих типов.
+
+### Partial, Required, Readonly
+
+```typescript
+interface Todo {
+  title: string;
+  description: string;
+  completed: boolean;
+}
+
+// Partial - все свойства становятся опциональными
+type PartialTodo = Partial<Todo>;
+// { title?: string; description?: string; completed?: boolean; }
+
+function updateTodo(todo: Todo, fieldsToUpdate: Partial<Todo>): Todo {
+  return { ...todo, ...fieldsToUpdate };
+}
+
+const todo1 = {
+  title: "организовать стол",
+  description: "убрать беспорядок",
+};
+
+const todo2 = updateTodo(todo1, {
+  description: "выбросить мусор",
+});
+
+// Required - все свойства становятся обязательными
+interface Config {
+  apiUrl?: string;
+  timeout?: number;
+}
+
+type RequiredConfig = Required<Config>;
+// { apiUrl: string; timeout: number; }
+
+// Readonly - все свойства становятся readonly
+type ReadonlyTodo = Readonly<Todo>;
+const todo: ReadonlyTodo = {
+  title: "задача",
+  description: "описание",
+  completed: false,
+};
+// todo.completed = true; // Ошибка!
+```
+
+### Pick, Omit
+
+```typescript
+interface Todo {
+  title: string;
+  description: string;
+  completed: boolean;
+  createdAt: number;
+}
+
+// Pick - выбирает указанные свойства
+type TodoPreview = Pick<Todo, "title" | "completed">;
+// { title: string; completed: boolean; }
+
+const preview: TodoPreview = {
+  title: "Убрать комнату",
+  completed: false,
+};
+
+// Omit - исключает указанные свойства
+type TodoInfo = Omit<Todo, "completed" | "createdAt">;
+// { title: string; description: string; }
+
+const info: TodoInfo = {
+  title: "Забрать детей",
+  description: "Детский сад закрывается в 17:00",
+};
+```
+
+### Record, Extract, Exclude
+
+```typescript
+// Record - создает объект с указанными ключами и значениями
+type CatName = "miffy" | "boris" | "mordred";
+
+interface CatInfo {
+  age: number;
+  breed: string;
+}
+
+const cats: Record<CatName, CatInfo> = {
+  miffy: { age: 10, breed: "Персидская" },
+  boris: { age: 5, breed: "Мейн-кун" },
+  mordred: { age: 16, breed: "Британская короткошерстная" },
+};
+
+// Extract - извлекает типы из union, которые можно присвоить указанному типу
+type T0 = Extract<"a" | "b" | "c", "a" | "f">;
+// type T0 = "a"
+
+type T1 = Extract<string | number | (() => void), Function>;
+// type T1 = () => void
+
+// Exclude - исключает типы из union
+type T2 = Exclude<"a" | "b" | "c", "a">;
+// type T2 = "b" | "c"
+
+type T3 = Exclude<string | number | (() => void), Function>;
+// type T3 = string | number
+```
+
+## Type Guards и Narrowing
+
+Type Guards помогают TypeScript сужать типы в условных блоках, обеспечивая безопасный доступ к свойствам.
+
+### typeof и instanceof
+
+```typescript
+// typeof для примитивов
+function padLeft(value: string, padding: string | number) {
+  if (typeof padding === "number") {
+    return Array(padding + 1).join(" ") + value;
+  }
+  return padding + value;
+}
+
+// instanceof для классов
+class Bird {
+  fly() {
+    console.log("летаю");
+  }
+}
+
+class Fish {
+  swim() {
+    console.log("плаваю");
+  }
+}
+
+function move(animal: Bird | Fish) {
+  if (animal instanceof Bird) {
+    animal.fly();
+  } else {
+    animal.swim();
+  }
+}
+```
+
+### Пользовательские type guards
+
+```typescript
+interface Cat {
+  type: "cat";
+  meow(): void;
+}
+
+interface Dog {
+  type: "dog";
+  bark(): void;
+}
+
+type Animal = Cat | Dog;
+
+// Type guard функция
+function isCat(animal: Animal): animal is Cat {
+  return animal.type === "cat";
+}
+
+function makeSound(animal: Animal) {
+  if (isCat(animal)) {
+    animal.meow(); // TypeScript знает, что это Cat
+  } else {
+    animal.bark(); // TypeScript знает, что это Dog
+  }
+}
+
+// Проверка на null/undefined
+function processValue(value: string | null | undefined) {
+  if (value != null) {
+    // TypeScript знает, что value не null и не undefined
+    console.log(value.toUpperCase());
+  }
+}
+```
+
+## Discriminated Unions
+
+Discriminated Unions (размеченные объединения) позволяют безопасно работать с union типами, используя общее свойство-дискриминант.
+
+### Базовый пример
+
+```typescript
+// Каждый вариант имеет общее свойство 'kind' с уникальным значением
+type Shape =
+  | { kind: "circle"; radius: number }
+  | { kind: "square"; sideLength: number }
+  | { kind: "rectangle"; width: number; height: number };
+
+function getArea(shape: Shape): number {
+  // TypeScript сужает тип на основе значения kind
+  switch (shape.kind) {
+    case "circle":
+      return Math.PI * shape.radius ** 2;
+    case "square":
+      return shape.sideLength ** 2;
+    case "rectangle":
+      return shape.width * shape.height;
+  }
+}
+
+// Использование if/else
+function getPerimeter(shape: Shape): number {
+  if (shape.kind === "circle") {
+    return 2 * Math.PI * shape.radius;
+  } else if (shape.kind === "square") {
+    return 4 * shape.sideLength;
+  } else {
+    // TypeScript знает, что это rectangle
+    return 2 * (shape.width + shape.height);
+  }
+}
+```
+
+### Практический пример: обработка результатов
+
+```typescript
+// Успешный результат
+type Success<T> = {
+  status: "success";
+  data: T;
+};
+
+// Ошибка
+type Error = {
+  status: "error";
+  message: string;
+};
+
+// Объединенный тип результата
+type Result<T> = Success<T> | Error;
+
+function handleResult<T>(result: Result<T>): void {
+  if (result.status === "success") {
+    // TypeScript знает, что result.data существует
+    console.log("Данные:", result.data);
+  } else {
+    // TypeScript знает, что result.message существует
+    console.error("Ошибка:", result.message);
+  }
+}
+
+// Использование
+const successResult: Result<string> = {
+  status: "success",
+  data: "Операция выполнена",
+};
+
+const errorResult: Result<string> = {
+  status: "error",
+  message: "Что-то пошло не так",
+};
+
+handleResult(successResult);
+handleResult(errorResult);
+```
+
+## Лучшие практики
+
+### 1. Избегайте `any`, используйте `unknown`
+
+```typescript
+// ❌ Плохо - any отключает проверку типов
+function processData(data: any) {
+  return data.someProperty.toUpperCase();
+}
+
+// ✅ Хорошо - unknown требует проверки типа
+function processData(data: unknown) {
+  if (typeof data === "object" && data !== null && "someProperty" in data) {
+    const obj = data as { someProperty: string };
+    return obj.someProperty.toUpperCase();
+  }
+  throw new Error("Неверный формат данных");
+}
+```
+
+### 2. Используйте строгие настройки компилятора
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true
+  }
+}
+```
+
+### 3. Предпочитайте интерфейсы для объектов, types для union
+
+```typescript
+// ✅ Интерфейс для расширяемых объектов
+interface User {
+  name: string;
+  email: string;
+}
+
+interface Admin extends User {
+  permissions: string[];
+}
+
+// ✅ Type для union и сложных типов
+type Status = "pending" | "completed" | "failed";
+type ID = string | number;
+```
+
+### 4. Используйте readonly для иммутабельности
+
+```typescript
+interface Config {
+  readonly apiUrl: string;
+  readonly timeout: number;
+}
+
+const config: Config = {
+  apiUrl: "https://api.example.com",
+  timeout: 5000,
+};
+
+// config.apiUrl = "новый URL"; // Ошибка!
+```
+
+### 5. Используйте const assertions для литеральных типов
+
+```typescript
+// Обычный массив
+const colors = ["red", "green", "blue"];
+// type: string[]
+
+// С const assertion
+const colorsAsConst = ["red", "green", "blue"] as const;
+// type: readonly ["red", "green", "blue"]
+
+// Полезно для создания union типов
+const statuses = ["pending", "completed", "failed"] as const;
+type Status = typeof statuses[number];
+// type Status = "pending" | "completed" | "failed"
+```
+
+## Полезные ресурсы
+
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html) - Официальное руководство TypeScript
+- [TypeScript Deep Dive](https://basarat.gitbook.io/typescript/) - Глубокое погружение в TypeScript
+- [TypeScript Utility Types](https://www.typescriptlang.org/docs/handbook/utility-types.html) - Документация по утилитарным типам
+- [Type Challenges](https://github.com/type-challenges/type-challenges) - Практические задачи для изучения типов
+- [TypeScript Playground](https://www.typescriptlang.org/play) - Онлайн-редактор для экспериментов с TypeScript

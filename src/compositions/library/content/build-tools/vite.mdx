@@ -1,3 +1,544 @@
 # Vite
 
-_Контент в разработке..._
+Vite — это современный инструмент сборки для фронтенд-разработки, который обеспечивает мгновенный запуск dev-сервера, быстрый Hot Module Replacement (HMR) и оптимизированную сборку для production. Использует esbuild для dev-сервера и Rollup для production-сборки.
+
+## Быстрый старт
+
+### Установка и базовые команды
+
+```bash
+# Создание нового проекта
+npm create vite@latest my-app -- --template react-ts
+
+# Установка зависимостей
+npm install
+
+# Запуск dev-сервера
+npm run dev
+
+# Сборка для production
+npm run build
+
+# Просмотр production-сборки
+npm run preview
+```
+
+### Базовые npm скрипты
+
+```json
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
+}
+```
+
+## Конфигурация
+
+### Базовый vite.config.js
+
+```js
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+      "~": path.resolve(__dirname, "./"),
+    },
+  },
+  server: {
+    port: 3000,
+    open: true,
+  },
+  build: {
+    outDir: "dist",
+    sourcemap: true,
+  },
+});
+```
+
+### Условная конфигурация
+
+```js
+import { defineConfig } from "vite";
+
+export default defineConfig(({ command, mode }) => {
+  if (command === "serve") {
+    // Конфигурация для dev-сервера
+    return {
+      server: {
+        port: 3000,
+      },
+    };
+  } else {
+    // Конфигурация для сборки
+    return {
+      build: {
+        minify: "terser",
+        rollupOptions: {
+          output: {
+            manualChunks: {
+              vendor: ["react", "react-dom"],
+            },
+          },
+        },
+      },
+    };
+  }
+});
+```
+
+### Программное получение конфигурации
+
+```js
+import { resolveConfig } from "vite";
+
+// Получить конфигурацию для разработки
+const devConfig = await resolveConfig(
+  {
+    configFile: "./vite.config.js",
+    mode: "development",
+  },
+  "serve",
+  "development",
+  "development"
+);
+
+console.log(devConfig.root); // Корневая директория проекта
+console.log(devConfig.server.port); // Порт сервера
+console.log(devConfig.plugins); // Все плагины
+```
+
+## Dev Server
+
+### Настройка dev-сервера
+
+```js
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  server: {
+    host: "0.0.0.0", // Доступ с других устройств
+    port: 3000,
+    strictPort: true, // Завершить, если порт занят
+    open: true, // Автоматически открыть браузер
+    cors: true, // Включить CORS
+    hmr: {
+      overlay: true, // Показывать overlay с ошибками
+    },
+    proxy: {
+      "/api": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+  },
+});
+```
+
+### Программное создание dev-сервера
+
+```js
+import { createServer } from "vite";
+
+const server = await createServer({
+  root: process.cwd(),
+  server: {
+    port: 3000,
+    strictPort: true,
+    proxy: {
+      "/api": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
+    },
+  },
+  plugins: [],
+  optimizeDeps: {
+    include: ["lodash-es"],
+  },
+});
+
+// Запуск сервера
+await server.listen();
+server.printUrls();
+
+// Трансформация модуля программно
+const result = await server.transformRequest("/src/main.js");
+console.log(result.code);
+
+// Закрытие сервера
+await server.close();
+```
+
+## Hot Module Replacement (HMR)
+
+HMR позволяет обновлять модули без полной перезагрузки страницы, сохраняя состояние приложения.
+
+### Базовое использование HMR
+
+```js
+// Автоматическое принятие обновлений
+if (import.meta.hot) {
+  import.meta.hot.accept();
+}
+```
+
+### Принятие обновлений от зависимостей
+
+```js
+import { foo } from "./foo.js";
+
+foo();
+
+if (import.meta.hot) {
+  // Принять обновления от конкретной зависимости
+  import.meta.hot.accept("./foo.js", (newFoo) => {
+    // newFoo содержит обновленный модуль
+    newFoo?.foo();
+  });
+
+  // Принять обновления от нескольких зависимостей
+  import.meta.hot.accept(
+    ["./foo.js", "./bar.js"],
+    ([newFooModule, newBarModule]) => {
+      // Массив содержит обновленные модули
+      // null если модуль не обновился
+    }
+  );
+}
+```
+
+### Сохранение состояния между обновлениями
+
+```js
+// Сохранение данных между HMR обновлениями
+if (import.meta.hot) {
+  // Сохранить состояние
+  import.meta.hot.data.counter = 0;
+
+  // Восстановить состояние при обновлении
+  import.meta.hot.accept((newModule) => {
+    const savedCounter = import.meta.hot.data.counter;
+    console.log("Restored counter:", savedCounter);
+  });
+}
+
+// ВАЖНО: мутируйте объект напрямую, не переприсваивайте
+// Правильно:
+import.meta.hot.data.someValue = "hello";
+
+// Неправильно:
+// import.meta.hot.data = { someValue: 'hello' }
+```
+
+### Очистка побочных эффектов
+
+```js
+function setupSideEffect() {
+  const interval = setInterval(() => {
+    console.log("Tick");
+  }, 1000);
+}
+
+setupSideEffect();
+
+if (import.meta.hot) {
+  import.meta.hot.dispose((data) => {
+    // Очистка побочных эффектов перед заменой модуля
+    clearInterval(interval);
+  });
+}
+```
+
+### Кастомные HMR события
+
+```js
+if (import.meta.hot) {
+  // Отправка кастомного события
+  import.meta.hot.send("custom-event", { data: "value" });
+
+  // Прослушивание кастомных событий
+  import.meta.hot.on("custom-event", (data) => {
+    console.log("Received:", data);
+  });
+}
+```
+
+## Сборка (Build)
+
+### Базовая конфигурация сборки
+
+```js
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  build: {
+    outDir: "dist", // Директория для сборки
+    assetsDir: "assets", // Поддиректория для статики
+    sourcemap: true, // Генерация source maps
+    minify: "esbuild", // Минификация: 'esbuild' | 'terser' | false
+    target: "esnext", // Целевая версия ES
+    chunkSizeWarningLimit: 1000, // Лимит размера чанка (в KB)
+  },
+});
+```
+
+### Настройка Rollup опций
+
+```js
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      input: {
+        main: "./index.html",
+        admin: "./admin.html",
+      },
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom"],
+          utils: ["./src/utils/helper1.js", "./src/utils/helper2.js"],
+        },
+      },
+    },
+  },
+});
+```
+
+### Preview production-сборки
+
+```js
+import { preview } from "vite";
+
+const previewServer = await preview({
+  preview: {
+    port: 8080,
+    open: true,
+    cors: true,
+    proxy: {
+      "/api": "http://localhost:3001",
+    },
+  },
+  build: {
+    outDir: "dist",
+  },
+});
+
+previewServer.printUrls();
+```
+
+## Переменные окружения
+
+### Использование .env файлов
+
+```bash
+# .env
+VITE_API_URL=https://api.example.com
+VITE_APP_TITLE=My App
+
+# .env.local (локальные переопределения, не коммитится)
+VITE_API_URL=http://localhost:3000
+
+# .env.production
+VITE_API_URL=https://api.production.com
+```
+
+### Доступ к переменным в коде
+
+```js
+// В коде доступны только переменные с префиксом VITE_
+console.log(import.meta.env.VITE_API_URL);
+console.log(import.meta.env.VITE_APP_TITLE);
+
+// Встроенные переменные
+console.log(import.meta.env.MODE); // 'development' | 'production'
+console.log(import.meta.env.DEV); // true в dev режиме
+console.log(import.meta.env.PROD); // true в production
+console.log(import.meta.env.SSR); // true при SSR
+```
+
+### Типизация переменных окружения
+
+```ts
+// vite-env.d.ts
+/// <reference types="vite/client" />
+
+interface ImportMetaEnv {
+  readonly VITE_API_URL: string;
+  readonly VITE_APP_TITLE: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+```
+
+## Плагины
+
+### Создание простого плагина
+
+```js
+import { Plugin } from "vite";
+
+export function myPlugin(): Plugin {
+  return {
+    name: "my-plugin",
+
+    // Трансформация кода
+    transform(code, id) {
+      if (id.endsWith(".custom")) {
+        return {
+          code: `export default ${JSON.stringify(code)}`,
+          map: null,
+        };
+      }
+    },
+  };
+}
+```
+
+### Плагин с виртуальными модулями
+
+```js
+export function virtualModulePlugin(): Plugin {
+  const virtualModuleId = "virtual:my-config";
+  const resolvedVirtualModuleId = "\0" + virtualModuleId;
+
+  return {
+    name: "virtual-module",
+
+    resolveId(id) {
+      if (id === virtualModuleId) {
+        return resolvedVirtualModuleId;
+      }
+    },
+
+    load(id) {
+      if (id === resolvedVirtualModuleId) {
+        return `export const config = { apiUrl: 'https://api.example.com' }`;
+      }
+    },
+  };
+}
+```
+
+### Плагин с кастомным HMR
+
+```js
+export function hmrPlugin(): Plugin {
+  return {
+    name: "custom-hmr",
+
+    handleHotUpdate({ file, server, modules }) {
+      if (file.endsWith(".data.json")) {
+        console.log("Data file updated:", file);
+
+        // Отправка кастомного события
+        server.ws.send({
+          type: "custom",
+          event: "data-update",
+          data: { file },
+        });
+
+        // Предотвращение стандартного HMR
+        return [];
+      }
+    },
+  };
+}
+```
+
+### Плагин с middleware
+
+```js
+export function middlewarePlugin(): Plugin {
+  return {
+    name: "configure-server",
+    configureServer(server) {
+      // Добавление middleware перед Vite middleware
+      server.middlewares.use((req, res, next) => {
+        if (req.url === "/custom") {
+          res.end("Custom response");
+        } else {
+          next();
+        }
+      });
+    },
+  };
+}
+```
+
+### Использование плагинов
+
+```js
+import { defineConfig } from "vite";
+import { myPlugin, virtualModulePlugin, hmrPlugin } from "./plugins";
+
+export default defineConfig({
+  plugins: [myPlugin(), virtualModulePlugin(), hmrPlugin()],
+});
+```
+
+## Оптимизация зависимостей
+
+Vite предварительно оптимизирует зависимости для ускорения dev-сервера.
+
+### Настройка оптимизации
+
+```js
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  optimizeDeps: {
+    // Включить зависимости в оптимизацию
+    include: ["lodash-es", "axios"],
+
+    // Исключить зависимости из оптимизации
+    exclude: ["some-heavy-library"],
+
+    // Принудительная переоптимизация
+    force: true,
+  },
+});
+```
+
+### Настройка CSS
+
+```js
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  css: {
+    // Настройки для препроцессоров
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "@/styles/variables.scss";`,
+      },
+    },
+    // CSS Modules
+    modules: {
+      localsConvention: "camelCase",
+      generateScopedName: "[name]__[local]___[hash:base64:5]",
+    },
+    // PostCSS конфигурация
+    postcss: "./postcss.config.js",
+  },
+});
+```
+
+## Полезные ресурсы
+
+- [Официальная документация Vite](https://vitejs.dev/) - Полное руководство по Vite
+- [Vite GitHub](https://github.com/vitejs/vite) - Исходный код и issues
+- [Awesome Vite](https://github.com/vitejs/awesome-vite) - Коллекция ресурсов и плагинов
+- [Vite Plugin API](https://vitejs.dev/guide/api-plugin.html) - Документация по API плагинов
+- [Rollup Documentation](https://rollupjs.org/) - Документация Rollup (используется для сборки)

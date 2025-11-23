@@ -1,3 +1,898 @@
 # Git
 
-_Контент в разработке..._
+Git — это распределённая система контроля версий, ставшая стандартом для управления кодом. Она позволяет отслеживать изменения, работать в команде, создавать ветки для новых функций и эффективно управлять историей проекта.
+
+## Основные концепции
+
+### Репозиторий
+
+Репозиторий — это хранилище вашего проекта, содержащее все файлы и полную историю их изменений.
+
+```bash
+# Инициализация нового репозитория
+git init
+
+# Клонирование существующего репозитория
+git clone https://github.com/user/repo.git
+
+# Клонирование в указанную директорию
+git clone https://github.com/user/repo.git my-project
+```
+
+### Три области Git
+
+Git работает с тремя основными областями:
+
+1. **Working Directory** (рабочая директория) — файлы на вашем компьютере
+2. **Staging Area** (индекс) — подготовленные к коммиту изменения
+3. **Repository** (репозиторий) — сохранённые коммиты
+
+```bash
+# Проверить статус всех трёх областей
+git status
+
+# Посмотреть изменения в рабочей директории
+git diff
+
+# Посмотреть изменения в staging area
+git diff --staged
+```
+
+### Коммит
+
+Коммит — это снимок состояния проекта в определённый момент времени с описанием изменений.
+
+```bash
+# Добавить файлы в staging area
+git add file.txt
+git add .                    # Все файлы
+git add src/                 # Директория
+git add -p                   # Интерактивное добавление частей файлов
+
+# Создать коммит
+git commit -m "Добавлена новая функция"
+
+# Создать коммит с подробным сообщением
+git commit
+
+# Добавить изменения в последний коммит (amend)
+git commit --amend -m "Исправлено сообщение коммита"
+git commit --amend --no-edit  # Не менять сообщение
+```
+
+## Основные команды
+
+### Работа с файлами
+
+```bash
+# Проверить статус репозитория
+git status
+git status -s                # Короткий формат
+
+# Просмотр изменений
+git diff                     # Изменения в рабочей директории
+git diff --staged            # Изменения в staging area
+git diff HEAD                # Все изменения относительно последнего коммита
+git diff branch1..branch2    # Разница между ветками
+
+# Удаление файлов
+git rm file.txt              # Удалить и добавить в staging
+git rm --cached file.txt     # Удалить из индекса, но оставить файл
+
+# Переименование/перемещение
+git mv old.txt new.txt       # Переименовать файл
+git mv file.txt dir/         # Переместить файл
+```
+
+### История коммитов
+
+```bash
+# Просмотр истории
+git log                      # Полная история
+git log --oneline            # Краткий формат
+git log --graph              # Граф веток
+git log --all                # Все ветки
+git log -p                   # С изменениями (patch)
+git log -n 5                 # Последние 5 коммитов
+git log --since="2 weeks ago"
+git log --author="Иван"
+git log --grep="bug"
+git log file.txt             # История конкретного файла
+
+# Красивый формат истории
+git log --graph --oneline --all --decorate
+
+# Поиск коммитов
+git log -S "function name"   # Поиск по содержимому
+git log --all --full-history -- file.txt
+```
+
+### Просмотр коммитов
+
+```bash
+# Детали коммита
+git show HEAD                # Последний коммит
+git show abc123              # Конкретный коммит
+git show HEAD~1              # Предыдущий коммит
+
+# Просмотр файла на момент коммита
+git show HEAD:file.txt
+git show abc123:src/app.ts
+```
+
+## Ветвление
+
+Ветвление — одна из ключевых возможностей Git, позволяющая работать над разными задачами параллельно.
+
+### Создание и переключение веток
+
+```bash
+# Создать новую ветку
+git branch feature-login
+
+# Переключиться на ветку
+git checkout feature-login
+git switch feature-login     # Новая команда (Git 2.23+)
+
+# Создать и переключиться сразу
+git checkout -b feature-login
+git switch -c feature-login  # Новая команда
+
+# Переименовать текущую ветку
+git branch -m new-name
+
+# Удалить ветку
+git branch -d feature-login  # Безопасное удаление
+git branch -D feature-login  # Принудительное удаление
+
+# Удалить удалённую ветку
+git push origin --delete feature-login
+```
+
+### Список веток
+
+```bash
+# Локальные ветки
+git branch
+
+# Все ветки (локальные + удалённые)
+git branch -a
+
+# Удалённые ветки
+git branch -r
+
+# Ветки с последним коммитом
+git branch -v
+
+# Ветки, объединённые в main
+git branch --merged
+git branch --no-merged
+```
+
+### Слияние веток
+
+```bash
+# Переключиться на целевую ветку (обычно main)
+git checkout main
+
+# Влить изменения из другой ветки
+git merge feature-login
+
+# Слияние с сообщением
+git merge feature-login -m "Merge feature-login into main"
+
+# Прервать слияние при конфликте
+git merge --abort
+
+# Слияние без создания merge-коммита (fast-forward)
+git merge --ff-only feature-login
+```
+
+### Rebase
+
+Rebase переносит коммиты из одной ветки на другую, создавая линейную историю.
+
+```bash
+# Перебазировать текущую ветку на main
+git checkout feature-login
+git rebase main
+
+# Интерактивный rebase (последние 3 коммита)
+git rebase -i HEAD~3
+
+# Отменить rebase
+git rebase --abort
+
+# Продолжить rebase после разрешения конфликтов
+git rebase --continue
+
+# Пропустить коммит во время rebase
+git rebase --skip
+```
+
+### Интерактивный rebase
+
+Позволяет изменять, объединять, удалять или переупорядочивать коммиты.
+
+```bash
+# Редактировать последние 5 коммитов
+git rebase -i HEAD~5
+
+# Доступные действия:
+# pick    - использовать коммит как есть
+# reword  - изменить сообщение коммита
+# edit    - остановиться для редактирования
+# squash  - объединить с предыдущим коммитом
+# fixup   - как squash, но отбросить сообщение
+# drop    - удалить коммит
+```
+
+### Cherry-pick
+
+Применение отдельных коммитов из одной ветки в другую.
+
+```bash
+# Применить конкретный коммит
+git cherry-pick abc123
+
+# Применить несколько коммитов
+git cherry-pick abc123 def456
+
+# Применить диапазон коммитов
+git cherry-pick abc123..def456
+
+# Применить без создания коммита
+git cherry-pick -n abc123
+```
+
+## Работа с удалёнными репозиториями
+
+### Настройка удалённых репозиториев
+
+```bash
+# Просмотр удалённых репозиториев
+git remote
+git remote -v                 # С URL
+
+# Добавить удалённый репозиторий
+git remote add origin https://github.com/user/repo.git
+
+# Изменить URL удалённого репозитория
+git remote set-url origin https://github.com/user/new-repo.git
+
+# Удалить удалённый репозиторий
+git remote remove origin
+
+# Просмотр информации об удалённом репозитории
+git remote show origin
+```
+
+### Получение и отправка изменений
+
+```bash
+# Скачать изменения (без слияния)
+git fetch origin
+
+# Скачать и влить изменения
+git pull origin main
+git pull                      # Использует отслеживаемую ветку
+
+# Отправить изменения
+git push origin main
+git push                      # Использует отслеживаемую ветку
+
+# Отправить ветку и установить отслеживание
+git push -u origin feature-login
+
+# Принудительная отправка (опасно!)
+git push --force
+git push --force-with-lease  # Безопаснее: проверяет, что удалённая ветка не изменилась
+```
+
+### Отслеживание веток
+
+```bash
+# Установить отслеживание ветки
+git branch --set-upstream-to=origin/main main
+git branch -u origin/main main
+
+# Просмотр отслеживаемых веток
+git branch -vv
+
+# Создать локальную ветку для отслеживания удалённой
+git checkout -b local-branch origin/remote-branch
+git checkout --track origin/remote-branch  # Автоматическое имя
+```
+
+## Отмена изменений
+
+### Отмена в рабочей директории
+
+```bash
+# Отменить изменения в файле (опасно!)
+git checkout -- file.txt
+git restore file.txt          # Новая команда (Git 2.23+)
+
+# Отменить все изменения
+git checkout -- .
+git restore .                 # Новая команда
+```
+
+### Отмена в staging area
+
+```bash
+# Убрать файл из staging area
+git reset HEAD file.txt
+git restore --staged file.txt # Новая команда
+
+# Убрать все файлы из staging area
+git reset
+git restore --staged .
+```
+
+### Отмена коммитов
+
+```bash
+# Отменить последний коммит, сохранив изменения
+git reset --soft HEAD~1
+
+# Отменить последний коммит, убрав изменения из staging
+git reset --mixed HEAD~1
+git reset HEAD~1              # --mixed по умолчанию
+
+# Отменить последний коммит и все изменения (опасно!)
+git reset --hard HEAD~1
+
+# Отменить несколько коммитов
+git reset --soft HEAD~3       # Отменить последние 3 коммита
+
+# Откатиться к конкретному коммиту
+git reset --hard abc123
+```
+
+### Revert
+
+Создаёт новый коммит, отменяющий изменения указанного коммита (безопаснее для общей истории).
+
+```bash
+# Отменить конкретный коммит
+git revert abc123
+
+# Отменить merge-коммит
+git revert -m 1 abc123
+
+# Отменить без создания коммита
+git revert -n abc123
+```
+
+## Stash
+
+Временное сохранение незакоммиченных изменений для переключения между ветками.
+
+```bash
+# Сохранить изменения
+git stash
+git stash save "Описание изменений"
+
+# Сохранить включая неотслеживаемые файлы
+git stash -u
+git stash --include-untracked
+
+# Сохранить включая игнорируемые файлы
+git stash -a
+git stash --all
+
+# Список сохранённых stash
+git stash list
+
+# Применить последний stash
+git stash apply
+git stash pop                # Применить и удалить
+
+# Применить конкретный stash
+git stash apply stash@{2}
+
+# Удалить stash
+git stash drop stash@{0}
+
+# Очистить все stash
+git stash clear
+
+# Создать ветку из stash
+git stash branch new-branch stash@{0}
+```
+
+## Теги
+
+Теги используются для пометки важных моментов в истории (например, релизов).
+
+```bash
+# Создать лёгкий тег
+git tag v1.0.0
+
+# Создать аннотированный тег (рекомендуется)
+git tag -a v1.0.0 -m "Релиз версии 1.0.0"
+
+# Создать тег для конкретного коммита
+git tag -a v1.0.0 abc123 -m "Релиз"
+
+# Список тегов
+git tag
+git tag -l "v1.*"            # Фильтрация
+
+# Просмотр тега
+git show v1.0.0
+
+# Удалить тег
+git tag -d v1.0.0
+
+# Отправить теги на удалённый репозиторий
+git push origin v1.0.0
+git push --tags              # Все теги
+```
+
+## .gitignore
+
+Файл `.gitignore` указывает Git, какие файлы и директории игнорировать.
+
+### Примеры .gitignore
+
+```gitignore
+# Зависимости
+node_modules/
+package-lock.json
+yarn.lock
+
+# Сборка
+dist/
+build/
+*.log
+
+# Окружение
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ОС
+.DS_Store
+Thumbs.db
+
+# Временные файлы
+*.tmp
+*.temp
+.cache/
+```
+
+### Правила .gitignore
+
+```gitignore
+# Комментарии начинаются с #
+# Пустые строки игнорируются
+
+# Игнорировать файл
+file.txt
+
+# Игнорировать директорию
+dir/
+
+# Игнорировать все файлы с расширением
+*.log
+
+# Игнорировать файлы в любой директории
+**/temp.log
+
+# Не игнорировать (исключение)
+!important.log
+
+# Игнорировать файлы в корне, но не в поддиректориях
+/temp.log
+
+# Игнорировать файлы в конкретной директории
+src/temp/
+```
+
+### Удалить игнорируемые файлы из индекса
+
+```bash
+# Если файлы уже добавлены в Git
+git rm --cached file.txt
+git rm -r --cached dir/
+
+# Удалить все игнорируемые файлы
+git rm -r --cached .
+git add .
+```
+
+## Git Hooks
+
+Хуки — это скрипты, автоматически выполняемые Git при определённых событиях.
+
+### Локальные хуки
+
+Хуки хранятся в `.git/hooks/`:
+
+#### pre-commit
+
+Выполняется перед созданием коммита. Можно использовать для проверки кода.
+
+```bash
+#!/bin/sh
+# .git/hooks/pre-commit
+
+# Запуск линтера
+npm run lint
+
+# Если линтер вернул ошибку, прервать коммит
+if [ $? -ne 0 ]; then
+  echo "Линтер обнаружил ошибки. Коммит отменён."
+  exit 1
+fi
+```
+
+#### commit-msg
+
+Проверка формата сообщения коммита.
+
+```bash
+#!/bin/sh
+# .git/hooks/commit-msg
+
+commit_msg=$(cat "$1")
+pattern="^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+"
+
+if ! echo "$commit_msg" | grep -qE "$pattern"; then
+  echo "Сообщение коммита должно следовать формату: type(scope): message"
+  exit 1
+fi
+```
+
+#### post-merge
+
+Выполняется после успешного слияния.
+
+```bash
+#!/bin/sh
+# .git/hooks/post-merge
+
+# Переустановить зависимости после слияния
+npm install
+```
+
+### Инструменты для управления хуками
+
+```bash
+# Husky — популярный инструмент для Git хуков
+npm install --save-dev husky
+
+# Настройка
+npx husky init
+
+# Добавить pre-commit хук
+npx husky add .husky/pre-commit "npm test"
+
+# Добавить commit-msg хук
+npx husky add .husky/commit-msg 'npx --no -- commitlint --edit "$1"'
+```
+
+## Рабочие процессы (Workflows)
+
+### Git Flow
+
+Классический workflow с несколькими типами веток:
+
+- **main/master** — стабильная версия для production
+- **develop** — ветка разработки
+- **feature/** — новые функции
+- **release/** — подготовка к релизу
+- **hotfix/** — срочные исправления
+
+```bash
+# Создать feature ветку от develop
+git checkout develop
+git pull origin develop
+git checkout -b feature/new-feature
+
+# Завершить feature
+git checkout develop
+git merge --no-ff feature/new-feature
+git branch -d feature/new-feature
+git push origin develop
+```
+
+### GitHub Flow
+
+Упрощённый workflow с одной основной веткой:
+
+- **main** — всегда готова к развёртыванию
+- **feature/** — ветки для новых функций
+
+```bash
+# Создать ветку от main
+git checkout main
+git pull origin main
+git checkout -b feature/new-feature
+
+# Работа, коммиты, push
+git push -u origin feature/new-feature
+
+# Создать Pull Request на GitHub
+# После одобрения: merge через интерфейс GitHub
+```
+
+### Trunk-Based Development
+
+Минималистичный подход с короткоживущими ветками:
+
+- Все работают в одной ветке (обычно main)
+- Частые коммиты и быстрые merge
+
+```bash
+# Всегда обновлять main перед началом работы
+git checkout main
+git pull origin main
+
+# Создать короткоживущую ветку
+git checkout -b fix/typo
+
+# Быстро завершить и смержить
+git push -u origin fix/typo
+# Создать PR и сразу merge
+```
+
+## Конфликты слияния
+
+### Разрешение конфликтов
+
+Когда Git не может автоматически объединить изменения, возникают конфликты.
+
+```bash
+# Посмотреть конфликтующие файлы
+git status
+
+# Открыть файл с конфликтом
+# Ищем маркеры:
+# <<<<<<< HEAD
+# ваш код
+# =======
+# код из другой ветки
+# >>>>>>> branch-name
+
+# После разрешения:
+git add resolved-file.txt
+git commit                    # Завершение слияния
+
+# Или прервать слияние
+git merge --abort
+```
+
+### Стратегии слияния
+
+```bash
+# Принять изменения из текущей ветки
+git merge -X ours branch-name
+
+# Принять изменения из другой ветки
+git merge -X theirs branch-name
+
+# Использовать конкретную стратегию
+git merge -s recursive -X patience branch-name
+```
+
+## Полезные команды
+
+### Поиск
+
+```bash
+# Найти коммит, добавивший строку
+git log -S "function name" --source --all
+
+# Найти коммит по сообщению
+git log --all --grep="bug fix"
+
+# Найти файлы по содержимому во всех ветках
+git grep "search term"
+git grep -n "search term"    # С номерами строк
+```
+
+### Очистка
+
+```bash
+# Удалить неотслеживаемые файлы
+git clean -n                 # Предпросмотр
+git clean -f                 # Удалить файлы
+git clean -fd                # Файлы и директории
+
+# Удалить отслеживаемые файлы, которые были удалены из файловой системы
+git add -u
+```
+
+### Сравнение
+
+```bash
+# Сравнить две ветки
+git diff main..feature
+
+# Сравнить конкретные файлы
+git diff main..feature -- file.txt
+
+# Статистика изменений
+git diff --stat main..feature
+```
+
+### Конфигурация
+
+```bash
+# Глобальная конфигурация
+git config --global user.name "Ваше Имя"
+git config --global user.email "your@email.com"
+
+# Конфигурация для текущего репозитория
+git config user.name "Имя"
+git config user.email "email@example.com"
+
+# Просмотр конфигурации
+git config --list
+git config user.name
+
+# Установить редактор по умолчанию
+git config --global core.editor "code --wait"
+
+# Цветной вывод
+git config --global color.ui auto
+
+# Настройка aliases
+git config --global alias.st status
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.unstage 'reset HEAD --'
+git config --global alias.last 'log -1 HEAD'
+```
+
+## Conventional Commits
+
+Стандарт написания сообщений коммитов для автоматизации и читаемости истории.
+
+### Формат
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+### Типы коммитов
+
+- **feat**: новая функция
+- **fix**: исправление бага
+- **docs**: изменения в документации
+- **style**: форматирование (не влияет на код)
+- **refactor**: рефакторинг
+- **perf**: улучшение производительности
+- **test**: добавление/изменение тестов
+- **chore**: изменения в процессе сборки, конфигурации
+
+### Примеры
+
+```bash
+git commit -m "feat(auth): добавить вход через OAuth"
+git commit -m "fix(api): исправить обработку ошибок 500"
+git commit -m "docs(readme): обновить инструкции по установке"
+git commit -m "refactor(utils): переписать функцию валидации"
+```
+
+## Полезные инструменты
+
+### GitHub CLI
+
+```bash
+# Установка: https://cli.github.com/
+
+# Создать issue
+gh issue create --title "Bug fix" --body "Описание"
+
+# Создать PR
+gh pr create --title "New feature" --body "Описание"
+
+# Список PR
+gh pr list
+
+# Просмотр PR
+gh pr view 123
+
+# Мердж PR
+gh pr merge 123 --squash
+```
+
+### LazyGit
+
+TUI (Terminal User Interface) для Git:
+
+```bash
+# Установка
+# macOS: brew install lazygit
+# Linux: https://github.com/jesseduffield/lazygit
+
+# Использование
+lazygit
+```
+
+## Лучшие практики
+
+### 1. Частые и осмысленные коммиты
+
+```bash
+# ✅ Хорошо: маленькие логические коммиты
+git commit -m "feat: добавить валидацию email"
+git commit -m "fix: исправить обработку ошибок"
+
+# ❌ Плохо: один большой коммит со всеми изменениями
+git commit -m "Много изменений"
+```
+
+### 2. Понятные сообщения коммитов
+
+```bash
+# ✅ Хорошо
+git commit -m "feat(auth): добавить двухфакторную аутентификацию"
+git commit -m "fix(api): исправить утечку памяти в обработчике запросов"
+
+# ❌ Плохо
+git commit -m "fix"
+git commit -m "обновления"
+git commit -m "WIP"
+```
+
+### 3. Использование веток
+
+Всегда создавайте отдельные ветки для новых функций или исправлений, не коммитьте напрямую в main.
+
+### 4. Синхронизация с удалённым репозиторием
+
+Регулярно делайте `git pull` перед началом работы и `git push` после завершения.
+
+### 5. Проверка перед коммитом
+
+```bash
+# Проверить статус
+git status
+
+# Просмотреть изменения
+git diff --staged
+
+# Запустить тесты и линтер
+npm test
+npm run lint
+```
+
+### 6. Не коммитить секреты
+
+Используйте `.gitignore` для исключения файлов с секретами (`.env`, ключи API и т.д.).
+
+### 7. Использование .gitkeep
+
+Для коммита пустых директорий создайте файл `.gitkeep`:
+
+```bash
+mkdir logs
+touch logs/.gitkeep
+git add logs/.gitkeep
+```
+
+## Полезные ресурсы
+
+- [Официальная документация Git](https://git-scm.com/doc) — полное руководство
+- [Pro Git Book](https://git-scm.com/book) — бесплатная книга по Git
+- [Git Reference](https://git-scm.com/docs) — справочник команд
+- [GitHub Git Cheat Sheet](https://education.github.com/git-cheat-sheet-education.pdf) — шпаргалка
+- [Learn Git Branching](https://learngitbranching.js.org/) — интерактивное обучение
+- [Conventional Commits](https://www.conventionalcommits.org/) — стандарт сообщений коммитов
+- [GitHub Flow](https://guides.github.com/introduction/flow/) — описание GitHub Flow

@@ -1,3 +1,581 @@
 # JavaScript
 
-_Контент в разработке..._
+JavaScript — это динамический язык программирования, который является основой современной веб-разработки. Он поддерживает объектно-ориентированный, функциональный и императивный стили программирования.
+
+## Асинхронность: Promises и async/await
+
+Асинхронность — одна из ключевых особенностей JavaScript. Современный подход использует Promises и async/await для работы с асинхронными операциями.
+
+### Создание и использование Promises
+
+```javascript
+function loadData(url) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (url.startsWith("https://")) {
+        resolve({ data: "Success", url: url });
+      } else {
+        reject(new Error("Invalid URL"));
+      }
+    }, 1000);
+  });
+}
+
+loadData("https://api.example.com")
+  .then((result) => {
+    console.log(result.data); // "Success"
+    return result.url;
+  })
+  .then((url) => {
+    console.log(`Loaded from: ${url}`);
+  })
+  .catch((error) => {
+    console.error("Error:", error.message);
+  });
+```
+
+### Async/await синтаксис
+
+```javascript
+async function fetchUserData(userId) {
+  try {
+    let response = await loadData(`https://api.example.com/users/${userId}`);
+    console.log("User data loaded:", response.data);
+    return response;
+  } catch (error) {
+    console.error("Failed to load user:", error.message);
+    return null;
+  }
+}
+
+fetchUserData(123).then((data) => {
+  if (data) {
+    console.log("Processing:", data);
+  }
+});
+```
+
+### Параллельное выполнение с Promise.all
+
+```javascript
+async function loadMultipleUsers(userIds) {
+  try {
+    let promises = userIds.map((id) =>
+      loadData(`https://api.example.com/users/${id}`)
+    );
+    let results = await Promise.all(promises);
+    return results;
+  } catch (error) {
+    console.error("One of the requests failed:", error);
+    return [];
+  }
+}
+
+loadMultipleUsers([1, 2, 3]).then((users) => {
+  console.log(`Loaded ${users.length} users`);
+});
+```
+
+### Top-level await в модулях
+
+В ES-модулях можно использовать `await` на верхнем уровне:
+
+```javascript
+// В ES-модуле
+let response = await fetch("/article/promise-chaining/user.json");
+let user = await response.json();
+
+console.log(user);
+```
+
+## Деструктуризация
+
+Деструктуризация позволяет извлекать значения из массивов и объектов в отдельные переменные.
+
+### Деструктуризация массивов
+
+```javascript
+let [name1, name2, ...rest] = [
+  "Julius",
+  "Caesar",
+  "Consul",
+  "of the Roman Republic",
+];
+
+// rest содержит оставшиеся элементы
+console.log(rest[0]); // "Consul"
+console.log(rest[1]); // "of the Roman Republic"
+console.log(rest.length); // 2
+```
+
+### Деструктуризация объектов
+
+```javascript
+let options = {
+  title: "Menu",
+  height: 200,
+  width: 100,
+};
+
+// Извлечение свойств
+let { title, ...rest } = options;
+
+// title = "Menu"
+// rest = { height: 200, width: 100 }
+console.log(rest.height); // 200
+console.log(rest.width); // 100
+
+// Значения по умолчанию
+let { title: menuTitle = "Default", width = 200 } = options;
+```
+
+### Деструктуризация в параметрах функций
+
+```javascript
+function showName({ firstName, lastName, ...titles }) {
+  console.log(firstName + " " + lastName); // "Julius Caesar"
+
+  // Остальные аргументы в массиве titles
+  console.log(titles[0]); // "Consul"
+  console.log(titles[1]); // "Imperator"
+}
+
+showName({
+  firstName: "Julius",
+  lastName: "Caesar",
+  titles: ["Consul", "Imperator"],
+});
+```
+
+## Spread и Rest операторы
+
+Оператор `...` используется для расширения (spread) и сбора (rest) элементов.
+
+### Spread для массивов
+
+```javascript
+let arr = [1, 2, 3];
+let arrCopy = [...arr]; // Копирование массива
+
+// Массивы не равны по ссылке
+console.log(arr === arrCopy); // false
+
+// Но содержат одинаковые элементы
+arr.push(4);
+console.log(arr); // [1, 2, 3, 4]
+console.log(arrCopy); // [1, 2, 3]
+
+// Использование в функциях
+let numbers = [3, 5, 1];
+console.log(Math.max(...numbers)); // 5
+
+// Объединение массивов
+let arr1 = [1, -2, 3, 4];
+let arr2 = [8, 3, -8, 1];
+console.log(Math.max(...arr1, ...arr2)); // 8
+```
+
+### Spread для объектов
+
+```javascript
+let obj = { a: 1, b: 2, c: 3 };
+let objCopy = { ...obj }; // Поверхностное копирование
+
+// Объекты не равны по ссылке
+console.log(obj === objCopy); // false
+
+// Объединение объектов
+let defaults = { theme: "dark", fontSize: 14 };
+let user = { fontSize: 16, name: "John" };
+let config = { ...defaults, ...user };
+// { theme: "dark", fontSize: 16, name: "John" }
+```
+
+### Rest параметры в функциях
+
+```javascript
+function sumAll(...args) {
+  let sum = 0;
+  for (let arg of args) sum += arg;
+  return sum;
+}
+
+console.log(sumAll(1)); // 1
+console.log(sumAll(1, 2)); // 3
+console.log(sumAll(1, 2, 3)); // 6
+```
+
+### Преобразование строки в массив
+
+```javascript
+let str = "Hello";
+let chars = [...str]; // ["H", "e", "l", "l", "o"]
+// Альтернатива: Array.from(str)
+```
+
+## Optional Chaining и Nullish Coalescing
+
+Современные операторы для безопасной работы с потенциально отсутствующими значениями.
+
+### Optional Chaining (?.)
+
+```javascript
+let user = {}; // Пользователь без свойства "address"
+
+// Безопасный доступ к вложенным свойствам
+console.log(user.address?.street); // undefined (без ошибки)
+
+// С методами
+let userAdmin = {
+  admin() {
+    console.log("I am admin");
+  },
+};
+
+let userGuest = {};
+
+userAdmin.admin?.(); // "I am admin"
+userGuest.admin?.(); // ничего не происходит (метод отсутствует)
+
+// С динамическими свойствами
+let key = "firstName";
+let user1 = { firstName: "John" };
+let user2 = null;
+
+console.log(user1?.[key]); // "John"
+console.log(user2?.[key]); // undefined
+```
+
+### Nullish Coalescing (??)
+
+Оператор `??` возвращает правую часть только если левая часть `null` или `undefined`:
+
+```javascript
+let firstName = null;
+let lastName = null;
+let nickName = "Supercoder";
+
+// Выбирает первое определенное значение
+console.log(firstName ?? lastName ?? nickName ?? "Anonymous"); // "Supercoder"
+
+// Отличие от || (|| проверяет все falsy значения)
+let height = 0;
+console.log(height || 100); // 100 (0 - falsy)
+console.log(height ?? 100); // 0 (0 - не null/undefined)
+```
+
+## Стрелочные функции
+
+Стрелочные функции имеют более короткий синтаксис и не имеют собственного `this`.
+
+### Базовый синтаксис
+
+```javascript
+// Обычная функция
+function regularFunction(a, b) {
+  return a + b;
+}
+
+// Стрелочная функция
+const arrowFunction = (a, b) => a + b;
+
+// Многострочная стрелочная функция
+const multiply = (a, b) => {
+  const result = a * b;
+  return result;
+};
+
+// Без параметров
+const greet = () => console.log("Hello!");
+
+// Один параметр (скобки необязательны)
+const square = (x) => x * x;
+```
+
+### Сохранение контекста this
+
+```javascript
+let user = {
+  name: "John",
+  items: [1, 2, 3],
+
+  // В обычной функции this зависит от контекста вызова
+  regularMethod: function () {
+    this.items.forEach(function (item) {
+      // this здесь не указывает на user!
+      console.log(this.name, item); // undefined
+    });
+  },
+
+  // В стрелочной функции this берется из внешней области
+  arrowMethod: function () {
+    this.items.forEach((item) => {
+      // this указывает на user
+      console.log(this.name, item); // "John 1", "John 2", "John 3"
+    });
+  },
+};
+```
+
+### Возврат объектов из стрелочных функций
+
+```javascript
+// Нужны скобки для возврата объекта
+const createUser = (name, age) => ({
+  name: name,
+  age: age,
+});
+
+// Или с коротким синтаксисом
+const createUserShort = (name, age) => ({ name, age });
+
+// Использование с map
+let users = [
+  { name: "John", surname: "Smith", id: 1 },
+  { name: "Pete", surname: "Hunt", id: 2 },
+];
+
+let usersMapped = users.map((user) => ({
+  fullName: `${user.name} ${user.surname}`,
+  id: user.id,
+}));
+```
+
+## Замыкания (Closures)
+
+Замыкание — это функция, которая имеет доступ к переменным из внешней области видимости даже после того, как внешняя функция завершила выполнение.
+
+### Базовый пример замыкания
+
+```javascript
+function outerFunction(x) {
+  // Внешняя переменная
+  let outerVariable = x;
+
+  // Внутренняя функция (замыкание)
+  function innerFunction(y) {
+    // Имеет доступ к outerVariable
+    return outerVariable + y;
+  }
+
+  return innerFunction;
+}
+
+let addFive = outerFunction(5);
+console.log(addFive(3)); // 8
+
+let addTen = outerFunction(10);
+console.log(addTen(3)); // 13
+```
+
+### Замыкания в циклах
+
+```javascript
+// Проблема: все функции ссылаются на одно и то же i
+for (var i = 0; i < 3; i++) {
+  setTimeout(function () {
+    console.log(i); // Выведет 3, 3, 3
+  }, 100);
+}
+
+// Решение 1: использовать let (блочная область видимости)
+for (let i = 0; i < 3; i++) {
+  setTimeout(function () {
+    console.log(i); // Выведет 0, 1, 2
+  }, 100);
+}
+
+// Решение 2: использовать IIFE (Immediately Invoked Function Expression)
+for (var i = 0; i < 3; i++) {
+  (function (j) {
+    setTimeout(function () {
+      console.log(j); // Выведет 0, 1, 2
+    }, 100);
+  })(i);
+}
+```
+
+### Практическое применение: создание счетчиков
+
+```javascript
+function createCounter() {
+  let count = 0;
+
+  return {
+    increment: () => ++count,
+    decrement: () => --count,
+    getCount: () => count,
+  };
+}
+
+let counter1 = createCounter();
+let counter2 = createCounter();
+
+console.log(counter1.increment()); // 1
+console.log(counter1.increment()); // 2
+console.log(counter2.increment()); // 1 (независимый счетчик)
+console.log(counter1.getCount()); // 2
+```
+
+## Контекст this
+
+`this` в JavaScript зависит от того, как вызывается функция.
+
+### Правила определения this
+
+```javascript
+// 1. В глобальном контексте
+console.log(this); // window (в браузере) или global (в Node.js)
+
+// 2. В методе объекта
+let user = {
+  name: "John",
+  greet: function () {
+    console.log(this.name); // "John"
+  },
+};
+
+user.greet(); // this = user
+
+// 3. Потеря контекста
+let greetFunc = user.greet;
+greetFunc(); // this = undefined (в strict mode) или window
+
+// 4. Явное указание контекста
+greetFunc.call(user); // this = user
+greetFunc.apply(user); // this = user
+let boundGreet = greetFunc.bind(user);
+boundGreet(); // this = user
+```
+
+### Call, Apply, Bind
+
+```javascript
+let person = {
+  firstName: "John",
+  lastName: "Doe",
+};
+
+function introduce(greeting, punctuation) {
+  console.log(
+    `${greeting}, я ${this.firstName} ${this.lastName}${punctuation}`
+  );
+}
+
+// call - вызывает функцию с указанным this и аргументами
+introduce.call(person, "Привет", "!"); // "Привет, я John Doe!"
+
+// apply - то же самое, но аргументы передаются массивом
+introduce.apply(person, ["Здравствуйте", "."]); // "Здравствуйте, я John Doe."
+
+// bind - создает новую функцию с привязанным this
+let introducePerson = introduce.bind(person);
+introducePerson("Привет", "!"); // "Привет, я John Doe!"
+```
+
+### Method borrowing
+
+```javascript
+// Заимствование метода у массива
+function hash() {
+  // arguments - это объект, похожий на массив
+  // Используем метод join из Array
+  console.log([].join.call(arguments)); // "1,2"
+}
+
+hash(1, 2);
+```
+
+## Современные методы массивов
+
+JavaScript предоставляет мощные методы для работы с массивами.
+
+### map, filter, reduce
+
+```javascript
+let numbers = [1, 2, 3, 4, 5];
+
+// map - преобразует каждый элемент
+let doubled = numbers.map((n) => n * 2);
+console.log(doubled); // [2, 4, 6, 8, 10]
+
+// filter - фильтрует элементы
+let evens = numbers.filter((n) => n % 2 === 0);
+console.log(evens); // [2, 4]
+
+// reduce - сводит массив к одному значению
+let sum = numbers.reduce((acc, n) => acc + n, 0);
+console.log(sum); // 15
+
+// Комбинирование методов
+let result = numbers
+  .filter((n) => n % 2 === 0) // [2, 4]
+  .map((n) => n * 2) // [4, 8]
+  .reduce((acc, n) => acc + n, 0); // 12
+```
+
+### find, findIndex, some, every
+
+```javascript
+let users = [
+  { id: 1, name: "John", age: 25 },
+  { id: 2, name: "Jane", age: 30 },
+  { id: 3, name: "Bob", age: 20 },
+];
+
+// find - находит первый элемент, удовлетворяющий условию
+let user = users.find((u) => u.age > 25);
+console.log(user); // { id: 2, name: "Jane", age: 30 }
+
+// findIndex - находит индекс первого элемента
+let index = users.findIndex((u) => u.name === "Bob");
+console.log(index); // 2
+
+// some - проверяет, есть ли хотя бы один элемент
+let hasAdult = users.some((u) => u.age >= 18);
+console.log(hasAdult); // true
+
+// every - проверяет, все ли элементы удовлетворяют условию
+let allAdults = users.every((u) => u.age >= 18);
+console.log(allAdults); // true
+```
+
+## Шаблонные строки (Template Literals)
+
+Шаблонные строки позволяют встраивать выражения в строки.
+
+```javascript
+let name = "John";
+let age = 30;
+
+// Обычная конкатенация
+let message1 = "Привет, меня зовут " + name + ", мне " + age + " лет.";
+
+// Шаблонная строка
+let message2 = `Привет, меня зовут ${name}, мне ${age} лет.`;
+
+// Многострочные строки
+let multiline = `
+  Это
+  многострочная
+  строка
+`;
+
+// Выражения в шаблонных строках
+let calculation = `Сумма: ${5 + 3}`; // "Сумма: 8"
+
+// Вложенные шаблонные строки
+let items = ["яблоко", "банан", "апельсин"];
+let list = `
+  Список покупок:
+  ${items.map((item) => `- ${item}`).join("\n")}
+`;
+```
+
+## Полезные ресурсы
+
+- [MDN JavaScript Guide](https://developer.mozilla.org/ru/docs/Web/JavaScript/Guide) - Полное руководство по JavaScript
+- [JavaScript.info](https://javascript.info/) - Современный учебник JavaScript
+- [ECMAScript Compatibility Table](https://kangax.github.io/compat-table/es6/) - Таблица совместимости ES6+
+- [You Don't Know JS](https://github.com/getify/You-Dont-Know-JS) - Глубокое погружение в JavaScript
+- [JavaScript Algorithms](https://github.com/trekhleb/javascript-algorithms) - Алгоритмы и структуры данных на JavaScript

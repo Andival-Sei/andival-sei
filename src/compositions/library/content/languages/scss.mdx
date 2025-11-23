@@ -1,3 +1,659 @@
-# SCSS
+# SCSS: Препроцессор для CSS
 
-_Контент в разработке..._
+SCSS (Sassy CSS) — это синтаксис препроцессора Sass, который расширяет возможности CSS переменными, вложенностью, миксинами, функциями и модульностью. SCSS использует синтаксис, максимально похожий на обычный CSS, что делает его простым в изучении.
+
+## Переменные
+
+Переменные позволяют хранить значения для повторного использования по всему проекту.
+
+### Базовое использование
+
+```scss
+// Определение переменных
+$primary-color: #3b82f6;
+$secondary-color: #8b5cf6;
+$font-stack: "Inter", sans-serif;
+$spacing-unit: 1rem;
+
+// Использование
+.button {
+  background-color: $primary-color;
+  font-family: $font-stack;
+  padding: $spacing-unit ($spacing-unit * 1.5);
+}
+```
+
+### Переменные с !default
+
+Позволяют устанавливать значения по умолчанию, которые можно переопределить:
+
+```scss
+// _variables.scss
+$primary-color: #3b82f6 !default;
+$border-radius: 0.5rem !default;
+
+// main.scss
+$primary-color: #ef4444; // Переопределяет значение
+@import "variables"; // Использует новое значение
+```
+
+### Карты (Maps) для организации данных
+
+```scss
+// Цветовая палитра
+$colors: (
+  "primary": #3b82f6,
+  "secondary": #8b5cf6,
+  "success": #10b981,
+  "danger": #ef4444,
+  "warning": #f59e0b,
+);
+
+// Размеры
+$breakpoints: (
+  "sm": 640px,
+  "md": 768px,
+  "lg": 1024px,
+  "xl": 1280px,
+);
+
+// Использование
+.button {
+  background-color: map-get($colors, "primary");
+  
+  @media (min-width: map-get($breakpoints, "md")) {
+    padding: 1.5rem;
+  }
+}
+```
+
+## Вложенность (Nesting)
+
+Вложенность позволяет отражать структуру HTML в стилях, улучшая читаемость.
+
+### Базовое вложение
+
+```scss
+.navbar {
+  display: flex;
+  padding: 1rem;
+  
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  li {
+    margin-right: 1rem;
+    
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+  
+  a {
+    text-decoration: none;
+    color: #333;
+    
+    &:hover {
+      color: #3b82f6;
+    }
+  }
+}
+```
+
+### Родительский селектор (&)
+
+```scss
+.button {
+  background: #3b82f6;
+  color: white;
+  
+  // &:hover эквивалентно .button:hover
+  &:hover {
+    background: #2563eb;
+  }
+  
+  // &.active эквивалентно .button.active
+  &.active {
+    background: #1d4ed8;
+  }
+  
+  // &--large эквивалентно .button--large (BEM)
+  &--large {
+    padding: 1rem 2rem;
+    font-size: 1.25rem;
+  }
+}
+```
+
+### Вложенность свойств
+
+```scss
+.element {
+  // Вместо:
+  // border-width: 1px;
+  // border-style: solid;
+  // border-color: #ccc;
+  
+  // Можно писать:
+  border: {
+    width: 1px;
+    style: solid;
+    color: #ccc;
+  }
+  
+  font: {
+    family: "Inter", sans-serif;
+    size: 1rem;
+    weight: 500;
+  }
+}
+```
+
+## Миксины (Mixins)
+
+Миксины — это переиспользуемые блоки стилей, которые можно параметризовать.
+
+### Простые миксины
+
+```scss
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  @include flex-center;
+  height: 100vh;
+}
+```
+
+### Миксины с параметрами
+
+```scss
+@mixin border-radius($radius: 0.5rem) {
+  border-radius: $radius;
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+}
+
+.card {
+  @include border-radius(1rem);
+}
+
+.button {
+  @include border-radius; // Использует значение по умолчанию
+}
+```
+
+### Миксины с множественными параметрами
+
+```scss
+@mixin button($bg-color, $text-color: white, $padding: 0.75rem 1.5rem) {
+  background-color: $bg-color;
+  color: $text-color;
+  padding: $padding;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  
+  &:hover {
+    background-color: darken($bg-color, 10%);
+  }
+}
+
+.primary-button {
+  @include button(#3b82f6);
+}
+
+.secondary-button {
+  @include button(#8b5cf6, white, 1rem 2rem);
+}
+```
+
+### Миксины с @content
+
+Позволяют передавать блоки стилей в миксин:
+
+```scss
+@mixin respond-to($breakpoint) {
+  @media (min-width: $breakpoint) {
+    @content;
+  }
+}
+
+.container {
+  padding: 1rem;
+  
+  @include respond-to(768px) {
+    padding: 2rem;
+    max-width: 1200px;
+  }
+}
+```
+
+### Практический пример: адаптивная типографика
+
+```scss
+@mixin responsive-font($min-size, $max-size, $min-width: 320px, $max-width: 1200px) {
+  font-size: clamp(
+    #{$min-size},
+    #{$min-size} + (#{$max-size} - #{$min-size}) * ((100vw - #{$min-width}) / (#{$max-width} - #{$min-width})),
+    #{$max-size}
+  );
+}
+
+h1 {
+  @include responsive-font(2rem, 4rem);
+}
+
+p {
+  @include responsive-font(1rem, 1.25rem);
+}
+```
+
+## Функции
+
+Sass предоставляет множество встроенных функций и позволяет создавать собственные.
+
+### Встроенные функции для работы с цветами
+
+```scss
+$primary: #3b82f6;
+
+.button {
+  background: $primary;
+  
+  &:hover {
+    // Осветлить цвет на 10%
+    background: lighten($primary, 10%);
+  }
+  
+  &:active {
+    // Затемнить цвет на 15%
+    background: darken($primary, 15%);
+  }
+}
+
+// Прозрачность
+.overlay {
+  background: rgba($primary, 0.8);
+  // или
+  background: transparentize($primary, 0.2);
+}
+```
+
+### Математические операции
+
+```scss
+$base-spacing: 1rem;
+
+.container {
+  padding: $base-spacing * 2; // 2rem
+  margin: $base-spacing / 2; // 0.5rem
+  gap: $base-spacing + 0.5rem; // 1.5rem
+}
+
+// Функции для округления
+$width: 100.7px;
+.element {
+  width: round($width); // 101px
+  height: ceil($width); // 101px
+  padding: floor($width); // 100px
+}
+```
+
+### Пользовательские функции
+
+```scss
+// Конвертация px в rem
+@function rem($pixels, $base: 16px) {
+  @return ($pixels / $base) * 1rem;
+}
+
+// Использование
+.container {
+  font-size: rem(18px); // 1.125rem
+  padding: rem(24px); // 1.5rem
+}
+
+// Функция для получения значения из карты
+@function color($key) {
+  @return map-get($colors, $key);
+}
+
+.button {
+  background: color("primary");
+}
+```
+
+## Модули и @use/@forward
+
+Современная система модулей Sass (замена устаревшему @import).
+
+### @use для импорта модулей
+
+```scss
+// _variables.scss
+$primary-color: #3b82f6;
+$spacing: 1rem;
+
+// _mixins.scss
+@use "variables" as vars;
+
+@mixin button {
+  background: vars.$primary-color;
+  padding: vars.$spacing;
+}
+
+// main.scss
+@use "variables" as *; // Импорт без префикса
+@use "mixins";
+
+.button {
+  @include mixins.button;
+  color: $primary-color; // Доступно благодаря "as *"
+}
+```
+
+### @forward для реэкспорта
+
+```scss
+// _theme.scss (главный файл темы)
+@forward "variables";
+@forward "mixins";
+@forward "functions";
+
+// main.scss
+@use "theme" as *; // Импортирует все из theme
+
+.button {
+  @include button-mixin;
+  background: $primary-color;
+}
+```
+
+### Конфигурация модулей с with
+
+```scss
+// _library.scss
+$primary-color: #3b82f6 !default;
+$border-radius: 0.5rem !default;
+
+.button {
+  background: $primary-color;
+  border-radius: $border-radius;
+}
+
+// main.scss
+@use "library" with (
+  $primary-color: #ef4444,
+  $border-radius: 1rem
+);
+```
+
+## Частичные файлы (Partials)
+
+Файлы, начинающиеся с подчеркивания, не компилируются отдельно, а только при импорте.
+
+```
+styles/
+├── _variables.scss
+├── _mixins.scss
+├── _functions.scss
+├── _base.scss
+├── _components.scss
+└── main.scss
+```
+
+```scss
+// main.scss
+@use "variables";
+@use "mixins";
+@use "base";
+@use "components";
+```
+
+## Расширение (@extend)
+
+Позволяет наследовать стили от другого селектора.
+
+```scss
+%button-base {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.primary-button {
+  @extend %button-base;
+  background: #3b82f6;
+  color: white;
+}
+
+.secondary-button {
+  @extend %button-base;
+  background: #8b5cf6;
+  color: white;
+}
+```
+
+**Важно**: @extend может создавать большие селекторы. В большинстве случаев лучше использовать миксины.
+
+## Условные операторы
+
+```scss
+@mixin theme-colors($theme: "light") {
+  @if $theme == "light" {
+    background: white;
+    color: #333;
+  } @else if $theme == "dark" {
+    background: #1a1a1a;
+    color: white;
+  } @else {
+    @error "Неизвестная тема: #{$theme}";
+  }
+}
+
+.container {
+  @include theme-colors("dark");
+}
+```
+
+## Циклы
+
+### @for
+
+```scss
+@for $i from 1 through 5 {
+  .col-#{$i} {
+    width: percentage($i / 5);
+  }
+}
+
+// Генерирует .col-1, .col-2, ..., .col-5
+```
+
+### @each
+
+```scss
+$sizes: small, medium, large;
+
+@each $size in $sizes {
+  .button-#{$size} {
+    @if $size == small {
+      padding: 0.5rem 1rem;
+    } @else if $size == medium {
+      padding: 0.75rem 1.5rem;
+    } @else {
+      padding: 1rem 2rem;
+    }
+  }
+}
+
+// Итерация по картам
+$colors: (
+  "primary": #3b82f6,
+  "secondary": #8b5cf6,
+);
+
+@each $name, $color in $colors {
+  .bg-#{$name} {
+    background-color: $color;
+  }
+}
+```
+
+### @while
+
+```scss
+$i: 1;
+@while $i <= 5 {
+  .spacing-#{$i} {
+    margin: #{$i * 0.5}rem;
+  }
+  $i: $i + 1;
+}
+```
+
+## Практический пример: система дизайна
+
+```scss
+// _design-system.scss
+@use "sass:map";
+@use "sass:color";
+
+// Токены дизайна
+$tokens: (
+  "colors": (
+    "primary": #3b82f6,
+    "secondary": #8b5cf6,
+    "success": #10b981,
+    "danger": #ef4444,
+  ),
+  "spacing": (
+    "xs": 0.25rem,
+    "sm": 0.5rem,
+    "md": 1rem,
+    "lg": 2rem,
+    "xl": 4rem,
+  ),
+  "breakpoints": (
+    "sm": 640px,
+    "md": 768px,
+    "lg": 1024px,
+    "xl": 1280px,
+  ),
+);
+
+// Функции для доступа к токенам
+@function token($category, $key) {
+  @return map.get(map.get($tokens, $category), $key);
+}
+
+// Миксин для медиа-запросов
+@mixin respond-to($breakpoint) {
+  $width: token("breakpoints", $breakpoint);
+  @media (min-width: $width) {
+    @content;
+  }
+}
+
+// Использование
+.button {
+  background: token("colors", "primary");
+  padding: token("spacing", "sm") token("spacing", "md");
+  
+  @include respond-to("md") {
+    padding: token("spacing", "md") token("spacing", "lg");
+  }
+}
+```
+
+## Лучшие практики
+
+### 1. Организация файлов
+
+```
+styles/
+├── abstracts/
+│   ├── _variables.scss
+│   ├── _functions.scss
+│   └── _mixins.scss
+├── base/
+│   ├── _reset.scss
+│   └── _typography.scss
+├── components/
+│   ├── _button.scss
+│   └── _card.scss
+├── layout/
+│   ├── _header.scss
+│   └── _footer.scss
+└── main.scss
+```
+
+### 2. Именование переменных
+
+```scss
+// ✅ Хорошо: семантические имена
+$primary-color: #3b82f6;
+$spacing-large: 2rem;
+
+// ❌ Плохо: неописательные имена
+$blue: #3b82f6;
+$big: 2rem;
+```
+
+### 3. Избегайте глубокой вложенности
+
+```scss
+// ❌ Плохо: слишком глубокая вложенность
+.nav {
+  ul {
+    li {
+      a {
+        span {
+          color: red;
+        }
+      }
+    }
+  }
+}
+
+// ✅ Хорошо: максимум 3-4 уровня
+.nav-link {
+  color: #333;
+  
+  span {
+    color: red;
+  }
+}
+```
+
+### 4. Используйте миксины вместо @extend
+
+```scss
+// ✅ Предпочтительно: миксины
+@mixin button-base {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+}
+
+// ❌ Избегайте: @extend (создает большие селекторы)
+%button-base {
+  padding: 0.75rem 1.5rem;
+}
+```
+
+## Полезные ресурсы
+
+- [Официальная документация Sass](https://sass-lang.com/documentation)
+- [Sass Guidelines](https://sass-guidelin.es/) — руководство по стилю кода
+- [Sass Modules](https://sass-lang.com/documentation/at-rules/use) — современная система модулей
+- [Sass Built-in Modules](https://sass-lang.com/documentation/modules) — встроенные модули (math, color, string, list, map, meta)

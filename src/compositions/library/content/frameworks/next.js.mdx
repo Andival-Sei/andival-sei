@@ -1,3 +1,658 @@
-# Next.js
+# Next.js: React-фреймворк для полного стека
 
-_Контент в разработке..._
+Next.js — это мощный React-фреймворк для создания полнофункциональных веб-приложений с серверным рендерингом, статической генерацией, API-маршрутами и оптимизацией производительности из коробки.
+
+## Быстрый старт
+
+### Установка и создание проекта
+
+```bash
+# Создание нового проекта
+npx create-next-app@latest my-app
+
+# С установкой TypeScript, ESLint, Tailwind CSS
+npx create-next-app@latest my-app --typescript --eslint --tailwind
+
+# Запуск dev-сервера
+npm run dev
+
+# Сборка для production
+npm run build
+
+# Запуск production-сборки
+npm start
+```
+
+### Базовые команды
+
+```json
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  }
+}
+```
+
+## App Router и Server Components
+
+App Router (введен в Next.js 13) — это новая модель роутинга, основанная на файловой системе в директории `app/`. По умолчанию все компоненты являются Server Components, что обеспечивает лучшую производительность и безопасность.
+
+### Server Components
+
+Server Components выполняются на сервере и идеально подходят для получения данных и работы с секретами.
+
+```tsx
+// app/page.tsx - Server Component по умолчанию
+import LikeButton from "@/app/ui/like-button";
+import { getPost } from "@/lib/data";
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const post = await getPost(id);
+
+  return (
+    <div>
+      <main>
+        <h1>{post.title}</h1>
+        <p>{post.content}</p>
+        <LikeButton likes={post.likes} />
+      </main>
+    </div>
+  );
+}
+```
+
+### Client Components
+
+Используйте директиву `'use client'` для компонентов, которым нужна интерактивность или доступ к браузерным API.
+
+```tsx
+"use client";
+
+import { useState } from "react";
+
+export function LikeButton({ likes }: { likes: number }) {
+  const [count, setCount] = useState(likes);
+
+  return (
+    <button onClick={() => setCount((prev) => prev + 1)}>
+      Лайков: {count}
+    </button>
+  );
+}
+```
+
+### Композиция Server и Client Components
+
+Server Components могут передавать дочерние элементы (children) в Client Components:
+
+```tsx
+// Server Component
+import Modal from "./ui/modal";
+import Cart from "./ui/cart";
+
+export default function Page() {
+  return (
+    <Modal>
+      <Cart />
+    </Modal>
+  );
+}
+```
+
+```tsx
+// Client Component
+"use client";
+
+export default function Modal({ children }: { children: React.ReactNode }) {
+  return <div className="modal">{children}</div>;
+}
+```
+
+## Роутинг
+
+### Pages (Страницы)
+
+Файл `page.tsx` определяет уникальный UI для маршрута:
+
+```tsx
+// app/dashboard/page.tsx → /dashboard
+export default function DashboardPage() {
+  return <h1>Панель управления</h1>;
+}
+```
+
+### Layouts (Макеты)
+
+Layouts оборачивают страницы и вложенные маршруты, сохраняя состояние при навигации:
+
+```tsx
+// app/dashboard/layout.tsx
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <section>
+      <nav>
+        {/* Навигация для всех страниц /dashboard/* */}
+      </nav>
+      {children}
+    </section>
+  );
+}
+```
+
+### Динамические маршруты
+
+Используйте квадратные скобки `[param]` для динамических сегментов:
+
+```tsx
+// app/blog/[slug]/page.tsx → /blog/post-1, /blog/post-2
+export default async function BlogPost({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const post = await getPost(slug);
+
+  return (
+    <article>
+      <h1>{post.title}</h1>
+      <div>{post.content}</div>
+    </article>
+  );
+}
+```
+
+### Catch-all и Optional Catch-all
+
+```tsx
+// app/shop/[...slug]/page.tsx → /shop, /shop/category, /shop/category/product
+export default function ShopPage({
+  params,
+}: {
+  params: Promise<{ slug: string[] }>;
+}) {
+  const { slug } = await params;
+  // slug может быть [], ['category'], ['category', 'product']
+}
+```
+
+### Доступ к параметрам запроса
+
+```tsx
+// app/search/page.tsx?q=nextjs
+export default function SearchPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const { q } = await searchParams;
+  return <div>Поиск: {q}</div>;
+}
+```
+
+## Server Actions
+
+Server Actions позволяют выполнять мутации данных на сервере без создания API-маршрутов.
+
+### Базовое использование
+
+```tsx
+// app/actions.ts
+"use server";
+
+import { revalidatePath } from "next/cache";
+
+export async function createPost(formData: FormData) {
+  const title = formData.get("title") as string;
+  const content = formData.get("content") as string;
+
+  // Сохранение данных
+  await savePost({ title, content });
+
+  // Инвалидация кэша
+  revalidatePath("/posts");
+}
+```
+
+```tsx
+// app/create-post/page.tsx
+import { createPost } from "./actions";
+
+export default function CreatePostPage() {
+  return (
+    <form action={createPost}>
+      <input type="text" name="title" placeholder="Заголовок" required />
+      <textarea name="content" placeholder="Содержание" required />
+      <button type="submit">Создать</button>
+    </form>
+  );
+}
+```
+
+### Передача дополнительных аргументов
+
+```tsx
+"use server";
+
+export async function updateUser(userId: string, formData: FormData) {
+  const name = formData.get("name") as string;
+  await updateUserInDB(userId, { name });
+}
+```
+
+```tsx
+"use client";
+
+import { updateUser } from "./actions";
+
+export function UserProfile({ userId }: { userId: string }) {
+  const updateUserWithId = updateUser.bind(null, userId);
+
+  return (
+    <form action={updateUserWithId}>
+      <input type="text" name="name" />
+      <button type="submit">Обновить</button>
+    </form>
+  );
+}
+```
+
+### Обработка состояний загрузки
+
+```tsx
+"use client";
+
+import { useFormStatus } from "react-dom";
+import { createPost } from "./actions";
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button type="submit" disabled={pending}>
+      {pending ? "Создание..." : "Создать пост"}
+    </button>
+  );
+}
+
+export default function CreatePostForm() {
+  return (
+    <form action={createPost}>
+      <input type="text" name="title" />
+      <SubmitButton />
+    </form>
+  );
+}
+```
+
+### Обработка ошибок
+
+```tsx
+"use server";
+
+export async function createTodo(prevState: any, formData: FormData) {
+  try {
+    await createItem(formData.get("todo") as string);
+    revalidatePath("/");
+    return { message: "Успешно создано" };
+  } catch (error) {
+    return { message: "Ошибка при создании" };
+  }
+}
+```
+
+```tsx
+"use client";
+
+import { useFormState } from "react-dom";
+import { createTodo } from "./actions";
+
+const initialState = { message: null };
+
+export function AddTodoForm() {
+  const [state, formAction] = useFormState(createTodo, initialState);
+
+  return (
+    <form action={formAction}>
+      <input type="text" name="todo" required />
+      <button type="submit">Добавить</button>
+      {state?.message && <p>{state.message}</p>}
+    </form>
+  );
+}
+```
+
+## Получение данных (Data Fetching)
+
+### Fetch в Server Components
+
+Next.js расширяет нативный `fetch` API с автоматическим кэшированием:
+
+```tsx
+// Статическое получение данных (кэшируется навсегда)
+export default async function Page() {
+  const res = await fetch("https://api.example.com/posts");
+  const posts = await res.json();
+
+  return (
+    <ul>
+      {posts.map((post) => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+### Динамическое получение данных
+
+```tsx
+// Получение данных при каждом запросе
+async function getProjects() {
+  const res = await fetch("https://api.example.com/projects", {
+    cache: "no-store", // Отключить кэширование
+  });
+  return res.json();
+}
+
+export default async function Dashboard() {
+  const projects = await getProjects();
+
+  return (
+    <ul>
+      {projects.map((project) => (
+        <li key={project.id}>{project.name}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+### Работа с базой данных
+
+```tsx
+import { db, posts } from "@/lib/db";
+
+export default async function Page() {
+  const allPosts = await db.select().from(posts);
+
+  return (
+    <ul>
+      {allPosts.map((post) => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+### Доступ к headers и cookies
+
+```tsx
+import { cookies, headers } from "next/headers";
+
+async function getData() {
+  const authHeader = headers().get("authorization");
+  // ...
+}
+
+export default async function Page() {
+  const theme = cookies().get("theme");
+  const data = await getData();
+  return <div>...</div>;
+}
+```
+
+## Кэширование и ревалидация
+
+### Time-based Revalidation
+
+```tsx
+// Ревалидация каждые 3600 секунд (1 час)
+export default async function Page() {
+  const data = await fetch("https://api.example.com/data", {
+    next: { revalidate: 3600 },
+  });
+  const posts = await data.json();
+  return <div>...</div>;
+}
+```
+
+### On-demand Revalidation с тегами
+
+```tsx
+// Получение данных с тегом
+export default async function Page() {
+  const res = await fetch("https://api.example.com/posts", {
+    next: { tags: ["posts"] },
+  });
+  const posts = await res.json();
+  return <div>...</div>;
+}
+```
+
+```tsx
+// Инвалидация по тегу в Server Action
+"use server";
+
+import { revalidateTag } from "next/cache";
+
+export async function createPost() {
+  // ... создание поста
+  revalidateTag("posts");
+}
+```
+
+### Инвалидация по пути
+
+```tsx
+"use server";
+
+import { revalidatePath } from "next/cache";
+
+export async function updatePost() {
+  // ... обновление поста
+  revalidatePath("/posts");
+  // или для конкретного поста
+  revalidatePath(`/posts/${postId}`);
+}
+```
+
+### Использование unstable_cache
+
+```tsx
+import { unstable_cache } from "next/cache";
+
+const getCachedUser = unstable_cache(
+  async (userId: string) => {
+    return getUserById(userId);
+  },
+  ["user"], // ключ кэша
+  {
+    tags: ["user"],
+    revalidate: 3600, // время жизни кэша
+  }
+);
+
+export default async function UserPage({ userId }: { userId: string }) {
+  const user = await getCachedUser(userId);
+  return <div>{user.name}</div>;
+}
+```
+
+## Metadata и SEO
+
+### Статическая metadata
+
+```tsx
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Главная страница",
+  description: "Добро пожаловать в Next.js",
+  openGraph: {
+    title: "Главная страница",
+    description: "Добро пожаловать в Next.js",
+    images: ["/og-image.jpg"],
+  },
+};
+
+export default function Page() {
+  return <div>...</div>;
+}
+```
+
+### Динамическая metadata
+
+```tsx
+import type { Metadata, ResolvingMetadata } from "next";
+
+type Props = {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await fetch(`https://api.example.com/posts/${slug}`).then(
+    (res) => res.json()
+  );
+
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: post.title,
+    description: post.description,
+    openGraph: {
+      images: [post.image, ...previousImages],
+    },
+  };
+}
+
+export default async function PostPage({ params }: Props) {
+  const { slug } = await params;
+  // ...
+}
+```
+
+### Robots metadata
+
+```tsx
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+};
+```
+
+## Route Handlers (API Routes)
+
+Route Handlers позволяют создавать API-эндпоинты в App Router:
+
+```tsx
+// app/api/posts/route.ts
+import { NextRequest } from "next/server";
+
+export async function GET(request: NextRequest) {
+  const posts = await getPosts();
+  return Response.json(posts);
+}
+
+export async function POST(request: NextRequest) {
+  const body = await request.json();
+  const post = await createPost(body);
+  return Response.json(post, { status: 201 });
+}
+```
+
+### Динамические Route Handlers
+
+```tsx
+// app/api/posts/[id]/route.ts
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const post = await getPost(id);
+  return Response.json(post);
+}
+```
+
+## Новые возможности Next.js 15/16
+
+### Асинхронные параметры
+
+В Next.js 15+ `params` и `searchParams` стали асинхронными:
+
+```tsx
+// Next.js 15+
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const { id } = await params;
+  const { q } = await searchParams;
+  // ...
+}
+```
+
+### Cache Components (Next.js 16)
+
+Новая модель программирования с частичным предварительным рендерингом (PPR):
+
+```tsx
+import { cache } from "react";
+
+const getData = cache(async () => {
+  return fetch("https://api.example.com/data").then((res) => res.json());
+});
+
+export default async function Page() {
+  const data = await getData();
+  return <div>{/* ... */}</div>;
+}
+```
+
+### Turbopack (стабильная версия)
+
+Turbopack стал стандартным бандлером для всех приложений Next.js, обеспечивая более быструю компиляцию.
+
+### React Compiler
+
+Интегрирован React Compiler для автоматической мемоизации, повышающей производительность приложений.
+
+## Полезные ресурсы
+
+- [Официальная документация Next.js](https://nextjs.org/docs) - Полное руководство по Next.js
+- [Next.js GitHub](https://github.com/vercel/next.js) - Исходный код и issues
+- [Next.js Learn](https://nextjs.org/learn) - Интерактивный курс обучения
+- [Next.js Examples](https://github.com/vercel/next.js/tree/canary/examples) - Примеры использования
+- [Next.js Blog](https://nextjs.org/blog) - Последние новости и обновления
