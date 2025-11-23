@@ -1,56 +1,119 @@
-// TODO: Реализовать секцию контактов
-// - Добавить форму обратной связи
-// - Добавить контактную информацию
-// - Добавить карту (опционально)
+"use client";
+
+import { motion } from "framer-motion";
+import { Mail, MapPin, MessageSquare } from "lucide-react";
 
 import { ContactForm } from "@/src/features/contact-form";
+import { siteConfig } from "@/src/shared/config/site";
 import { Section } from "@/src/shared/ui/Section";
 
 export function ContactSection() {
   return (
-    <Section className="py-20">
-      <div className="grid gap-12 lg:grid-cols-2">
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Get in Touch
-            </h2>
-            <p className="text-muted-foreground text-lg">
-              Have a project in mind or just want to say hi? I&apos;d love to
-              hear from you.
-            </p>
-          </div>
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <div className="bg-primary/10 text-primary flex h-12 w-12 items-center justify-center rounded-full">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="h-6 w-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-                  />
-                </svg>
+    <div className="relative overflow-hidden">
+      {/* Background Gradients - now outside the container */}
+      <div className="bg-primary/5 absolute left-0 top-1/2 -z-10 h-[500px] w-[500px] -translate-y-1/2 rounded-full blur-3xl" />
+      <div className="bg-primary/10 absolute bottom-0 right-0 -z-10 h-[300px] w-[300px] rounded-full blur-3xl" />
+
+      <Section className="py-24 sm:py-32">
+        <div className="grid gap-16 lg:grid-cols-2 lg:gap-24">
+          {/* Left Column: Info */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="space-y-8"
+          >
+            <div className="space-y-4">
+              <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
+                Давайте работать вместе
+              </h2>
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                У вас есть идея проекта или просто хотите поздороваться? Я
+                всегда открыт для обсуждения новых проектов, творческих идей или
+                возможности стать частью вашего видения.
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              <div className="flex items-start gap-4">
+                <div className="bg-primary/10 text-primary flex h-12 w-12 shrink-0 items-center justify-center rounded-xl">
+                  <Mail className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold">Email</h3>
+                  <p className="text-muted-foreground">
+                    {process.env.NEXT_PUBLIC_CONTACT_EMAIL ||
+                      "freedomdragon777@gmail.com"}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold">Email</h3>
-                <p className="text-muted-foreground">hello@example.com</p>
+
+              <div className="flex items-start gap-4">
+                <div className="bg-primary/10 text-primary flex h-12 w-12 shrink-0 items-center justify-center rounded-xl">
+                  <MessageSquare className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold">Соцсети</h3>
+                  <div className="text-muted-foreground flex gap-4">
+                    <a
+                      href={siteConfig.links.telegram}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="hover:text-primary transition-colors"
+                    >
+                      Telegram
+                    </a>
+                    <a
+                      href={siteConfig.links.vk}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="hover:text-primary transition-colors"
+                    >
+                      VK
+                    </a>
+                    <a
+                      href={siteConfig.links.github}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="hover:text-primary transition-colors"
+                    >
+                      GitHub
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="bg-primary/10 text-primary flex h-12 w-12 shrink-0 items-center justify-center rounded-xl">
+                  <MapPin className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold">Локация</h3>
+                  <p className="text-muted-foreground">Удалённо / Самара</p>
+                </div>
               </div>
             </div>
-            {/* Add more contact info here if needed */}
-          </div>
-        </div>
+          </motion.div>
 
-        <div className="bg-card rounded-2xl border p-8 shadow-sm">
-          <ContactForm />
+          {/* Right Column: Form */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
+            className="bg-card/50 border-border/50 relative rounded-3xl border p-8 shadow-2xl backdrop-blur-sm sm:p-10"
+          >
+            <div className="mb-8">
+              <h3 className="text-2xl font-semibold">Напишите мне</h3>
+              <p className="text-muted-foreground mt-2">
+                Я отвечу вам в течение 24 часов.
+              </p>
+            </div>
+            <ContactForm />
+          </motion.div>
         </div>
-      </div>
-    </Section>
+      </Section>
+    </div>
   );
 }
