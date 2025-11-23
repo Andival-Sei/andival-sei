@@ -8,6 +8,9 @@ export interface Project {
   imageUrl?: string;
   demoUrl?: string;
   codeUrl?: string;
+  status?: string;
+  timeline?: string;
+  focus?: string;
   featured?: boolean;
   // TODO: Добавить дополнительные поля по необходимости
   // - date: Date

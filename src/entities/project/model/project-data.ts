@@ -1,28 +1,37 @@
-// TODO: Заменить заглушки на реальные данные проектов
-
 import type { Project } from "./types";
 
 export const projects: Project[] = [
   {
     id: "1",
-    title: "Project 1",
-    description: "TODO: Добавить описание проекта",
-    technologies: ["React", "TypeScript"],
-    // TODO: Добавить изображения проектов
-    // imageUrl: '/projects/project-1.jpg',
-    // demoUrl: 'https://example.com',
-    // codeUrl: 'https://github.com/example',
+    title: "Консоль дизайн-системы",
+    description:
+      "Центральное место для токенов, паттернов и руководств по использованию, чтобы каждый интерфейс поставлял согласованный UI, не замедляя команды.",
+    technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Contentlayer"],
+    status: "Планирование",
+    timeline: "Релиз Q1",
+    focus:
+      "Основы, документация компонентов, проверки качества на этапе сборки.",
   },
   {
     id: "2",
-    title: "Project 2",
-    description: "TODO: Добавить описание проекта",
-    technologies: ["Next.js", "Tailwind CSS"],
+    title: "Хаб экспериментов",
+    description:
+      "Легковесная аналитика и инструмент для экспериментов, позволяющий продуктовым командам валидировать идеи без ожидания платформенной команды.",
+    technologies: ["React", "tRPC", "PostgreSQL", "Vite"],
+    status: "В разработке",
+    timeline: "Альфа в процессе",
+    focus:
+      "Быстрая настройка, честные метрики и чистый workflow остановки/запуска.",
   },
   {
     id: "3",
-    title: "Project 3",
-    description: "TODO: Добавить описание проекта",
-    technologies: ["Node.js", "PostgreSQL"],
+    title: "Площадка для парного программирования с ИИ",
+    description:
+      "Прототипирование ИИ как партнера по дизайну/разработке для ранних потоков: создает черновики UI-состояний, предлагает граничные случаи и ведет changelog.",
+    technologies: ["TypeScript", "OpenAI", "Next.js", "Storybook"],
+    status: "В исследовании",
+    timeline: "Прототипирование сейчас",
+    focus:
+      "Быстрые циклы обратной связи, прозрачное рассуждение, безопасные откаты.",
   },
 ];
