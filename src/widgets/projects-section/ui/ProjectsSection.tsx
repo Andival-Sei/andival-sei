@@ -3,21 +3,24 @@ import { ProjectCard } from "@/src/features/project-card";
 import { Section } from "@/src/shared/ui/Section";
 
 export function ProjectsSection() {
+  const completedProjects = projects.filter(
+    (p) => p.status === "Завершён"
+  ).length;
   const metrics = [
     {
-      label: "Активные треки",
+      label: "Завершённых проектов",
+      value: completedProjects.toString().padStart(2, "0"),
+      hint: "Готовые к демонстрации",
+    },
+    {
+      label: "Всего проектов",
       value: projects.length.toString().padStart(2, "0"),
-      hint: "Кейсы в работе",
+      hint: "В портфолио",
     },
     {
-      label: "Фокус",
-      value: "Дизайн + разработка",
-      hint: "Системы, доставка, эксперименты",
-    },
-    {
-      label: "Ритм",
-      value: "Еженедельные релизы",
-      hint: "Небольшие части вместо больших переписываний",
+      label: "Технологии",
+      value: "React, TypeScript",
+      hint: "Современный стек",
     },
   ];
 
@@ -33,20 +36,20 @@ export function ProjectsSection() {
           <div className="max-w-2xl space-y-5">
             <div className="text-primary flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.2em]">
               <span className="bg-primary/10 text-primary rounded-full px-3 py-1 font-semibold">
-                Лаборатория проектов
+                Портфолио проектов
               </span>
               <span className="text-muted-foreground">
-                Заглушки сегодня — отполированные кейсы дальше
+                Реализованные проекты с открытым исходным кодом
               </span>
             </div>
 
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-              Готовые к релизу эксперименты
+              Все проекты
             </h2>
             <p className="text-muted-foreground text-lg">
-              Рабочее пространство, ориентированное на дизайн, где я создаю
-              системы, инструменты доставки и UX-эксперименты. Реальные сборки в
-              работе; визуалы появятся после прохождения ревью.
+              Полная коллекция реализованных веб-приложений, демонстрирующих
+              навыки разработки на современном стеке. Каждый проект включает
+              ссылки на демо-версию и исходный код на GitHub.
             </p>
 
             <div className="grid gap-3 sm:grid-cols-3">
@@ -67,37 +70,37 @@ export function ProjectsSection() {
 
           <div className="bg-card/80 border-border/70 rounded-2xl border p-6 shadow-lg backdrop-blur">
             <div className="text-muted-foreground text-xs uppercase tracking-[0.15em]">
-              Заметки о процессе
+              О проектах
             </div>
             <div className="text-muted-foreground mt-4 space-y-3 text-sm leading-relaxed">
               <div className="text-foreground font-semibold">
-                Дизайн × разработка, без разрыва передачи.
+                Полнофункциональные веб-приложения
               </div>
               <p>
-                Я набрасываю потоки, кодифицирую паттерны и настраиваю DX, чтобы
-                команда продолжала поставлять без лишней церемонии.
+                Каждый проект демонстрирует практические навыки работы с
+                современными технологиями и инструментами разработки.
               </p>
               <ul className="space-y-2">
                 <li className="flex gap-3">
                   <span className="bg-primary/70 mt-2 h-2 w-2 rounded-full" />
                   <div>
-                    <p className="text-foreground">Быстрые циклы</p>
-                    <p>Демонстрируемые части каждую неделю.</p>
+                    <p className="text-foreground">Открытый исходный код</p>
+                    <p>Все проекты доступны на GitHub для изучения.</p>
                   </div>
                 </li>
                 <li className="flex gap-3">
                   <span className="bg-primary/70 mt-2 h-2 w-2 rounded-full" />
                   <div>
-                    <p className="text-foreground">Системы в первую очередь</p>
-                    <p>Переиспользуемые основы лучше разовых экранов.</p>
+                    <p className="text-foreground">Рабочие демо</p>
+                    <p>Каждый проект развёрнут и доступен онлайн.</p>
                   </div>
                 </li>
                 <li className="flex gap-3">
                   <span className="bg-primary/70 mt-2 h-2 w-2 rounded-full" />
                   <div>
-                    <p className="text-foreground">Четкие результаты</p>
+                    <p className="text-foreground">Современный стек</p>
                     <p>
-                      Каждый релиз поставляется с историей и линией принятия.
+                      React, TypeScript, современные инструменты и практики.
                     </p>
                   </div>
                 </li>

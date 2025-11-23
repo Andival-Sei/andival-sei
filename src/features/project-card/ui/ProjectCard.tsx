@@ -23,7 +23,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
       <div className="via-primary/50 absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent to-transparent opacity-70" />
 
       <div className="flex items-start justify-between gap-4 px-6 pt-6">
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           {formattedIndex ? (
             <span className="text-muted-foreground font-mono text-xs tracking-[0.2em]">
               {formattedIndex}
@@ -32,6 +32,11 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
           <Badge className="border-primary/20 bg-primary/10 text-primary border">
             {statusLabel}
           </Badge>
+          {project.category ? (
+            <Badge variant="outline" className="text-xs">
+              {project.category}
+            </Badge>
+          ) : null}
         </div>
         <span className="text-muted-foreground text-xs uppercase tracking-[0.1em]">
           {timelineLabel}
@@ -68,16 +73,15 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         </div>
 
         <div className="border-border/60 flex items-center justify-between gap-3 border-t pt-4">
-          <div className="text-muted-foreground flex items-center gap-2 text-xs">
-            <span className="via-primary/50 to-primary block h-px w-8 bg-gradient-to-r from-transparent" />
-            Заглушка кейса — визуалы и ссылки появятся в следующей сборке.
-          </div>
-
           {hasLinks ? (
             <div className="flex gap-2">
               {project.demoUrl ? (
                 <Button asChild variant="ghost" size="sm">
-                  <Link href={project.demoUrl} target="_blank">
+                  <Link
+                    href={project.demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Globe className="mr-2 h-4 w-4" />
                     Демо
                   </Link>
@@ -85,7 +89,11 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
               ) : null}
               {project.codeUrl ? (
                 <Button asChild variant="ghost" size="sm">
-                  <Link href={project.codeUrl} target="_blank">
+                  <Link
+                    href={project.codeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Github className="mr-2 h-4 w-4" />
                     Код
                   </Link>

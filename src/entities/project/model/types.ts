@@ -1,5 +1,11 @@
 // Типы для сущности Project
 
+export type ProjectCategory =
+  | "Учебный проект"
+  | "Коммерческий проект"
+  | "Пет-проект"
+  | "Open Source";
+
 export interface Project {
   id: string;
   title: string;
@@ -12,8 +18,8 @@ export interface Project {
   timeline?: string;
   focus?: string;
   featured?: boolean;
+  category?: ProjectCategory;
   // TODO: Добавить дополнительные поля по необходимости
   // - date: Date
-  // - category: string
   // - tags: string[]
 }
