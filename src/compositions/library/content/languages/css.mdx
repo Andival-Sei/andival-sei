@@ -1,0 +1,384 @@
+# CSS: Современная стилизация
+
+CSS (Cascading Style Sheets) — язык таблиц стилей, который описывает внешний вид HTML-документа.
+
+## Основы каскада и специфичности
+
+Каскад определяет, какие стили применяются к элементу, когда есть конфликты.
+
+### Приоритет селекторов
+
+Специфичность вычисляется как `(inline, id, class, element)`:
+
+```css
+/* (0, 0, 0, 1) - специфичность 1 */
+p {
+  color: black;
+}
+
+/* (0, 0, 1, 1) - специфичность 11 */
+.text {
+  color: blue;
+}
+
+/* (0, 1, 0, 1) - специфичность 101 */
+#unique {
+  color: red;
+}
+
+/* (1, 0, 0, 0) - специфичность 1000 */
+<p style="color: green;">Inline стиль</p>
+```
+
+### !important (использовать с осторожностью)
+
+```css
+/* Перебивает все, кроме другого !important с большей специфичностью */
+.button {
+  background: blue !important;
+}
+```
+
+## Flexbox
+
+Flexbox — одномерная система раскладки для распределения пространства вдоль одной оси.
+
+### Основы Flexbox
+
+```css
+.container {
+  display: flex;
+
+  /* Направление */
+  flex-direction: row; /* row | column | row-reverse | column-reverse */
+
+  /* Выравнивание по главной оси */
+  justify-content: center; /* flex-start | flex-end | center | space-between | space-around */
+
+  /* Выравнивание по поперечной оси */
+  align-items: center; /* flex-start | flex-end | center | stretch | baseline */
+
+  /* Перенос строк */
+  flex-wrap: wrap; /* nowrap | wrap | wrap-reverse */
+
+  /* Промежутки */
+  gap: 1rem;
+}
+
+.item {
+  /* Гибкость элемента */
+  flex: 1; /* flex-grow | flex-shrink | flex-basis */
+
+  /* Индивидуальное выравнивание */
+  align-self: flex-end;
+}
+```
+
+### Практический пример: навигация
+
+```css
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #333;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.nav-link:hover {
+  color: #60a5fa;
+}
+```
+
+## Grid Layout
+
+CSS Grid — двумерная система раскладки для создания сложных layouts.
+
+### Основы Grid
+
+```css
+.grid-container {
+  display: grid;
+
+  /* Определение колонок */
+  grid-template-columns: 1fr 2fr 1fr; /* 3 колонки */
+  grid-template-columns: repeat(3, 1fr); /* То же самое */
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(250px, 1fr)
+  ); /* Адаптивная сетка */
+
+  /* Определение рядов */
+  grid-template-rows: auto 1fr auto;
+
+  /* Промежутки */
+  gap: 1rem; /* row-gap и column-gap */
+
+  /* Именованные области */
+  grid-template-areas:
+    "header header header"
+    "sidebar main aside"
+    "footer footer footer";
+}
+
+.header {
+  grid-area: header;
+}
+
+.sidebar {
+  grid-area: sidebar;
+}
+```
+
+### Responsive Grid пример
+
+```css
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.product-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+```
+
+## Custom Properties (CSS Variables)
+
+Переменные делают CSS более поддерживаемым и динамичным.
+
+### Определение и использование
+
+```css
+:root {
+  /* Цвета */
+  --primary-color: #3b82f6;
+  --secondary-color: #8b5cf6;
+  --text-color: #1f2937;
+  --bg-color: #ffffff;
+
+  /* Размеры */
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 2rem;
+
+  /* Типографика */
+  --font-heading: "Inter", sans-serif;
+  --font-body: "Roboto", sans-serif;
+
+  /* Радиусы */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+}
+
+.button {
+  background: var(--primary-color);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+}
+
+/* Темная тема */
+[data-theme="dark"] {
+  --text-color: #f9fafb;
+  --bg-color: #111827;
+}
+```
+
+### Динамическое изменение
+
+```javascript
+// Изменение переменной через JavaScript
+document.documentElement.style.setProperty("--primary-color", "#ef4444");
+
+// Получение значения
+const primaryColor = getComputedStyle(
+  document.documentElement
+).getPropertyValue("--primary-color");
+```
+
+## Responsive Design
+
+Создание адаптивных интерфейсов для разных устройств.
+
+### Media Queries
+
+```css
+/* Mobile First подход */
+.container {
+  padding: 1rem;
+}
+
+/* Планшеты (768px и выше) */
+@media (min-width: 768px) {
+  .container {
+    padding: 2rem;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+}
+
+/* Десктоп (1024px и выше) */
+@media (min-width: 1024px) {
+  .container {
+    padding: 3rem;
+    max-width: 960px;
+  }
+}
+
+/* Большие экраны (1280px и выше) */
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1200px;
+  }
+}
+```
+
+### Container Queries (современный подход)
+
+```css
+.card-container {
+  container-type: inline-size;
+  container-name: card;
+}
+
+.card-title {
+  font-size: 1rem;
+}
+
+/* Стили в зависимости от размера контейнера */
+@container card (min-width: 400px) {
+  .card-title {
+    font-size: 1.5rem;
+  }
+
+  .card-layout {
+    display: flex;
+    gap: 1rem;
+  }
+}
+```
+
+## Современные возможности
+
+### Clamp() для адаптивной типографики
+
+```css
+h1 {
+  /* min-size | preferred-size | max-size */
+  font-size: clamp(2rem, 5vw, 4rem);
+}
+
+.container {
+  /* Адаптивная ширина */
+  width: clamp(320px, 90%, 1200px);
+  padding: clamp(1rem, 3vw, 3rem);
+}
+```
+
+### Aspect Ratio
+
+```css
+.video-container {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+}
+
+.square-avatar {
+  aspect-ratio: 1;
+  width: 100px;
+}
+```
+
+### Scroll Snap
+
+```css
+.scroll-container {
+  scroll-snap-type: x mandatory;
+  overflow-x: scroll;
+  display: flex;
+  gap: 1rem;
+}
+
+.scroll-item {
+  scroll-snap-align: center;
+  flex: 0 0 80%;
+}
+```
+
+## Анимации и transitions
+
+### Transitions
+
+```css
+.button {
+  background: #3b82f6;
+  transform: scale(1);
+  transition:
+    background 0.3s ease,
+    transform 0.2s ease;
+}
+
+.button:hover {
+  background: #2563eb;
+  transform: scale(1.05);
+}
+```
+
+### Keyframe Animations
+
+```css
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animated-element {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* С задержкой */
+.delayed {
+  animation: fadeInUp 0.6s ease-out 0.3s forwards;
+}
+```
+
+## Полезные ресурсы
+
+- [MDN CSS Reference](https://developer.mozilla.org/ru/docs/Web/CSS)
+- [CSS Tricks](https://css-tricks.com/)
+- [Can I Use](https://caniuse.com/)
+- [Flexbox Froggy](https://flexboxfroggy.com/) -游戏для изучения Flexbox
+- [Grid Garden](https://cssgridgarden.com/) - игра для изучения Grid

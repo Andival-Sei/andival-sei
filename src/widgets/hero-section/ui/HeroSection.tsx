@@ -7,7 +7,7 @@ import { Button } from "@/src/shared/ui/Button";
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[calc(100vh-4rem)] overflow-hidden py-12 md:py-20 lg:py-32">
+    <section className="relative min-h-[calc(100vh-4rem)] overflow-hidden pb-8 pt-12 md:pb-12 md:pt-20 lg:pb-16 lg:pt-32">
       {/* Декоративные фоновые элементы */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         {/* Градиентные круги */}

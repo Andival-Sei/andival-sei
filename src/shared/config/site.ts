@@ -6,8 +6,8 @@ export const siteConfig = {
   url: "https://yourdomain.com", // TODO: Заменить на реальный URL
   ogImage: "/og-image.jpg", // TODO: Добавить OG изображение
   links: {
-    // TODO: Добавить ссылки на социальные сети
-    github: "https://github.com/yourusername",
-    linkedin: "https://linkedin.com/in/yourusername",
+    github: "https://github.com/Andival-Sei",
+    telegram: "https://t.me/Andiewahl",
+    vk: "https://vk.com/andiewahl",
   },
 } as const;

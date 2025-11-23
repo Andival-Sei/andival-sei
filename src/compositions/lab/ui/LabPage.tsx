@@ -1,149 +1,82 @@
 "use client";
 
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+
+import { Button } from "@/src/shared/ui/Button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/src/shared/ui/Card";
+import { Section } from "@/src/shared/ui/Section";
 import { Footer } from "@/src/widgets/footer";
 import { Header } from "@/src/widgets/header";
+
+const labSections = [
+  {
+    title: "Библиотека",
+    description:
+      "Раздел с короткими конспектами по технологиям. Начните с главной страницы и переходите по темам через сайд-меню.",
+    href: "/lab/library/main",
+    status: "Доступно",
+  },
+];
 
 export function LabPage() {
   return (
     <>
       <Header />
-      <main className="lab-page">
-        <div className="lab-content">
-          <div className="lab-icon">
-            <svg
-              width="120"
-              height="120"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+      <div className="from-background via-background/90 to-muted/20 bg-gradient-to-b">
+        <Section className="space-y-8">
+          <div className="space-y-3 text-center sm:text-left">
+            <p className="text-primary text-xs uppercase tracking-[0.2em]">
+              Лаборатория
+            </p>
+            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+              Эксперименты, черновики и заметки
+            </h1>
+            <p className="text-muted-foreground max-w-3xl text-lg">
+              Здесь собираются пробные разделы и внутренние инструменты. Первым
+              открываем вход в библиотеку.
+            </p>
           </div>
-          <h1 className="lab-title">Страница в разработке</h1>
-          <p className="lab-description">
-            Лаборатория находится в процессе создания. Скоро здесь появится
-            что-то интересное!
-          </p>
-          <div className="lab-loader">
-            <div className="loader-dot"></div>
-            <div className="loader-dot"></div>
-            <div className="loader-dot"></div>
+
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {labSections.map((section) => (
+              <Card
+                key={section.title}
+                className="border-primary/10 relative overflow-hidden"
+              >
+                <div className="pointer-events-none absolute inset-0 opacity-40">
+                  <div className="from-primary/10 via-primary/5 absolute inset-0 bg-gradient-to-br to-transparent" />
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,0.08),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(56,189,248,0.07),transparent_30%)]" />
+                </div>
+
+                <CardHeader className="relative">
+                  <div className="flex items-center justify-between gap-3">
+                    <CardTitle className="text-xl">{section.title}</CardTitle>
+                    <span className="text-primary/80 bg-primary/10 rounded-full px-3 py-1 text-xs font-semibold">
+                      {section.status}
+                    </span>
+                  </div>
+                  <CardDescription>{section.description}</CardDescription>
+                </CardHeader>
+                <CardContent className="relative">
+                  <Button asChild>
+                    <Link href={section.href}>
+                      Перейти
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
           </div>
-        </div>
-
-        <style jsx>{`
-          .lab-page {
-            min-height: calc(100vh - 200px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(
-              135deg,
-              hsl(var(--muted) / 0.3) 0%,
-              hsl(var(--background)) 100%
-            );
-            padding: 4rem 2rem;
-          }
-
-          .lab-content {
-            text-align: center;
-            max-width: 600px;
-            animation: fadeInUp 0.6s ease-out;
-          }
-
-          .lab-icon {
-            color: hsl(var(--primary));
-            margin: 0 auto 2rem;
-            opacity: 0.8;
-            animation: float 3s ease-in-out infinite;
-          }
-
-          .lab-title {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: linear-gradient(
-              135deg,
-              hsl(var(--primary)),
-              hsl(var(--primary) / 0.6)
-            );
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-          }
-
-          .lab-description {
-            font-size: 1.125rem;
-            color: hsl(var(--muted-foreground));
-            margin-bottom: 2.5rem;
-            line-height: 1.6;
-          }
-
-          .lab-loader {
-            display: flex;
-            gap: 0.75rem;
-            justify-content: center;
-            align-items: center;
-          }
-
-          .loader-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: hsl(var(--primary));
-            animation: bounce 1.4s ease-in-out infinite;
-          }
-
-          .loader-dot:nth-child(1) {
-            animation-delay: -0.32s;
-          }
-
-          .loader-dot:nth-child(2) {
-            animation-delay: -0.16s;
-          }
-
-          @keyframes fadeInUp {
-            from {
-              opacity: 0;
-              transform: translateY(30px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-
-          @keyframes float {
-            0%,
-            100% {
-              transform: translateY(0px);
-            }
-            50% {
-              transform: translateY(-20px);
-            }
-          }
-
-          @keyframes bounce {
-            0%,
-            80%,
-            100% {
-              transform: scale(0);
-              opacity: 0.5;
-            }
-            40% {
-              transform: scale(1);
-              opacity: 1;
-            }
-          }
-        `}</style>
-      </main>
+        </Section>
+      </div>
       <Footer />
     </>
   );

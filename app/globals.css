@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "highlight.js/styles/github-dark.css";
 
 /* Светлая тема (по умолчанию) */
 :root,
@@ -152,4 +153,96 @@ body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   color: var(--foreground);
   background: var(--background);
+}
+
+/* Prose стили для MDX контента */
+.prose {
+  max-width: 65ch;
+  color: var(--foreground);
+}
+
+.prose :where(code):not(:where([class~="not-prose"] *)) {
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 400;
+}
+
+.prose :where(pre):not(:where([class~="not-prose"] *)) {
+  overflow-x: auto;
+}
+
+.prose :where(pre code):not(:where([class~="not-prose"] *)) {
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+  background-color: transparent;
+  border-width: 0;
+  border-radius: 0;
+}
+
+/* Кастомизация highlight.js */
+.hljs {
+  padding: 0;
+  background: transparent !important;
+}
+
+/* Стили для блоков кода с подсветкой */
+pre code.hljs {
+  display: block;
+  padding: 0;
+  overflow-x: auto;
+}
+
+/* Кастомизация highlight.js для темной темы */
+[data-theme="dark"] .hljs {
+  color: #e5e7eb;
+}
+
+/* Кастомизация highlight.js для светлой темы */
+[data-theme="light"] .hljs {
+  color: #1f2937;
+}
+
+/* Скролл-отступ для якорных ссылок */
+.prose :where(h1, h2, h3, h4, h5, h6):not(:where([class~="not-prose"] *)) {
+  scroll-margin-top: 6rem;
+}
+
+/* Стили для таблиц в prose - отключаем стандартные стили Typography */
+.prose :where(table):not(:where([class~="not-prose"] *)) {
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+}
+
+.prose :where(thead):not(:where([class~="not-prose"] *)) {
+  border-bottom: none;
+}
+
+.prose :where(tbody):not(:where([class~="not-prose"] *)) {
+  border-top: none;
+}
+
+.prose :where(tr):not(:where([class~="not-prose"] *)) {
+  border-top: none;
+  border-bottom: 1px solid var(--border);
+}
+
+.prose :where(th):not(:where([class~="not-prose"] *)) {
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  text-align: left;
+  background-color: color-mix(in srgb, var(--primary) 5%, transparent);
+  border: 1px solid var(--border);
+}
+
+[data-theme="dark"] .prose :where(th):not(:where([class~="not-prose"] *)) {
+  background-color: color-mix(in srgb, var(--primary) 3%, transparent);
+}
+
+.prose :where(td):not(:where([class~="not-prose"] *)) {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
 }

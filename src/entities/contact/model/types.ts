@@ -6,8 +6,9 @@ export interface ContactInfo {
   location?: string;
   socialLinks?: {
     github?: string;
+    telegram?: string;
+    vk?: string;
     linkedin?: string;
     twitter?: string;
-    // TODO: Добавить другие социальные сети
   };
 }

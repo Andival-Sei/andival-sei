@@ -100,7 +100,10 @@ export function ExperienceTimeline() {
 
         <div className="relative mx-auto max-w-5xl">
           {/* Central Line Container */}
-          <div className="bg-border/30 absolute bottom-0 left-[20px] top-0 w-1 transform overflow-hidden rounded-full md:left-1/2 md:-translate-x-1/2">
+          <div
+            className="bg-border/30 absolute left-[20px] top-0 w-1 transform overflow-hidden rounded-full md:left-1/2 md:-translate-x-1/2"
+            style={{ bottom: "24px" }}
+          >
             <motion.div
               style={{ height: lineHeight }}
               className="from-primary bg-linear-to-b w-full via-purple-500 to-blue-500 shadow-[0_0_20px_rgba(var(--primary),0.5)]"

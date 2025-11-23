@@ -1,12 +1,8 @@
-// TODO: Реализовать компонент Footer
-// - Добавить информацию о копирайте
-// - Добавить ссылки на социальные сети
-// - Добавить ссылки на важные страницы
-
 import { Github, Send } from "lucide-react";
 import Link from "next/link";
 
 import { ThemeToggle } from "@/src/features/theme-toggle";
+import { siteConfig } from "@/src/shared/config/site";
 
 export function Footer() {
   return (
@@ -18,7 +14,7 @@ export function Footer() {
 
         <div className="flex items-center gap-4">
           <Link
-            href="https://github.com"
+            href={siteConfig.links.github}
             target="_blank"
             rel="noreferrer"
             className="text-muted-foreground hover:text-foreground transition-colors"
@@ -27,7 +23,7 @@ export function Footer() {
             <span className="sr-only">GitHub</span>
           </Link>
           <Link
-            href="https://t.me"
+            href={siteConfig.links.telegram}
             target="_blank"
             rel="noreferrer"
             className="text-muted-foreground hover:text-foreground transition-colors"
@@ -36,7 +32,7 @@ export function Footer() {
             <span className="sr-only">Telegram</span>
           </Link>
           <Link
-            href="https://vk.com"
+            href={siteConfig.links.vk}
             target="_blank"
             rel="noreferrer"
             className="text-muted-foreground hover:text-foreground transition-colors"
