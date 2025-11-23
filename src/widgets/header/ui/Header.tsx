@@ -9,6 +9,8 @@ import Link from "next/link";
 import { Navigation } from "@/src/features/navigation";
 import { Button } from "@/src/shared/ui/Button";
 
+import { BurgerMenu } from "./BurgerMenu";
+
 export function Header() {
   return (
     <header className="bg-background/80 sticky top-0 z-50 w-full backdrop-blur-md">
@@ -27,12 +29,15 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-4">
-          <Button
-            asChild
-            className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
-          >
-            <Link href="/contact">Связаться</Link>
-          </Button>
+          <div className="hidden md:block">
+            <Button
+              asChild
+              className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
+            >
+              <Link href="/contact">Связаться</Link>
+            </Button>
+          </div>
+          <BurgerMenu />
         </div>
       </div>
     </header>
