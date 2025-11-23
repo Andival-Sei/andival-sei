@@ -7,12 +7,14 @@ import { Footer } from "@/src/widgets/footer";
 import { Header } from "@/src/widgets/header";
 import { HeroSection } from "@/src/widgets/hero-section";
 import { ProjectsSection } from "@/src/widgets/projects-section";
+import { TechStackSection } from "@/src/widgets/tech-stack-section";
 
 export function HomePage() {
   return (
     <>
       <Header />
       <HeroSection />
+      <TechStackSection />
       <ProjectsSection />
       <Footer />
     </>

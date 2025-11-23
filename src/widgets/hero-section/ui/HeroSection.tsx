@@ -1,53 +1,117 @@
-// TODO: Реализовать Hero секцию
-// - Добавить заголовок и подзаголовок
-// - Добавить призыв к действию (CTA)
-// - Добавить анимации при загрузке
-// - Добавить фоновые элементы/декорации
+"use client";
 
-import { ArrowRight, Mail } from "lucide-react";
+import { ArrowRight, Code2, Mail } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/src/shared/ui/Button";
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden py-20 md:py-32">
-      <div className="container mx-auto flex flex-col items-center justify-center gap-8 text-center">
-        <div className="space-y-4">
-          <h1 className="text-4xl font-bold tracking-tighter sm:text-6xl md:text-7xl lg:text-8xl">
-            Andival-Sei
-          </h1>
-          <h2 className="text-muted-foreground text-2xl font-medium md:text-3xl">
-            Frontend-разработчик
-          </h2>
-          <p className="text-muted-foreground mx-auto max-w-[700px] text-lg md:text-xl">
-            Привет, я Кирилл, Frontend-разработчик. Пока что я только начинаю
-            свой путь. Создаю современные и отзывчивые веб-приложения с
-            использованием React и TypeScript. Учусь и развиваюсь с каждым
-            проектом.
-          </p>
-        </div>
+    <section className="relative min-h-[calc(100vh-4rem)] overflow-hidden py-12 md:py-20 lg:py-32">
+      {/* Декоративные фоновые элементы */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        {/* Градиентные круги */}
+        <div className="bg-primary/10 absolute -left-1/4 top-1/4 h-96 w-96 rounded-full blur-3xl" />
+        <div className="bg-primary/5 absolute -right-1/4 bottom-1/4 h-96 w-96 rounded-full blur-3xl" />
+        <div className="bg-primary/5 absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl" />
 
-        <div className="flex flex-col gap-4 sm:flex-row">
-          <Button asChild size="lg" className="rounded-md">
-            <Link href="/projects">
-              Посмотреть проекты <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-          <Button asChild size="lg" variant="secondary" className="rounded-md">
-            <Link href="mailto:contact@example.com">
-              <Mail className="mr-2 h-4 w-4" /> Отправить Email
-            </Link>
-          </Button>
-        </div>
+        {/* Сетка паттерн */}
+        <div
+          className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"
+          style={{
+            maskImage:
+              "radial-gradient(ellipse 80% 50% at 50% 0%, #000 70%, transparent 110%)",
+            WebkitMaskImage:
+              "radial-gradient(ellipse 80% 50% at 50% 0%, #000 70%, transparent 110%)",
+          }}
+        />
+      </div>
 
-        <div className="mt-20 space-y-4">
-          <h3 className="text-2xl font-bold">Мой стек технологий</h3>
-          <p className="text-muted-foreground">
-            Инструменты и технологии, которые я использую для создания
-            современных веб-приложений
-          </p>
-          {/* Tech stack icons could go here */}
+      <div className="container mx-auto px-4">
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-8">
+          {/* Левая колонка - Контент */}
+          <div className="space-y-8 text-center lg:text-left">
+            {/* Заголовок с анимацией */}
+            <div className="animate-fade-in-up space-y-4 opacity-0">
+              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+                <span className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-transparent">
+                  Привет, я{" "}
+                </span>
+                <span className="from-primary via-primary to-primary/70 bg-gradient-to-r bg-clip-text text-transparent">
+                  Кирилл
+                </span>
+              </h1>
+              <h2 className="text-muted-foreground text-xl font-medium sm:text-2xl md:text-3xl">
+                Frontend-разработчик
+              </h2>
+            </div>
+
+            {/* Описание с анимацией */}
+            <div
+              className="animate-fade-in-up space-y-6 opacity-0"
+              style={{ animationDelay: "150ms" }}
+            >
+              <p className="text-muted-foreground mx-auto max-w-[600px] text-base leading-relaxed sm:text-lg md:text-xl lg:mx-0">
+                Создаю современные и отзывчивые веб-приложения с использованием
+                React и TypeScript. Учусь и развиваюсь с каждым проектом, изучаю
+                новые технологии и подходы к разработке.
+              </p>
+
+              {/* CTA кнопки */}
+              <div className="flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start">
+                <Button asChild size="lg" className="group rounded-md">
+                  <Link href="/projects">
+                    Посмотреть проекты
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="rounded-md"
+                >
+                  <Link href="/contact">
+                    <Mail className="mr-2 h-4 w-4" />
+                    Связаться
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Правая колонка - Визуальный элемент */}
+          <div className="relative flex items-center justify-center lg:justify-end">
+            <div
+              className="animate-fade-in-right relative opacity-0"
+              style={{ animationDelay: "200ms" }}
+            >
+              {/* Декоративная градиентная рамка */}
+              <div className="from-primary/20 via-primary/10 absolute inset-0 rounded-2xl bg-gradient-to-br to-transparent blur-2xl" />
+
+              {/* Основной визуальный элемент */}
+              <div className="bg-card/50 relative flex h-80 w-80 items-center justify-center rounded-2xl border p-8 backdrop-blur-sm sm:h-96 sm:w-96 md:h-[28rem] md:w-[28rem]">
+                {/* Градиентный фон */}
+                <div className="from-primary/5 to-primary/10 absolute inset-4 rounded-xl bg-gradient-to-br" />
+
+                {/* Центральная иконка/графический элемент */}
+                <div className="relative z-10 flex flex-col items-center justify-center gap-4">
+                  <div className="bg-primary/10 rounded-full p-8">
+                    <Code2 className="text-primary h-16 w-16 animate-pulse" />
+                  </div>
+                  <div className="space-y-2 text-center">
+                    <div className="bg-primary/20 h-2 w-24 rounded-full" />
+                    <div className="bg-primary/10 h-2 w-32 rounded-full" />
+                  </div>
+                </div>
+
+                {/* Декоративные плавающие элементы */}
+                <div className="bg-primary/40 absolute -left-4 -top-4 h-3 w-3 animate-ping rounded-full" />
+                <div className="bg-primary/30 absolute -right-6 top-1/4 h-2 w-2 animate-pulse rounded-full" />
+                <div className="bg-primary/40 absolute -bottom-6 left-1/4 h-2.5 w-2.5 animate-ping rounded-full" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
