@@ -24,7 +24,10 @@ import { Card } from "@/src/shared/ui/Card";
 import { Section } from "@/src/shared/ui/Section";
 
 // Типы для категорий и технологий
-type TechIcon = ComponentType<{ className?: string }>;
+type TechIcon = ComponentType<{
+  className?: string;
+  style?: React.CSSProperties;
+}>;
 
 interface Technology {
   name: string;
