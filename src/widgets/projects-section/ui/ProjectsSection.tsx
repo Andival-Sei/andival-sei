@@ -9,10 +9,17 @@ import { Section } from "@/src/shared/ui/Section";
 
 export function ProjectsSection() {
   return (
-    <Section>
-      <h2 className="text-3xl font-bold tracking-tight">Projects</h2>
-      <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {/* TODO: Добавить фильтрацию и сортировку проектов */}
+    <Section className="py-20">
+      <div className="mb-12 flex flex-col gap-4 text-center md:text-left">
+        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+          Featured Projects
+        </h2>
+        <p className="text-muted-foreground max-w-[700px] text-lg">
+          A collection of my recent work and experiments.
+        </p>
+      </div>
+
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}

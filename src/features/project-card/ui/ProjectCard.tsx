@@ -5,8 +5,20 @@
 // - Добавить ссылки (демо, код)
 // - Добавить hover эффекты
 
+import { Github, Globe } from "lucide-react";
+import Link from "next/link";
+
 import type { Project } from "@/src/entities/project/model/types";
-import { Card, CardContent } from "@/src/shared/ui/Card";
+import { Badge } from "@/src/shared/ui/Badge";
+import { Button } from "@/src/shared/ui/Button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/src/shared/ui/Card";
 
 interface ProjectCardProps {
   project: Project;
@@ -14,33 +26,48 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <Card>
-      {/* TODO: Добавить изображение проекта */}
-      <div className="bg-muted aspect-video w-full" />
+    <Card className="hover:border-primary/50 group flex h-full flex-col overflow-hidden transition-all hover:shadow-xl">
+      <div className="bg-muted relative aspect-video w-full overflow-hidden">
+        {/* Placeholder gradient if no image */}
+        <div className="bg-linear-to-br absolute inset-0 from-indigo-500/10 to-purple-500/10 transition-transform duration-500 group-hover:scale-105" />
+        {/* TODO: Add actual image component here */}
+      </div>
 
-      <CardContent>
-        <h3 className="text-xl font-semibold">{project.title}</h3>
-        <p className="text-muted-foreground mt-2 text-sm">
+      <CardHeader>
+        <CardTitle className="text-xl">{project.title}</CardTitle>
+        <CardDescription className="line-clamp-2">
           {project.description}
-        </p>
+        </CardDescription>
+      </CardHeader>
 
-        {/* TODO: Добавить теги технологий */}
-        <div className="mt-4 flex flex-wrap gap-2">
+      <CardContent className="flex-1">
+        <div className="flex flex-wrap gap-2">
           {project.technologies?.map((tech) => (
-            <span
-              key={tech}
-              className="bg-muted rounded-full px-2 py-1 text-xs"
-            >
+            <Badge key={tech} variant="secondary" className="font-normal">
               {tech}
-            </span>
+            </Badge>
           ))}
         </div>
-
-        {/* TODO: Добавить ссылки на проект */}
-        <div className="mt-4 flex gap-2">
-          {/* TODO: Добавить кнопки для демо и кода */}
-        </div>
       </CardContent>
+
+      <CardFooter className="gap-2 pt-0">
+        {project.demoUrl && (
+          <Button asChild variant="outline" size="sm" className="w-full">
+            <Link href={project.demoUrl} target="_blank">
+              <Globe className="mr-2 size-4" />
+              Demo
+            </Link>
+          </Button>
+        )}
+        {project.codeUrl && (
+          <Button asChild variant="outline" size="sm" className="w-full">
+            <Link href={project.codeUrl} target="_blank">
+              <Github className="mr-2 size-4" />
+              Code
+            </Link>
+          </Button>
+        )}
+      </CardFooter>
     </Card>
   );
 }

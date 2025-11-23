@@ -9,6 +9,9 @@
 import { useState } from "react";
 
 import { Button } from "@/src/shared/ui/Button";
+import { Input } from "@/src/shared/ui/Input";
+import { Label } from "@/src/shared/ui/Label";
+import { Textarea } from "@/src/shared/ui/Textarea";
 
 export function ContactForm() {
   const [formData, setFormData] = useState({
@@ -25,53 +28,51 @@ export function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {/* TODO: Добавить валидацию полей */}
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium">
-          Name
-        </label>
-        <input
-          id="name"
-          type="text"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="border-input bg-background mt-1 block w-full rounded-md border px-3 py-2"
-          required
-        />
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="name">Name</Label>
+          <Input
+            id="name"
+            placeholder="John Doe"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="john@example.com"
+            value={formData.email}
+            onChange={(e) =>
+              setFormData({ ...formData, email: e.target.value })
+            }
+            required
+          />
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium">
-          Email
-        </label>
-        <input
-          id="email"
-          type="email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          className="border-input bg-background mt-1 block w-full rounded-md border px-3 py-2"
-          required
-        />
-      </div>
-
-      <div>
-        <label htmlFor="message" className="block text-sm font-medium">
-          Message
-        </label>
-        <textarea
+      <div className="space-y-2">
+        <Label htmlFor="message">Message</Label>
+        <Textarea
           id="message"
+          placeholder="Tell me about your project..."
           value={formData.message}
           onChange={(e) =>
             setFormData({ ...formData, message: e.target.value })
           }
           rows={5}
-          className="border-input bg-background mt-1 block w-full rounded-md border px-3 py-2"
           required
+          className="resize-none"
         />
       </div>
 
-      <Button type="submit">Send Message</Button>
+      <Button type="submit" size="lg" className="w-full sm:w-auto">
+        Send Message
+      </Button>
     </form>
   );
 }

@@ -11,7 +11,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
         data-slot="card"
         ref={ref}
         className={cn(
-          "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+          "bg-card/90 text-card-foreground border-border/50 hover:border-border/80 flex flex-col gap-6 rounded-xl border py-6 shadow-md backdrop-blur-sm transition-all hover:shadow-lg",
           className
         )}
         {...props}
@@ -45,7 +45,7 @@ const CardTitle = React.forwardRef<HTMLDivElement, React.ComponentProps<"div">>(
       <div
         data-slot="card-title"
         ref={ref}
-        className={cn("font-semibold leading-none", className)}
+        className={cn("font-semibold leading-none tracking-tight", className)}
         {...props}
       />
     );
