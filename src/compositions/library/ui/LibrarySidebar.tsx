@@ -2,6 +2,8 @@
 
 import {
   BookOpen,
+  Brain,
+  Code,
   Code2,
   FileCode,
   FolderKanban,
@@ -10,6 +12,22 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  SiCss3,
+  SiGit,
+  SiGoogle,
+  SiHtml5,
+  SiJavascript,
+  SiJetbrains,
+  SiNextdotjs,
+  SiOpenai,
+  SiReact,
+  SiRedux,
+  SiSass,
+  SiTypescript,
+  SiVite,
+  SiWebpack,
+} from "react-icons/si";
 
 import {
   LIBRARY_BASE_PATH,
@@ -18,7 +36,6 @@ import {
   slugify,
 } from "@/src/compositions/library/model/libraryNavigation";
 import { cn } from "@/src/shared/lib/utils";
-import { Badge } from "@/src/shared/ui/Badge";
 
 // Иконки для категорий
 const categoryIcons: Record<string, typeof Code2> = {
@@ -27,6 +44,31 @@ const categoryIcons: Record<string, typeof Code2> = {
   frameworks: FileCode,
   ide: FolderKanban,
   "ai-assistants": Sparkles,
+};
+
+// Иконки для топиков
+const topicIcons: Record<
+  string,
+  React.ComponentType<{ className?: string }>
+> = {
+  HTML: SiHtml5,
+  CSS: SiCss3,
+  SCSS: SiSass,
+  JavaScript: SiJavascript,
+  TypeScript: SiTypescript,
+  Webpack: SiWebpack,
+  Vite: SiVite,
+  Redux: SiRedux,
+  React: SiReact,
+  "Next.js": SiNextdotjs,
+  "VS Code": Code,
+  Cursor: Code,
+  Antigravity: Sparkles,
+  WebStorm: SiJetbrains,
+  Git: SiGit,
+  GPT: SiOpenai,
+  Claude: Brain,
+  Gemini: SiGoogle,
 };
 
 const navClasses =
@@ -45,26 +87,13 @@ export function LibrarySidebar() {
   return (
     <div className="w-full lg:w-[280px]">
       <div className="bg-card/70 relative overflow-hidden rounded-3xl border border-white/10 p-6 shadow-xl backdrop-blur-sm">
-        <div className="relative z-10 mb-6 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="bg-primary/10 rounded-xl p-2">
-              <BookOpen className="text-primary h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-muted-foreground text-xs uppercase tracking-[0.2em]">
-                Библиотека
-              </p>
-              <p className="text-foreground text-lg font-semibold">
-                Разделы и темы
-              </p>
-            </div>
+        <div className="relative z-10 mb-6 flex items-center gap-3">
+          <div className="bg-primary/10 rounded-xl p-2">
+            <BookOpen className="text-primary h-5 w-5" />
           </div>
-          <Badge
-            variant="outline"
-            className="border-primary/40 bg-primary/5 text-primary text-[11px] font-semibold"
-          >
-            beta
-          </Badge>
+          <div>
+            <p className="text-foreground text-lg font-semibold">Библиотека</p>
+          </div>
         </div>
 
         <nav className="relative z-10 space-y-6">
@@ -86,10 +115,7 @@ export function LibrarySidebar() {
                     : "text-muted-foreground group-hover:text-primary group-hover:scale-110"
                 )}
               />
-              <span className="font-medium">{libraryMainEntry.title}</span>
-              <span className="text-muted-foreground ml-auto text-xs uppercase">
-                обзор
-              </span>
+              <span className="font-medium">Обзор</span>
             </Link>
           </div>
 
@@ -111,6 +137,7 @@ export function LibrarySidebar() {
                         topic.title
                       )}`;
                       const active = isActive(topicPath);
+                      const TopicIcon = topicIcons[topic.title] || Code2;
 
                       return (
                         <Link
@@ -123,12 +150,12 @@ export function LibrarySidebar() {
                               : "hover:border-primary/40 hover:bg-primary/5 border-white/10 hover:shadow-md"
                           )}
                         >
-                          <div
+                          <TopicIcon
                             className={cn(
-                              "h-1.5 w-1.5 shrink-0 rounded-full transition-all duration-300",
+                              "h-4 w-4 shrink-0 transition-transform duration-300",
                               active
-                                ? "bg-primary"
-                                : "bg-muted-foreground group-hover:bg-primary group-hover:scale-150"
+                                ? "text-primary"
+                                : "text-muted-foreground group-hover:text-primary group-hover:scale-110"
                             )}
                           />
                           <span className="flex-1">{topic.title}</span>
