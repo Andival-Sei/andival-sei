@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 import { projects } from "@/src/entities/project/model/project-data";
-import { ProjectCard } from "@/src/features/project-card";
+import { FeaturedProjectCard } from "@/src/features/featured-project-card";
 import { Button } from "@/src/shared/ui/Button";
 import { Section } from "@/src/shared/ui/Section";
 
@@ -17,7 +17,7 @@ export function FeaturedProjectsSection() {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:28px_28px]" />
       </div>
 
-      <div className="space-y-8">
+      <div className="space-y-12">
         <div className="flex items-center justify-between">
           <div className="space-y-3">
             <div className="text-primary flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.2em]">
@@ -41,9 +41,14 @@ export function FeaturedProjectsSection() {
           </Button>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="space-y-8">
           {featuredProjects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index + 1} />
+            <FeaturedProjectCard
+              key={project.id}
+              project={project}
+              index={index + 1}
+              reversed={index % 2 === 1}
+            />
           ))}
         </div>
 
