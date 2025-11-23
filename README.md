@@ -249,6 +249,10 @@ import { Button, Card, Input } from "@/src/shared/ui";
 
 ## 🚀 Деплой
 
+Проект задеплоен на [Vercel](https://vercel.com):
+
+🌐 **Live сайт**: [https://andival-sei.vercel.app/](https://andival-sei.vercel.app/)
+
 ### Vercel (рекомендуется)
 
 Самый простой способ задеплоить Next.js приложение - использовать [Vercel Platform](https://vercel.com/new):
@@ -271,5 +275,5 @@ TODO: Добавить информацию об авторе
 
 ## 🔗 Ссылки
 
-- [Демо сайта](https://yourdomain.com) - TODO: Добавить ссылку на демо
+- [Демо сайта](https://andival-sei.vercel.app/) - Задеплоенный проект на Vercel
 - [GitHub](https://github.com/yourusername/andival-sei) - TODO: Добавить ссылку на репозиторий

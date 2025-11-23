@@ -21,7 +21,7 @@ describe("Button component", () => {
     const button = screen.getByRole("button");
     expect(button).toHaveClass("border");
     expect(button).toHaveClass("bg-background");
-    expect(button).toHaveClass("shadow-xs");
+    expect(button).toHaveClass("shadow-sm");
   });
 
   it("должен применять variant ghost", () => {
