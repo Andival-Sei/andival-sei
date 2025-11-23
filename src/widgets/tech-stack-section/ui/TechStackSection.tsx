@@ -16,6 +16,7 @@ import {
   SiJetbrains,
   SiOpenai,
   SiGoogle,
+  SiGit,
 } from "react-icons/si";
 
 import { Badge } from "@/src/shared/ui/Badge";
@@ -54,6 +55,7 @@ const TechIcons = {
   Cursor: Code, // Используем иконку Code из lucide-react для Cursor (похожий редактор)
   Antigravity: Sparkles, // Оставляем кастомную иконку для Antigravity (специфичный инструмент)
   WebStorm: SiJetbrains, // Используем JetBrains иконку для WebStorm
+  Git: SiGit, // Git - контроль версий
   GPT: SiOpenai, // OpenAI/GPT - реальная иконка OpenAI
   Claude: Brain, // Anthropic Claude - используем иконку мозга из lucide-react
   Gemini: SiGoogle, // Google Gemini - используем иконку Google
@@ -95,12 +97,13 @@ const techStackCategories: TechCategory[] = [
   {
     title: "IDE и редакторы",
     icon: Code,
-    description: "Среды разработки",
+    description: "Среды разработки и инструменты",
     technologies: [
       { name: "VS Code", icon: TechIcons.VSCode, color: "#007acc" },
       { name: "Cursor", icon: TechIcons.Cursor, color: "#000000" },
       { name: "Antigravity", icon: TechIcons.Antigravity, color: "#6366f1" },
       { name: "WebStorm", icon: TechIcons.WebStorm, color: "#000000" },
+      { name: "Git", icon: TechIcons.Git, color: "#f05032" },
     ],
   },
   {
