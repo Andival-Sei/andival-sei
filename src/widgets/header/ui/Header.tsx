@@ -8,7 +8,7 @@ import { BurgerMenu } from "./BurgerMenu";
 export function Header() {
   return (
     <header className="bg-background/80 sticky top-0 z-50 w-full backdrop-blur-md">
-      <div className="container mx-auto flex h-16 items-center justify-between">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-2 text-xl font-bold tracking-tight">
           <Link
             href="/"

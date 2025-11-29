@@ -65,15 +65,12 @@ src/app/
 
 ```
 src/processes/
-└── send-contact-form/
-    ├── ui/
-    │   └── SendContactForm.tsx
-    └── index.ts
+(пока пусто - процессы будут добавляться по мере необходимости)
 ```
 
 **Примеры**:
 
-- `send-contact-form` - процесс отправки контактной формы
+(пока нет примеров - процессы будут добавляться по мере необходимости)
 
 **Правила**:
 
@@ -150,7 +147,10 @@ src/widgets/
 - `Header` - шапка сайта с навигацией
 - `Footer` - подвал сайта
 - `HeroSection` - главная секция
-- `AboutSection` - секция "О себе"
+- `AboutHero` - герой-секция страницы "О себе"
+- `ExperienceTimeline` - временная линия опыта
+- `SkillsSection` - секция навыков
+- `InterestsGrid` - сетка интересов
 - `ProjectsSection` - секция проектов
 - `ContactSection` - секция контактов
 
@@ -205,10 +205,12 @@ src/entities/
 │   ├── model/
 │   │   ├── types.ts
 │   │   └── project-data.ts
-│   ├── ui/
-│   │   └── ProjectPreview.tsx
 │   └── index.ts
 ├── skill/
+│   ├── model/
+│   │   ├── types.ts
+│   │   └── skill-data.ts
+│   └── index.ts
 └── contact/
 ```
 
