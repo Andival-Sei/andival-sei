@@ -39,7 +39,7 @@ export function createPageMetadata({
       absolute: fullTitle,
     },
     description,
-    keywords: siteConfig.keywords,
+    keywords: [...siteConfig.keywords],
     authors: [{ name: siteConfig.author }],
     creator: siteConfig.author,
     openGraph: {
