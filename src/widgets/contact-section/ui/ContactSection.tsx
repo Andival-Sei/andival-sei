@@ -1,7 +1,7 @@
 import { Mail, MapPin, MessageSquare } from "lucide-react";
 
+import { contactInfo } from "@/src/entities/contact";
 import { ContactForm } from "@/src/features/contact-form";
-import { siteConfig } from "@/src/shared/config/site";
 import { FadeIn } from "@/src/shared/ui";
 import { Section } from "@/src/shared/ui/Section";
 
@@ -34,10 +34,12 @@ export function ContactSection() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold">Email</h3>
-                  <p className="text-muted-foreground">
-                    {process.env.NEXT_PUBLIC_CONTACT_EMAIL ||
-                      "freedomdragon777@gmail.com"}
-                  </p>
+                  <a
+                    href={`mailto:${contactInfo.email}`}
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {contactInfo.email}
+                  </a>
                 </div>
               </div>
 
@@ -48,30 +50,36 @@ export function ContactSection() {
                 <div>
                   <h3 className="text-lg font-semibold">Соцсети</h3>
                   <div className="text-muted-foreground flex gap-4">
-                    <a
-                      href={siteConfig.links.telegram}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="hover:text-primary transition-colors"
-                    >
-                      Telegram
-                    </a>
-                    <a
-                      href={siteConfig.links.vk}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="hover:text-primary transition-colors"
-                    >
-                      VK
-                    </a>
-                    <a
-                      href={siteConfig.links.github}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="hover:text-primary transition-colors"
-                    >
-                      GitHub
-                    </a>
+                    {contactInfo.socialLinks?.telegram && (
+                      <a
+                        href={contactInfo.socialLinks.telegram}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="hover:text-primary transition-colors"
+                      >
+                        Telegram
+                      </a>
+                    )}
+                    {contactInfo.socialLinks?.vk && (
+                      <a
+                        href={contactInfo.socialLinks.vk}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="hover:text-primary transition-colors"
+                      >
+                        VK
+                      </a>
+                    )}
+                    {contactInfo.socialLinks?.github && (
+                      <a
+                        href={contactInfo.socialLinks.github}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="hover:text-primary transition-colors"
+                      >
+                        GitHub
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
@@ -82,7 +90,9 @@ export function ContactSection() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold">Локация</h3>
-                  <p className="text-muted-foreground">Удалённо / Самара</p>
+                  <p className="text-muted-foreground">
+                    {contactInfo.location || "Не указано"}
+                  </p>
                 </div>
               </div>
             </div>

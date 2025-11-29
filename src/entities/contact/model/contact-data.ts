@@ -1,13 +1,10 @@
-// TODO: Заменить заглушки на реальные контактные данные
-
 import { siteConfig } from "@/src/shared/config/site";
 
 import type { ContactInfo } from "./types";
 
 export const contactInfo: ContactInfo = {
-  email: "your.email@example.com",
-  phone: "+7 (XXX) XXX-XX-XX",
-  location: "Moscow, Russia",
+  email: "freedomdragon777@gmail.com",
+  location: "Удалённо / Самара",
   socialLinks: {
     github: siteConfig.links.github,
     telegram: siteConfig.links.telegram,
