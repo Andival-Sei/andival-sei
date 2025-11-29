@@ -28,9 +28,9 @@ module.exports = {
     "subject-full-stop": [1, "never", "."],
     "subject-case": [1, "never", ["upper-case"]],
     // Увеличенные лимиты длины для более свободного стиля
-    "header-max-length": [1, "always", 100],
+    "header-max-length": [0],
     "body-leading-blank": [1, "always"],
-    "body-max-line-length": [1, "always", 100],
+    "body-max-line-length": [0],
     "footer-leading-blank": [1, "always"],
   },
 };
