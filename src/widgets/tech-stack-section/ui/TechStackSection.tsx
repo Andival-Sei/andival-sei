@@ -123,7 +123,7 @@ const techStackCategories: TechCategory[] = [
 
 export function TechStackSection() {
   return (
-    <Section className="pb-20 pt-12 md:pt-16 lg:pt-20">
+    <Section className="py-8 pb-20 md:py-12 md:pb-20 lg:py-16 lg:pb-20">
       <div className="mb-16 flex flex-col gap-4 text-center">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
           Мой стек технологий

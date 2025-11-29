@@ -1,13 +1,14 @@
 "use client";
 
-import { ArrowRight, Code2, Mail } from "lucide-react";
+import { ArrowRight, Mail } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/src/shared/ui/Button";
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[calc(100vh-4rem)] overflow-hidden pb-8 pt-12 md:pb-12 md:pt-20 lg:pb-16 lg:pt-32">
+    <section className="relative overflow-hidden pb-12 pt-12 md:pb-16 md:pt-20 lg:pb-20 lg:pt-32">
       {/* Декоративные фоновые элементы */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         {/* Градиентные круги */}
@@ -90,19 +91,22 @@ export function HeroSection() {
               <div className="from-primary/20 via-primary/10 absolute inset-0 rounded-2xl bg-gradient-to-br to-transparent blur-2xl" />
 
               {/* Основной визуальный элемент */}
-              <div className="bg-card/50 relative flex h-80 w-80 items-center justify-center rounded-2xl border p-8 backdrop-blur-sm sm:h-96 sm:w-96 md:h-[28rem] md:w-[28rem]">
+              <div className="bg-card/50 group relative flex h-80 w-80 items-center justify-center overflow-hidden rounded-2xl border backdrop-blur-sm sm:h-96 sm:w-96 md:h-[28rem] md:w-[28rem]">
                 {/* Градиентный фон */}
-                <div className="from-primary/5 to-primary/10 absolute inset-4 rounded-xl bg-gradient-to-br" />
+                <div className="from-primary/5 to-primary/10 absolute inset-0 rounded-2xl bg-gradient-to-br" />
 
-                {/* Центральная иконка/графический элемент */}
-                <div className="relative z-10 flex flex-col items-center justify-center gap-4">
-                  <div className="bg-primary/10 rounded-full p-8">
-                    <Code2 className="text-primary h-16 w-16 animate-pulse" />
-                  </div>
-                  <div className="space-y-2 text-center">
-                    <div className="bg-primary/20 h-2 w-24 rounded-full" />
-                    <div className="bg-primary/10 h-2 w-32 rounded-full" />
-                  </div>
+                {/* Фото пользователя */}
+                <div className="relative h-full w-full">
+                  <Image
+                    src="/profile/me.jpg"
+                    alt="Кирилл - Frontend разработчик"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    priority
+                    sizes="(max-width: 768px) 320px, (max-width: 1024px) 384px, 448px"
+                  />
+                  {/* Overlay для лучшей видимости */}
+                  <div className="from-primary/5 absolute inset-0 rounded-2xl bg-gradient-to-br to-transparent" />
                 </div>
 
                 {/* Декоративные плавающие элементы */}

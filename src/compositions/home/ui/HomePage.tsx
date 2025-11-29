@@ -1,8 +1,3 @@
-// TODO: Реализовать главную страницу портфолио
-// - Добавить Hero секцию
-// - Добавить краткое описание
-// - Добавить ссылки на основные разделы
-
 import { FeaturedProjectsSection } from "@/src/widgets/featured-projects-section";
 import { Footer } from "@/src/widgets/footer";
 import { Header } from "@/src/widgets/header";

@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import { MapPin, Mail } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 import { Badge } from "@/src/shared/ui/Badge";
 import { Button } from "@/src/shared/ui/Button";
@@ -50,11 +52,14 @@ export function AboutHero() {
               </div>
               <div className="bg-border hidden h-6 w-px sm:block" />
               <Button
+                asChild
                 variant="default"
                 className="shadow-primary/20 rounded-full shadow-lg"
               >
-                <Mail className="mr-2 h-4 w-4" />
-                Связаться
+                <Link href="/contact">
+                  <Mail className="mr-2 h-4 w-4" />
+                  Связаться
+                </Link>
               </Button>
             </div>
           </motion.div>
@@ -72,16 +77,18 @@ export function AboutHero() {
               <div className="border-primary/10 absolute inset-4 rounded-full border" />
 
               {/* Main Image Container */}
-              <div className="bg-linear-to-br group absolute inset-8 flex items-center justify-center overflow-hidden rounded-full border border-white/10 from-zinc-800 to-zinc-950 shadow-2xl">
-                <div className="bg-primary/5 group-hover:bg-primary/10 absolute inset-0 transition-colors duration-500" />
+              <div className="bg-linear-to-br group absolute inset-8 overflow-hidden rounded-full border border-white/10 from-zinc-800 to-zinc-950 shadow-2xl">
+                <div className="bg-primary/5 group-hover:bg-primary/10 absolute inset-0 z-10 transition-colors duration-500" />
 
-                {/* Placeholder for User Photo - using a stylish avatar or abstract shape if no photo provided */}
-                <div className="p-6 text-center">
-                  <span className="mb-4 block text-6xl">👨‍💻</span>
-                  <p className="text-muted-foreground text-sm font-medium">
-                    Andival-Sei
-                  </p>
-                </div>
+                {/* Фото пользователя */}
+                <Image
+                  src="/profile/me.jpg"
+                  alt="Кирилл - Frontend разработчик"
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(max-width: 768px) 100vw, 400px"
+                />
               </div>
 
               {/* Floating Cards */}

@@ -29,7 +29,7 @@ export function LabPage() {
   return (
     <>
       <Header />
-      <div className="from-background via-background/90 to-muted/20 bg-gradient-to-b">
+      <div className="from-background via-background/90 to-muted/20 bg-linear-to-b">
         <Section className="space-y-8">
           <div className="space-y-3 text-center sm:text-left">
             <p className="text-primary text-xs uppercase tracking-[0.2em]">
@@ -51,7 +51,7 @@ export function LabPage() {
                 className="border-primary/10 relative overflow-hidden"
               >
                 <div className="pointer-events-none absolute inset-0 opacity-40">
-                  <div className="from-primary/10 via-primary/5 absolute inset-0 bg-gradient-to-br to-transparent" />
+                  <div className="from-primary/10 via-primary/5 bg-linear-to-b absolute inset-0 to-transparent" />
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,0.08),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(56,189,248,0.07),transparent_30%)]" />
                 </div>
 
