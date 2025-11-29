@@ -19,6 +19,7 @@ import {
   SiGit,
 } from "react-icons/si";
 
+import { FadeIn } from "@/src/shared/ui";
 import { Badge } from "@/src/shared/ui/Badge";
 import { Card } from "@/src/shared/ui/Card";
 import { Section } from "@/src/shared/ui/Section";
@@ -124,7 +125,7 @@ const techStackCategories: TechCategory[] = [
 export function TechStackSection() {
   return (
     <Section className="py-8 pb-20 md:py-12 md:pb-20 lg:py-16 lg:pb-20">
-      <div className="mb-16 flex flex-col gap-4 text-center">
+      <FadeIn className="mb-16 flex flex-col gap-4 text-center" direction="up">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
           Мой стек технологий
         </h2>
@@ -132,66 +133,70 @@ export function TechStackSection() {
           Инструменты и технологии, которые я использую для создания современных
           веб-приложений
         </p>
-      </div>
+      </FadeIn>
 
       <div className="grid w-full gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {techStackCategories.map((category, categoryIndex) => {
           const CategoryIcon = category.icon;
           return (
-            <Card
+            <FadeIn
               key={category.title}
-              className="bg-card/50 hover:border-primary/50 hover:shadow-primary/10 group relative overflow-hidden border-2 transition-all duration-300 hover:shadow-lg"
-              style={{
-                animationDelay: `${categoryIndex * 100}ms`,
-              }}
+              delay={categoryIndex * 0.1}
+              className="h-full"
             >
-              <div className="p-6">
-                {/* Заголовок категории */}
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="bg-primary/10 group-hover:bg-primary/20 rounded-lg p-2 transition-transform duration-300 group-hover:scale-110">
-                    <CategoryIcon className="text-primary h-6 w-6" />
+              <Card className="bg-card/50 hover:border-primary/50 hover:shadow-primary/10 group relative h-full overflow-hidden border-2 transition-all duration-300 hover:shadow-lg">
+                <div className="p-6">
+                  {/* Заголовок категории */}
+                  <div className="mb-4 flex items-center gap-3">
+                    <div className="bg-primary/10 group-hover:bg-primary/20 rounded-lg p-2 transition-transform duration-300 group-hover:scale-110">
+                      <CategoryIcon className="text-primary h-6 w-6" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold">
+                        {category.title}
+                      </h3>
+                      <p className="text-muted-foreground text-xs">
+                        {category.description}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold">{category.title}</h3>
-                    <p className="text-muted-foreground text-xs">
-                      {category.description}
-                    </p>
+
+                  {/* Технологии в категории */}
+                  <div className="flex flex-wrap gap-2">
+                    {category.technologies.map((tech, techIndex) => {
+                      const TechIcon = tech.icon;
+                      return (
+                        <FadeIn
+                          key={tech.name}
+                          delay={categoryIndex * 0.1 + techIndex * 0.05}
+                          className="inline-flex"
+                        >
+                          <Badge
+                            variant="secondary"
+                            className="group/tech bg-background/80 hover:border-primary/30 hover:bg-primary/5 flex items-center gap-1.5 border px-3 py-1.5 text-sm font-medium shadow-sm transition-all duration-200 hover:scale-105 hover:shadow-md"
+                          >
+                            <TechIcon
+                              className="h-4 w-4 transition-transform duration-200 group-hover/tech:scale-110"
+                              style={
+                                tech.color
+                                  ? {
+                                      color: tech.color,
+                                    }
+                                  : undefined
+                              }
+                            />
+                            <span>{tech.name}</span>
+                          </Badge>
+                        </FadeIn>
+                      );
+                    })}
                   </div>
                 </div>
 
-                {/* Технологии в категории */}
-                <div className="flex flex-wrap gap-2">
-                  {category.technologies.map((tech, techIndex) => {
-                    const TechIcon = tech.icon;
-                    return (
-                      <Badge
-                        key={tech.name}
-                        variant="secondary"
-                        className="group/tech animate-fade-in-up bg-background/80 hover:border-primary/30 hover:bg-primary/5 flex items-center gap-1.5 border px-3 py-1.5 text-sm font-medium opacity-0 shadow-sm transition-all duration-200 hover:scale-105 hover:shadow-md"
-                        style={{
-                          animationDelay: `${categoryIndex * 100 + techIndex * 50}ms`,
-                        }}
-                      >
-                        <TechIcon
-                          className="h-4 w-4 transition-transform duration-200 group-hover/tech:scale-110"
-                          style={
-                            tech.color
-                              ? {
-                                  color: tech.color,
-                                }
-                              : undefined
-                          }
-                        />
-                        <span>{tech.name}</span>
-                      </Badge>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Декоративный градиент при наведении */}
-              <div className="from-primary/0 via-primary/0 to-primary/0 group-hover:from-primary/5 group-hover:via-primary/0 group-hover:to-primary/5 absolute inset-0 -z-10 bg-gradient-to-br transition-all duration-300" />
-            </Card>
+                {/* Декоративный градиент при наведении */}
+                <div className="from-primary/0 via-primary/0 to-primary/0 group-hover:from-primary/5 group-hover:via-primary/0 group-hover:to-primary/5 bg-linear-to-br absolute inset-0 -z-10 transition-all duration-300" />
+              </Card>
+            </FadeIn>
           );
         })}
       </div>

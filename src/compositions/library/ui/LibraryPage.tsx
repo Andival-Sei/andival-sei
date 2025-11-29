@@ -3,6 +3,7 @@
 import { MDXProvider } from "@mdx-js/react";
 
 import { type LibraryEntry } from "@/src/compositions/library/model/libraryNavigation";
+import { FadeIn } from "@/src/shared/ui";
 import { Badge } from "@/src/shared/ui/Badge";
 
 import { mdxComponents } from "./mdx/MdxComponents";
@@ -16,38 +17,31 @@ export function LibraryPage({ entry, MdxContent }: LibraryPageProps) {
   return (
     <article className="space-y-8">
       <header className="mb-10 space-y-6">
-        <div className="animate-fade-in-up opacity-0">
+        <FadeIn direction="up" delay={0}>
           <Badge
             variant="outline"
             className="border-primary/40 bg-primary/5 text-primary text-[11px] uppercase tracking-[0.2em]"
           >
             {entry.category}
           </Badge>
-        </div>
+        </FadeIn>
 
-        <div
-          className="animate-fade-in-up space-y-4 opacity-0"
-          style={{ animationDelay: "100ms" }}
-        >
-          <h1 className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-3xl font-bold tracking-tight text-transparent md:text-4xl lg:text-5xl">
-            {entry.title}
-          </h1>
-        </div>
+        <FadeIn direction="up" delay={0.1}>
+          <div className="space-y-4">
+            <h1 className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-3xl font-bold tracking-tight text-transparent md:text-4xl lg:text-5xl">
+              {entry.title}
+            </h1>
+          </div>
+        </FadeIn>
 
-        <div
-          className="animate-fade-in-up opacity-0"
-          style={{ animationDelay: "200ms" }}
-        >
+        <FadeIn direction="up" delay={0.2}>
           <p className="text-muted-foreground max-w-3xl text-lg leading-relaxed">
             {entry.description}
           </p>
-        </div>
+        </FadeIn>
       </header>
 
-      <div
-        className="animate-fade-in-up opacity-0"
-        style={{ animationDelay: "300ms" }}
-      >
+      <FadeIn direction="up" delay={0.3}>
         {MdxContent ? (
           <MDXProvider components={mdxComponents}>
             <div className="prose prose-slate dark:prose-invert max-w-none">
@@ -63,7 +57,7 @@ export function LibraryPage({ entry, MdxContent }: LibraryPageProps) {
             </p>
           </div>
         )}
-      </div>
+      </FadeIn>
     </article>
   );
 }

@@ -6,6 +6,7 @@ import { projects } from "@/src/entities/project/model/project-data";
 import type { Project } from "@/src/entities/project/model/types";
 import { ProjectCard } from "@/src/features/project-card";
 import { ProjectsFilter } from "@/src/features/projects-filter";
+import { FadeIn } from "@/src/shared/ui";
 
 export function ProjectsSection() {
   const [filteredProjects, setFilteredProjects] = useState<Project[]>(projects);
@@ -42,7 +43,7 @@ export function ProjectsSection() {
 
         {/* Сетка паттерн */}
         <div
-          className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"
+          className="bg-size-[24px_24px] absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)]"
           style={{
             maskImage:
               "radial-gradient(ellipse 80% 50% at 50% 0%, #000 70%, transparent 110%)",
@@ -55,7 +56,7 @@ export function ProjectsSection() {
       <div className="container mx-auto px-4">
         <div className="space-y-12">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-            <div className="max-w-2xl space-y-5">
+            <FadeIn className="max-w-2xl space-y-5" direction="right">
               <div className="text-primary flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.2em]">
                 <span className="bg-primary/10 text-primary rounded-full px-3 py-1 font-semibold">
                   Портфолио проектов
@@ -75,9 +76,11 @@ export function ProjectsSection() {
               </p>
 
               <div className="grid gap-3 sm:grid-cols-3">
-                {metrics.map((metric) => (
-                  <div
+                {metrics.map((metric, index) => (
+                  <FadeIn
                     key={metric.label}
+                    delay={0.1 + index * 0.1}
+                    scale={0.95}
                     className="bg-card/70 border-border/70 rounded-xl border p-4 shadow-sm backdrop-blur"
                   >
                     <p className="text-muted-foreground text-xs uppercase tracking-[0.2em]">
@@ -87,12 +90,16 @@ export function ProjectsSection() {
                     <p className="text-muted-foreground text-sm">
                       {metric.hint}
                     </p>
-                  </div>
+                  </FadeIn>
                 ))}
               </div>
-            </div>
+            </FadeIn>
 
-            <div className="bg-card/80 border-border/70 rounded-2xl border p-6 shadow-lg backdrop-blur">
+            <FadeIn
+              direction="left"
+              delay={0.2}
+              className="bg-card/80 border-border/70 rounded-2xl border p-6 shadow-lg backdrop-blur"
+            >
               <div className="text-muted-foreground text-xs uppercase tracking-[0.15em]">
                 О проектах
               </div>
@@ -130,37 +137,38 @@ export function ProjectsSection() {
                   </li>
                 </ul>
               </div>
-            </div>
+            </FadeIn>
           </div>
 
           {/* Фильтры и сортировка */}
-          <div className="bg-card/50 border-border/70 rounded-xl border p-6 backdrop-blur">
+          <FadeIn
+            delay={0.3}
+            className="bg-card/50 border-border/70 rounded-xl border p-6 backdrop-blur"
+          >
             <ProjectsFilter
               projects={projects}
               onFilterChange={setFilteredProjects}
             />
-          </div>
+          </FadeIn>
 
           {/* Отфильтрованные проекты */}
           {filteredProjects.length > 0 ? (
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {filteredProjects.map((project, index) => (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  index={index + 1}
-                />
+                <FadeIn key={project.id} delay={index * 0.05} fullWidth>
+                  <ProjectCard project={project} index={index + 1} />
+                </FadeIn>
               ))}
             </div>
           ) : (
-            <div className="bg-card/50 border-border/70 rounded-xl border p-12 text-center">
+            <FadeIn className="bg-card/50 border-border/70 rounded-xl border p-12 text-center">
               <p className="text-muted-foreground text-lg">
                 Проекты не найдены по выбранным фильтрам
               </p>
               <p className="text-muted-foreground mt-2 text-sm">
                 Попробуйте изменить параметры фильтрации
               </p>
-            </div>
+            </FadeIn>
           )}
         </div>
       </div>

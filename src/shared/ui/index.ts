@@ -46,3 +46,4 @@ export { Tabs, TabsList, TabsTrigger, TabsContent } from "./Tabs";
 export { Separator, type SeparatorProps } from "./Separator";
 export { Section, type SectionProps } from "./Section";
 export { Link, type LinkProps } from "./Link";
+export { FadeIn } from "./FadeIn";

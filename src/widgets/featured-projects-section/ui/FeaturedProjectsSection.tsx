@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { projects } from "@/src/entities/project/model/project-data";
 import { FeaturedProjectCard } from "@/src/features/featured-project-card";
+import { FadeIn } from "@/src/shared/ui";
 import { Button } from "@/src/shared/ui/Button";
 
 export function FeaturedProjectsSection() {
@@ -14,7 +15,7 @@ export function FeaturedProjectsSection() {
       <div className="container mx-auto px-4">
         <div className="space-y-12">
           <div className="flex items-center justify-between">
-            <div className="space-y-3">
+            <FadeIn className="space-y-3" direction="up">
               <div className="text-primary flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.2em]">
                 <span className="bg-primary/10 text-primary rounded-full px-3 py-1 font-semibold">
                   Избранные проекты
@@ -27,23 +28,26 @@ export function FeaturedProjectsSection() {
                 Топ-3 проекта, демонстрирующих мои навыки и опыт в разработке
                 современных веб-приложений.
               </p>
-            </div>
-            <Button asChild variant="outline" className="hidden lg:flex">
-              <Link href="/projects">
-                Все проекты
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+            </FadeIn>
+            <FadeIn direction="left" delay={0.2} className="hidden lg:block">
+              <Button asChild variant="outline" className="hidden lg:flex">
+                <Link href="/projects">
+                  Все проекты
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </FadeIn>
           </div>
 
           <div className="space-y-8">
             {featuredProjects.map((project, index) => (
-              <FeaturedProjectCard
-                key={project.id}
-                project={project}
-                index={index + 1}
-                reversed={index % 2 === 1}
-              />
+              <FadeIn key={project.id} delay={index * 0.2} fullWidth>
+                <FeaturedProjectCard
+                  project={project}
+                  index={index + 1}
+                  reversed={index % 2 === 1}
+                />
+              </FadeIn>
             ))}
           </div>
 

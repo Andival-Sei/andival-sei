@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
   Code2,
   Gamepad2,
@@ -12,6 +11,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/src/shared/lib/utils";
+import { FadeIn } from "@/src/shared/ui";
 
 interface InterestItem {
   icon: React.ElementType;
@@ -78,27 +78,20 @@ const interests: InterestItem[] = [
 export function InterestsGrid() {
   return (
     <section className="container mx-auto px-4 py-24">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-        className="mb-16 text-center"
-      >
+      <FadeIn duration={0.5} className="mb-16 text-center">
         <h2 className="mb-4 text-4xl font-bold">Интересы и Хобби</h2>
         <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
           То, что вдохновляет меня за пределами редактора кода.
         </p>
-      </motion.div>
+      </FadeIn>
 
       <div className="mx-auto grid max-w-5xl auto-rows-[200px] grid-cols-1 gap-4 md:grid-cols-3">
         {interests.map((item, index) => (
-          <motion.div
+          <FadeIn
             key={index}
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: index * 0.05 }}
+            scale={0.95}
+            duration={0.4}
+            delay={index * 0.05}
             className={cn(
               "bg-background/50 hover:shadow-primary/5 group relative overflow-hidden rounded-3xl border border-white/10 backdrop-blur-sm transition-all hover:shadow-2xl",
               item.className
@@ -134,7 +127,7 @@ export function InterestsGrid() {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </FadeIn>
         ))}
       </div>
     </section>

@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Briefcase, GraduationCap, Rocket, Star, Calendar } from "lucide-react";
 import { useRef } from "react";
 
+import { FadeIn } from "@/src/shared/ui";
 import { Badge } from "@/src/shared/ui/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/shared/ui/Card";
 
@@ -83,20 +84,14 @@ export function ExperienceTimeline() {
       <div className="from-background via-primary/5 to-background bg-linear-to-b pointer-events-none absolute inset-0" />
 
       <div className="container relative z-10 mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mb-20 text-center"
-        >
+        <FadeIn direction="up" duration={0.5} className="mb-20 text-center">
           <h2 className="from-primary bg-linear-to-r mb-6 to-purple-500 bg-clip-text text-4xl font-bold text-transparent md:text-5xl">
             Мой Путь
           </h2>
           <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
             От первых шагов в коммуникации до создания сложных веб-интерфейсов.
           </p>
-        </motion.div>
+        </FadeIn>
 
         <div className="relative mx-auto max-w-5xl">
           {/* Central Line Container */}
@@ -116,12 +111,12 @@ export function ExperienceTimeline() {
               const isLeft = index % 2 === 0; // Карточки слева на чётных индексах (0, 2, 4...)
 
               return (
-                <motion.div
+                <FadeIn
                   key={index}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  direction="up"
+                  duration={0.6}
+                  delay={index * 0.1}
+                  viewportMargin="-100px"
                   className="relative"
                 >
                   {/* Timeline Node */}
@@ -192,7 +187,7 @@ export function ExperienceTimeline() {
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </FadeIn>
               );
             })}
           </div>

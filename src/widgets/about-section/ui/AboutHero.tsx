@@ -1,10 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { MapPin, Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { FadeIn } from "@/src/shared/ui";
 import { Badge } from "@/src/shared/ui/Badge";
 import { Button } from "@/src/shared/ui/Button";
 
@@ -20,10 +20,10 @@ export function AboutHero() {
       <div className="container relative z-10 mx-auto px-4">
         <div className="flex flex-col items-center gap-12 md:flex-row md:gap-20">
           {/* Text Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
+          <FadeIn
+            duration={0.5}
+            direction="right"
+            immediate={true}
             className="flex-1 space-y-6 text-center md:text-left"
           >
             <Badge
@@ -62,13 +62,15 @@ export function AboutHero() {
                 </Link>
               </Button>
             </div>
-          </motion.div>
+          </FadeIn>
 
           {/* Image/Visual */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+          <FadeIn
+            duration={0.5}
+            delay={0.2}
+            scale={0.9}
+            direction="none"
+            immediate={true}
             className="relative flex-1"
           >
             <div className="relative mx-auto aspect-square w-full max-w-md">
@@ -92,48 +94,49 @@ export function AboutHero() {
               </div>
 
               {/* Floating Cards */}
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="bg-background/80 absolute -right-4 top-10 rounded-2xl border border-white/10 p-4 shadow-xl backdrop-blur-md"
+              <FadeIn
+                delay={0.6}
+                duration={0.4}
+                direction="left"
+                immediate={true}
+                className="absolute -right-4 top-10"
               >
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/20 font-bold text-blue-500">
-                    TS
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground text-xs">Main Stack</p>
-                    <p className="text-sm font-bold">TypeScript</p>
+                <div className="bg-background/80 rounded-2xl border border-white/10 p-4 shadow-xl backdrop-blur-md">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/20 font-bold text-blue-500">
+                      TS
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground text-xs">
+                        Main Stack
+                      </p>
+                      <p className="text-sm font-bold">TypeScript</p>
+                    </div>
                   </div>
                 </div>
-              </motion.div>
+              </FadeIn>
 
-              <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 1,
-                }}
-                className="bg-background/80 absolute -left-4 bottom-20 rounded-2xl border border-white/10 p-4 shadow-xl backdrop-blur-md"
+              <FadeIn
+                delay={0.8}
+                duration={0.4}
+                direction="right"
+                immediate={true}
+                className="absolute -left-4 bottom-20"
               >
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/20 font-bold text-cyan-500">
-                    R
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground text-xs">Framework</p>
-                    <p className="text-sm font-bold">React & Next.js</p>
+                <div className="bg-background/80 rounded-2xl border border-white/10 p-4 shadow-xl backdrop-blur-md">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/20 font-bold text-cyan-500">
+                      R
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground text-xs">Framework</p>
+                      <p className="text-sm font-bold">React & Next.js</p>
+                    </div>
                   </div>
                 </div>
-              </motion.div>
+              </FadeIn>
             </div>
-          </motion.div>
+          </FadeIn>
         </div>
       </div>
     </section>

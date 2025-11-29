@@ -3,6 +3,7 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
+import { FadeIn } from "@/src/shared/ui";
 import { Button } from "@/src/shared/ui/Button";
 import {
   Card,
@@ -31,7 +32,10 @@ export function LabPage() {
       <Header />
       <div className="from-background via-background/90 to-muted/20 bg-linear-to-b">
         <Section className="space-y-8">
-          <div className="space-y-3 text-center sm:text-left">
+          <FadeIn
+            className="space-y-3 text-center sm:text-left"
+            immediate={true}
+          >
             <p className="text-primary text-xs uppercase tracking-[0.2em]">
               Лаборатория
             </p>
@@ -42,37 +46,41 @@ export function LabPage() {
               Здесь собираются пробные разделы и внутренние инструменты. Первым
               открываем вход в библиотеку.
             </p>
-          </div>
+          </FadeIn>
 
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {labSections.map((section) => (
-              <Card
+            {labSections.map((section, index) => (
+              <FadeIn
                 key={section.title}
-                className="border-primary/10 relative overflow-hidden"
+                direction="up"
+                delay={index * 0.1}
+                scale={0.95}
               >
-                <div className="pointer-events-none absolute inset-0 opacity-40">
-                  <div className="from-primary/10 via-primary/5 bg-linear-to-b absolute inset-0 to-transparent" />
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,0.08),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(56,189,248,0.07),transparent_30%)]" />
-                </div>
-
-                <CardHeader className="relative">
-                  <div className="flex items-center justify-between gap-3">
-                    <CardTitle className="text-xl">{section.title}</CardTitle>
-                    <span className="text-primary/80 bg-primary/10 rounded-full px-3 py-1 text-xs font-semibold">
-                      {section.status}
-                    </span>
+                <Card className="border-primary/10 relative overflow-hidden">
+                  <div className="pointer-events-none absolute inset-0 opacity-40">
+                    <div className="from-primary/10 via-primary/5 bg-linear-to-b absolute inset-0 to-transparent" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(99,102,241,0.08),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(56,189,248,0.07),transparent_30%)]" />
                   </div>
-                  <CardDescription>{section.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="relative">
-                  <Button asChild>
-                    <Link href={section.href}>
-                      Перейти
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
+
+                  <CardHeader className="relative">
+                    <div className="flex items-center justify-between gap-3">
+                      <CardTitle className="text-xl">{section.title}</CardTitle>
+                      <span className="text-primary/80 bg-primary/10 rounded-full px-3 py-1 text-xs font-semibold">
+                        {section.status}
+                      </span>
+                    </div>
+                    <CardDescription>{section.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="relative">
+                    <Button asChild>
+                      <Link href={section.href}>
+                        Перейти
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </FadeIn>
             ))}
           </div>
         </Section>

@@ -1,10 +1,8 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { Mail, MapPin, MessageSquare } from "lucide-react";
 
 import { ContactForm } from "@/src/features/contact-form";
 import { siteConfig } from "@/src/shared/config/site";
+import { FadeIn } from "@/src/shared/ui";
 import { Section } from "@/src/shared/ui/Section";
 
 export function ContactSection() {
@@ -17,13 +15,7 @@ export function ContactSection() {
       <Section className="py-24 sm:py-32">
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-24">
           {/* Left Column: Info */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            className="space-y-8"
-          >
+          <FadeIn direction="right" duration={0.7} className="space-y-8">
             <div className="space-y-4">
               <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
                 Давайте работать вместе
@@ -94,14 +86,13 @@ export function ContactSection() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </FadeIn>
 
           {/* Right Column: Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
+          <FadeIn
+            direction="left"
+            duration={0.7}
+            delay={0.2}
             className="bg-card/50 border-border/50 relative rounded-3xl border p-8 shadow-2xl backdrop-blur-sm sm:p-10"
           >
             <div className="mb-8">
@@ -111,7 +102,7 @@ export function ContactSection() {
               </p>
             </div>
             <ContactForm />
-          </motion.div>
+          </FadeIn>
         </div>
       </Section>
     </div>

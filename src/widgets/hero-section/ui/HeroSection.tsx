@@ -4,6 +4,7 @@ import { ArrowRight, Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { FadeIn } from "@/src/shared/ui";
 import { Button } from "@/src/shared/ui/Button";
 
 export function HeroSection() {
@@ -18,7 +19,7 @@ export function HeroSection() {
 
         {/* Сетка паттерн */}
         <div
-          className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"
+          className="bg-size-[24px_24px] absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)]"
           style={{
             maskImage:
               "radial-gradient(ellipse 80% 50% at 50% 0%, #000 70%, transparent 110%)",
@@ -33,24 +34,26 @@ export function HeroSection() {
           {/* Левая колонка - Контент */}
           <div className="space-y-8 text-center lg:text-left">
             {/* Заголовок с анимацией */}
-            <div className="animate-fade-in-up space-y-4 opacity-0">
+            <FadeIn className="space-y-4" direction="up" immediate={true}>
               <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-                <span className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-transparent">
+                <span className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-transparent">
                   Привет, я{" "}
                 </span>
-                <span className="from-primary via-primary to-primary/70 bg-gradient-to-r bg-clip-text text-transparent">
+                <span className="from-primary via-primary to-primary/70 bg-linear-to-r bg-clip-text text-transparent">
                   Кирилл
                 </span>
               </h1>
               <h2 className="text-muted-foreground text-xl font-medium sm:text-2xl md:text-3xl">
                 Frontend-разработчик
               </h2>
-            </div>
+            </FadeIn>
 
             {/* Описание с анимацией */}
-            <div
-              className="animate-fade-in-up space-y-6 opacity-0"
-              style={{ animationDelay: "150ms" }}
+            <FadeIn
+              className="space-y-6"
+              direction="up"
+              delay={0.15}
+              immediate={true}
             >
               <p className="text-muted-foreground mx-auto max-w-[600px] text-base leading-relaxed sm:text-lg md:text-xl lg:mx-0">
                 Создаю современные и отзывчивые веб-приложения с использованием
@@ -78,22 +81,24 @@ export function HeroSection() {
                   </Link>
                 </Button>
               </div>
-            </div>
+            </FadeIn>
           </div>
 
           {/* Правая колонка - Визуальный элемент */}
           <div className="relative flex items-center justify-center lg:justify-end">
-            <div
-              className="animate-fade-in-right relative opacity-0"
-              style={{ animationDelay: "200ms" }}
+            <FadeIn
+              className="relative"
+              direction="left"
+              delay={0.2}
+              immediate={true}
             >
               {/* Декоративная градиентная рамка */}
-              <div className="from-primary/20 via-primary/10 absolute inset-0 rounded-2xl bg-gradient-to-br to-transparent blur-2xl" />
+              <div className="from-primary/20 via-primary/10 bg-linear-to-br absolute inset-0 rounded-2xl to-transparent blur-2xl" />
 
               {/* Основной визуальный элемент */}
-              <div className="bg-card/50 group relative flex h-80 w-80 items-center justify-center overflow-hidden rounded-2xl border backdrop-blur-sm sm:h-96 sm:w-96 md:h-[28rem] md:w-[28rem]">
+              <div className="bg-card/50 md:h-112 md:w-md group relative flex h-80 w-80 items-center justify-center overflow-hidden rounded-2xl border backdrop-blur-sm sm:h-96 sm:w-96">
                 {/* Градиентный фон */}
-                <div className="from-primary/5 to-primary/10 absolute inset-0 rounded-2xl bg-gradient-to-br" />
+                <div className="from-primary/5 to-primary/10 bg-linear-to-br absolute inset-0 rounded-2xl" />
 
                 {/* Фото пользователя */}
                 <div className="relative h-full w-full">
@@ -106,7 +111,7 @@ export function HeroSection() {
                     sizes="(max-width: 768px) 320px, (max-width: 1024px) 384px, 448px"
                   />
                   {/* Overlay для лучшей видимости */}
-                  <div className="from-primary/5 absolute inset-0 rounded-2xl bg-gradient-to-br to-transparent" />
+                  <div className="from-primary/5 bg-linear-to-br absolute inset-0 rounded-2xl to-transparent" />
                 </div>
 
                 {/* Декоративные плавающие элементы */}
@@ -114,7 +119,7 @@ export function HeroSection() {
                 <div className="bg-primary/30 absolute -right-6 top-1/4 h-2 w-2 animate-pulse rounded-full" />
                 <div className="bg-primary/40 absolute -bottom-6 left-1/4 h-2.5 w-2.5 animate-ping rounded-full" />
               </div>
-            </div>
+            </FadeIn>
           </div>
         </div>
       </div>
