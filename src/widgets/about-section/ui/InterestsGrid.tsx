@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  Code2,
-  Gamepad2,
-  Wrench,
-  Mountain,
-  Tv,
-  Coffee,
-  ArrowUpRight,
-} from "lucide-react";
+import { Code2, Gamepad2, Wrench, Mountain, Tv, Coffee } from "lucide-react";
 
 import { cn } from "@/src/shared/lib/utils";
 import { FadeIn } from "@/src/shared/ui";
@@ -115,7 +107,6 @@ export function InterestsGrid() {
                 >
                   <item.icon className="h-6 w-6" />
                 </div>
-                <ArrowUpRight className="text-muted-foreground h-5 w-5 -translate-y-2 translate-x-2 opacity-0 transition-opacity duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100" />
               </div>
 
               <div>

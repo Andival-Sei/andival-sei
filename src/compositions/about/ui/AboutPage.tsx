@@ -2,6 +2,7 @@ import {
   AboutHero,
   ExperienceTimeline,
   InterestsGrid,
+  SkillsSection,
 } from "@/src/widgets/about-section";
 import { Footer } from "@/src/widgets/footer";
 import { Header } from "@/src/widgets/header";
@@ -13,6 +14,7 @@ export function AboutPage() {
       <main className="flex-1">
         <AboutHero />
         <ExperienceTimeline />
+        <SkillsSection />
         <InterestsGrid />
       </main>
       <Footer />
