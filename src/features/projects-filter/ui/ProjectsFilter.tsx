@@ -299,17 +299,15 @@ export function ProjectsFilter({
           >
             <DropdownMenuLabel>Технологии</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <div className="max-h-[250px] overflow-y-auto">
-              {allTechnologies.map((tech) => (
-                <DropdownMenuCheckboxItem
-                  key={tech}
-                  checked={selectedTechnologies.includes(tech)}
-                  onCheckedChange={() => toggleTechnology(tech)}
-                >
-                  {tech}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </div>
+            {allTechnologies.map((tech) => (
+              <DropdownMenuCheckboxItem
+                key={tech}
+                checked={selectedTechnologies.includes(tech)}
+                onCheckedChange={() => toggleTechnology(tech)}
+              >
+                {tech}
+              </DropdownMenuCheckboxItem>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
 

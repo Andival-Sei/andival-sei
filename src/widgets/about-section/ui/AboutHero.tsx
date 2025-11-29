@@ -64,14 +64,14 @@ export function AboutHero() {
             </div>
           </FadeIn>
 
-          {/* Image/Visual */}
+          {/* Image/Visual - скрыт на маленьких экранах */}
           <FadeIn
             duration={0.5}
             delay={0.2}
             scale={0.9}
             direction="none"
             immediate={true}
-            className="relative flex-1"
+            className="relative hidden flex-1 md:block"
           >
             <div className="relative mx-auto aspect-square w-full max-w-md">
               {/* Decorative Rings */}
@@ -93,13 +93,13 @@ export function AboutHero() {
                 />
               </div>
 
-              {/* Floating Cards */}
+              {/* Floating Cards - только на больших экранах */}
               <FadeIn
                 delay={0.6}
                 duration={0.4}
                 direction="left"
                 immediate={true}
-                className="absolute -right-4 top-10"
+                className="absolute -right-4 top-10 hidden lg:block"
               >
                 <div className="bg-background/80 rounded-2xl border border-white/10 p-4 shadow-xl backdrop-blur-md">
                   <div className="flex items-center gap-3">
@@ -121,7 +121,7 @@ export function AboutHero() {
                 duration={0.4}
                 direction="right"
                 immediate={true}
-                className="absolute -left-4 bottom-20"
+                className="absolute -left-4 bottom-20 hidden lg:block"
               >
                 <div className="bg-background/80 rounded-2xl border border-white/10 p-4 shadow-xl backdrop-blur-md">
                   <div className="flex items-center gap-3">
