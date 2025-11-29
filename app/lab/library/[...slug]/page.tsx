@@ -46,7 +46,7 @@ export async function generateMetadata(
       absolute: pageTitle, // Без "| Andival-Sei"
     },
     description: entry.description,
-    keywords: siteConfig.keywords,
+    keywords: [...siteConfig.keywords],
     authors: [{ name: siteConfig.author }],
     creator: siteConfig.author,
     openGraph: {
