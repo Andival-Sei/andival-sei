@@ -1,7 +1,3 @@
-// TODO: Реализовать страницу проектов
-// - Добавить фильтры по технологиям
-// - Добавить поиск проектов
-
 import { Footer } from "@/src/widgets/footer";
 import { Header } from "@/src/widgets/header";
 import { ProjectsSection } from "@/src/widgets/projects-section";

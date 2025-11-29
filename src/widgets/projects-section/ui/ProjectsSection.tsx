@@ -1,8 +1,16 @@
+"use client";
+
+import { useState } from "react";
+
 import { projects } from "@/src/entities/project/model/project-data";
+import type { Project } from "@/src/entities/project/model/types";
 import { ProjectCard } from "@/src/features/project-card";
+import { ProjectsFilter } from "@/src/features/projects-filter";
 import { Section } from "@/src/shared/ui/Section";
 
 export function ProjectsSection() {
+  const [filteredProjects, setFilteredProjects] = useState<Project[]>(projects);
+
   const completedProjects = projects.filter(
     (p) => p.status === "Завершён"
   ).length;
@@ -109,11 +117,35 @@ export function ProjectsSection() {
           </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index + 1} />
-          ))}
+        {/* Фильтры и сортировка */}
+        <div className="bg-card/50 border-border/70 rounded-xl border p-6 backdrop-blur">
+          <ProjectsFilter
+            projects={projects}
+            onFilterChange={setFilteredProjects}
+          />
         </div>
+
+        {/* Отфильтрованные проекты */}
+        {filteredProjects.length > 0 ? (
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {filteredProjects.map((project, index) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                index={index + 1}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="bg-card/50 border-border/70 rounded-xl border p-12 text-center">
+            <p className="text-muted-foreground text-lg">
+              Проекты не найдены по выбранным фильтрам
+            </p>
+            <p className="text-muted-foreground mt-2 text-sm">
+              Попробуйте изменить параметры фильтрации
+            </p>
+          </div>
+        )}
       </div>
     </Section>
   );
