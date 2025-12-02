@@ -22,6 +22,12 @@ export default defineConfig({
         "**/__mocks__/**",
         "e2e/**",
       ],
+      thresholds: {
+        lines: 70,
+        functions: 70,
+        branches: 70,
+        statements: 70,
+      },
     },
   },
   resolve: {
